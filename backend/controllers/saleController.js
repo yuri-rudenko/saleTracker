@@ -75,7 +75,7 @@ class saleController {
 
         try {
 
-            const {products, date, type} = req.body;
+            const {products, date, type, status} = req.body;
 
             const newDate = date ? new Date(date) : new Date();
             const newType = type ? type : "Unknown";
@@ -118,7 +118,8 @@ class saleController {
                 date: newDate,
                 type: newType,
                 price,
-                amount
+                amount,
+                status
             })
 
             if(!sale) return res.status(400).json({ message: "Problem with creating sale order" });
@@ -141,6 +142,33 @@ class saleController {
 
     }
 
+    async edit(req, res, next) {
+
+        try {
+
+            const {_id, ...fieldsToUpdate} = req.body;
+
+            if(!_id) return res.status(400).json({ message: "Sale ID is required." });
+
+            const editedSale = await Sale.findByIdAndUpdate(
+                _id,
+                fieldsToUpdate,
+                { new: true }
+            );
+
+            if (!editedSale) {
+                return res.status(404).json({ message: "Sale not found." });
+            };
+
+            res.status(200).json(editedSale);
+            
+        } catch (error) {
+
+            next(error);
+
+        }
+
+    }
 
 
 }

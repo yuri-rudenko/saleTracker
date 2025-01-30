@@ -29,7 +29,8 @@ const SaleSchema = new mongoose.Schema({
     amount: {type: Number, required: true, min: 0},
     price: {type: Number, required: true, min: 0},
     date: {type: Date, default: Date.now},
-    type: {type: String, required: true, enum: ["OLX", "Nova", "Ukr", "Meeting", "Other", "Unknown"]}
+    type: {type: String, required: true, enum: ["OLX", "Nova", "Ukr", "Meeting", "Other", "Unknown"]},
+    status: {type: String, required: true, enum: ["Awaiting", "Sent", "Approved", "Declined"], default: "Awaiting"},
 }, { timestamps: true })
 
 const SaleProductSchema = new mongoose.Schema({
@@ -43,7 +44,7 @@ const BuySchema = new mongoose.Schema({
     products: [{type : mongoose.Schema.Types.ObjectId, ref: 'BuyProduct'}],
     date: {type: Date, default: Date.now},
     price: {type: Number, required: true, min: 0},
-    status: {type: String, required: true, enum: ["pending", "arrived"]},
+    status: {type: String, required: true, enum: ["pending", "arrived"], default: "pending"},
 }, { timestamps: true })
 
 const BuyProductSchema = new mongoose.Schema({
@@ -53,6 +54,11 @@ const BuyProductSchema = new mongoose.Schema({
     totalPrice: {type: Number, required: true, min: 0},
     amountInOne: {type: Number, default: 1},
 }, { timestamps: true })
+
+const UserSchema = new mongoose.Schema({
+  username: {type: String, unique: true, required: true, min: [3, 'Name is too short'], max: [16, 'Name is too long']},
+  password: {type: String, required: true, min: [6, 'Password is too short'], max: [16, 'Password is too long']},
+})
 
 const ActionSchema = new mongoose.Schema(
     {
@@ -87,5 +93,6 @@ const SaleProduct = mongoose.model('SaleProduct', SaleProductSchema);
 const Buy = mongoose.model('Buy', BuySchema);
 const BuyProduct = mongoose.model('BuyProduct', BuyProductSchema);
 const Action = mongoose.model('Action', ActionSchema);
+const User = mongoose.model('User', UserSchema)
 
-export {Product, Brand, Type, Sale, SaleProduct, Buy, BuyProduct, Action}
+export {Product, Brand, Type, Sale, SaleProduct, Buy, BuyProduct, Action, User}

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import buyController from "../controllers/buyController.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = new Router()
 
@@ -13,6 +14,6 @@ router.get("/products", buyController.getAllProduct);
 router.get("/:_id", buyController.get);
 
 // Create a new buy
-router.post("/", buyController.create);
+router.post("/", authMiddleware, buyController.create);
 
 export default router;

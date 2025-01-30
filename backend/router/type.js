@@ -1,5 +1,6 @@
 import { Router } from "express";
 import typeController from "../controllers/typeController.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = new Router()
 
@@ -10,12 +11,12 @@ router.get("/", typeController.getAll);
 router.get("/:_id", typeController.get);
 
 // Create a new type
-router.post("/", typeController.create);
+router.post("/", authMiddleware, typeController.create);
 
 // Update an existing type
-router.put("/", typeController.edit);
-
+router.put("/", authMiddleware, typeController.edit);
+ 
 // Delete a type by ID
-router.delete("/:_id", typeController.delete);
+router.delete("/:_id", authMiddleware, typeController.delete);
 
 export default router;

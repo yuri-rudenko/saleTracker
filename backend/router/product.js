@@ -1,5 +1,6 @@
 import { Router } from "express";
 import productController from "../controllers/productController.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 
 const router = new Router()
@@ -11,12 +12,12 @@ router.get("/", productController.getAll);
 router.get("/:_id", productController.get);
 
 // Create a new product
-router.post("/", productController.create);
+router.post("/", authMiddleware, productController.create);
 
 // Update an existing product
-router.put("/", productController.edit);
+router.put("/", authMiddleware, productController.edit);
 
 // Delete a product by ID
-router.delete("/:_id", productController.delete);
+router.delete("/:_id", authMiddleware, productController.delete);
 
 export default router;

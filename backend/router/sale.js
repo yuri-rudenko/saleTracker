@@ -1,5 +1,6 @@
 import { Router } from "express";
 import saleController from "../controllers/saleController.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = new Router()
 
@@ -13,6 +14,9 @@ router.get("/products", saleController.getAllProduct);
 router.get("/:_id", saleController.get);
 
 // Create a new sale
-router.post("/", saleController.create);
+router.post("/", authMiddleware, saleController.create);
+
+// Edit sale
+router.put("/", authMiddleware, saleController.edit);
 
 export default router;
