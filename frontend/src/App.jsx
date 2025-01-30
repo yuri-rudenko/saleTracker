@@ -1,4 +1,5 @@
 import './styles/style.css';
+import { ReactComponent as Search } from './images/Search.svg';
 
 function App() {
   return (
@@ -12,7 +13,10 @@ function App() {
 
         <div className='main'>
             <div className="header">
-              header
+              <div className="input">
+                <Search className="search-icon"/>
+                <input type="text" className="main-search"  placeholder='Search...'></input>
+              </div>
             </div>
             <div className="body">
               body
