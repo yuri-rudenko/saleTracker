@@ -42,22 +42,53 @@ input {
 .wrapper .header {
     background-color: white;
     height: 80px;
+    width: 100%;
     font-size: 14px;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px; 
+    overflow: hidden;
+}
+
+.wrapper .header .input {
+    flex-grow: 1;
+    position: relative;
 }
 
 .wrapper .header .main-search {
     background-color: #F7F8FA;
-    margin: 16px 24px 16px 24px;
     height: 48px;
+    min-width: 100%;
     padding: 16px 16px 16px 40px;
-    width: 60%;
     border: none;
 }
 
 .wrapper .header .search-icon {
-    position: relative;
-    left: 53px;
-    top: 3px;
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+}
+
+.wrapper .header .right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 16px; 
+}
+
+.wrapper .header .right .bell-icon {
+    width: 24px;
+}
+
+.wrapper .header .right .user {
+    display: flex;
+    gap: 10px;
+    align-items: center;
 }
 
 .wrapper .body {
