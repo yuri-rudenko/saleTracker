@@ -104,7 +104,6 @@ input {
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 10px;
-    margin: 0px 5px;
 }
 
 .wrapper .body .stats-blocks .block {
@@ -208,7 +207,6 @@ input {
 
 .wrapper .body .graphs .views-container {
     min-width: 350px;
-    margin-right: 13px;
     padding: 24px;
     flex: 1 1 30%;
     background-color: white;

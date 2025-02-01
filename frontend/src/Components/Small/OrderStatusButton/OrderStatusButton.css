@@ -1,0 +1,18 @@
+.order-status-button-container .main-button {
+    width: 88px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 18.5px;
+}
+
+.order-status-button-container .main-button p {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.order-status-button-container .pending {
+    background-color: #E8F0FF;
+    color: #6C97DE;
+}

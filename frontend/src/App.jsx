@@ -3,6 +3,7 @@ import Header from './Components/Header';
 import StatsBlock from './Components/Stats-Block';
 import RevenueGraph from './Components/RevenueGraph';
 import ViewsGraph from './Components/ViewsGraph';
+import RecentOrders from './Components/RecentOrders';
 
 function App() {
   return (
@@ -28,6 +29,9 @@ function App() {
               <div className="graphs">
                 <RevenueGraph/>
                 <ViewsGraph/>
+              </div>
+              <div className="recent-orders">
+                <RecentOrders/>
               </div>
             </div>
         </div>
