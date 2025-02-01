@@ -1,6 +1,8 @@
 import './styles/style.css';
 import Header from './Components/Header';
 import StatsBlock from './Components/Stats-Block';
+import RevenueGraph from './Components/RevenueGraph';
+import ViewsGraph from './Components/ViewsGraph';
 
 function App() {
   return (
@@ -22,6 +24,10 @@ function App() {
                 <StatsBlock/>
                 <StatsBlock/>
                 <StatsBlock/>
+              </div>
+              <div className="graphs">
+                <RevenueGraph/>
+                <ViewsGraph/>
               </div>
             </div>
         </div>

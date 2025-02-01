@@ -136,3 +136,30 @@ input {
     color: black;
     font-weight: 600;
 }
+
+.wrapper .body .graphs {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.wrapper .body .graphs .revenue-container {
+    min-width: 400px;
+    margin-right: 13px;
+    flex: 1 1 60%;
+}
+
+.wrapper .body .graphs .views-container {
+    min-width: 350px;
+    margin-right: 13px;
+    flex: 1 1 30%;
+}
+
+@media (max-width: 600px) { 
+    .revenue-container {
+        flex-basis: 100%;
+    }
+    .views-container {
+        flex-basis: 100%;
+    }
+}
