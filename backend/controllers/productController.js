@@ -50,18 +50,21 @@ class productController {
 
         try {
 
-            const {name, category, brand, image, link} = req.body;
+            const {name, category, brand, image, link, views = 0} = req.body;
 
             if (!brand || !brand._id || !category || !category._id) {
                 return res.status(404).json({ message: "Category or brand not found." });
             }
+
+            
 
             const product = await Product.create({
                 name,
                 category: category._id,
                 brand: brand._id,
                 image,
-                link
+                link,
+                views
             })
 
             res.status(200).json({product: product});
