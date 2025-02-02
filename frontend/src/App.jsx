@@ -1,9 +1,14 @@
 import './styles/style.css';
+import './styles/header.css';
+import './styles/stats-blocks.css';
+import './styles/main-graphs.css';
+import './styles/menu.css';
 import Header from './Components/Header';
 import StatsBlock from './Components/Stats-Block';
 import RevenueGraph from './Components/RevenueGraph';
 import ViewsGraph from './Components/ViewsGraph';
 import RecentOrders from './Components/RecentOrders';
+import Menu from './Components/Menu';
 
 function App() {
   return (
@@ -12,7 +17,7 @@ function App() {
       <div className="wrapper">
 
         <div className='menu'>
-            1233
+            <Menu/>
         </div>
 
         <div className='main'>

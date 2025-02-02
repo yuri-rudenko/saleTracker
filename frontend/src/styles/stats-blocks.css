@@ -1,0 +1,35 @@
+.wrapper .body .dashboard {
+    font-size: 24px;
+    margin-bottom: 26px;
+}
+
+.wrapper .body .stats-blocks {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.wrapper .body .stats-blocks .block {
+    background-color: white;
+    padding: 24px;
+    box-shadow: rgba(0, 0, 0, 0.1) 1.95px 1.95px 2.6px;
+}
+
+.wrapper .body .stats-blocks .block .top {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    margin-bottom: 8px;
+}
+
+.wrapper .body .stats-blocks .block .total {
+    font-size: 16px;
+    color: #93A3AB;
+}
+
+.wrapper .body .stats-blocks .block .amount {
+    font-size: 24px;
+    color: black;
+    font-weight: 600;
+}
