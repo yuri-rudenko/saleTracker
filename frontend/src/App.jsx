@@ -3,47 +3,60 @@ import './styles/header.css';
 import './styles/stats-blocks.css';
 import './styles/main-graphs.css';
 import './styles/menu.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './Components/Header';
-import StatsBlock from './Components/Stats-Block';
-import RevenueGraph from './Components/RevenueGraph';
-import ViewsGraph from './Components/ViewsGraph';
-import RecentOrders from './Components/RecentOrders';
 import Menu from './Components/Menu';
+import Dashboard from './Pages/Dashboard';
+import Orders from './Pages/Orders';
+import Items from './Pages/Items';
+import Buying from './Pages/Buying';
+import Stats from './Pages/Stats';
 
 function App() {
   return (
-    <div className="App">
+    <Router basename="/">
+      <div className="App">
 
-      <div className="wrapper">
+        <div className="wrapper">
 
-        <div className='menu'>
-            <Menu/>
-        </div>
+          <div className='menu'>
+            <Menu />
+          </div>
 
-        <div className='main'>
-            <Header/>
+          <div className='main'>
+            <Header />
+
             <div className="body">
-              <div className="dashboard">Dashboard</div>
-              <div className="stats-blocks">
-                <StatsBlock/>
-                <StatsBlock/>
-                <StatsBlock/>
-                <StatsBlock/>
-                <StatsBlock/>
-              </div>
-              <div className="graphs">
-                <RevenueGraph/>
-                <ViewsGraph/>
-              </div>
-              <div className="recent-orders">
-                <RecentOrders/>
-              </div>
+              <Routes>
+
+                <Route path='/' element={
+                  <Dashboard />
+                } />
+
+                <Route path='/orders' element={
+                  <Orders />
+                } />
+
+                <Route path='/items' element={
+                  <Items />
+                } />
+
+                <Route path='/buying' element={
+                  <Buying />
+                } />
+
+                <Route path='/stats' element={
+                  <Stats />
+                } />
+
+              </Routes>
             </div>
+          </div>
+
         </div>
 
       </div>
-
-    </div>
+    </Router>
   );
 }
 
