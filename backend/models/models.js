@@ -12,7 +12,10 @@ const ProductSchema = new mongoose.Schema({
     currentlyAvaliable: {type : Number, default: 0, min: 0},
     sales: [{type : mongoose.Schema.Types.ObjectId, ref: 'Sale'}],
     amountSold: {type : Number, default: 0},
-    views: {type : Number, default: 0}
+    views: [{
+      date: { type: Date, default: Date.now },  
+      views: { type: Number, default: 0 }
+  }]
 }, { timestamps: true })
 
 const BrandSchema = new mongoose.Schema({
