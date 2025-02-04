@@ -1,8 +1,10 @@
 import React from 'react';
-import StatsBlock from '../Components/Stats-Block';
-import RevenueGraph from '../Components/RevenueGraph';
-import ViewsGraph from '../Components/ViewsGraph';
-import RecentOrders from '../Components/RecentOrders';
+import './stats-blocks.css';
+import './main-graphs.css';
+import StatsBlock from '../../Components/Stats-Block';
+import RevenueGraph from '../../Components/RevenueGraph';
+import ViewsGraph from '../../Components/ViewsGraph';
+import RecentOrders from '../../Components/RecentOrders';
 
 const Dashboard = () => {
     return (
