@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -10,14 +9,10 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import { visuallyHidden } from '@mui/utils';
+import { Button, Dialog, DialogTitle } from '@mui/material';
+import AddNewProduct from './AddNewProduct';
 
 
 function createData(image, name, left, buyprice, sellprice, sells, date, views, increase) {
@@ -35,22 +30,22 @@ function createData(image, name, left, buyprice, sellprice, sells, date, views, 
 }
 
 const rows = [
-    createData('Images', 'Crunch', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('Image', 'Crunch', 2, 309, 6100, 6, "03.01.2025", 20, 3),
-    createData('Image', 'Crunch', 2, 309, 600, 6, "03.01.2025", 20, 3),
-    createData('Image', 'Crunch', 2, 309, 600, 6, "03.01.2025", 20, 3),
-    createData('Image', 'Crunch', 2, 309, 600, 6, "03.01.2025", 20, 3),
-    createData('Image', 'Crunch', 2, 309, 600, 6, "03.01.2025", 20, 3),
-    createData('Image', 'Crunch', 2, 309, 600, 6, "03.01.2025", 20, 3),
-    createData('Image', 'Crunch', 2, 309, 600, 6, "03.01.2025", 20, 3),
-    createData('Image', 'Crunch', 2, 309, 600, 6, "03.01.2025", 20, 3),
-    createData('Image', 'Crunch', 2, 309, 600, 6, "03.01.2025", 20, 3),
-    createData('Image', 'Crunch', 2, 309, 600, 6, "03.01.2025", 20, 3),
-    createData('Image', 'Crunch', 2, 309, 600, 6, "03.01.2025", 20, 3),
-    createData('Image', 'Crunch', 2, 309, 600, 6, "03.01.2025", 20, 3),
-    createData('Image', 'Crunch', 2, 309, 600, 6, "03.01.2025", 20, 3),
-    createData('Image', 'Crunch', 2, 309, 600, 6, "03.01.2025", 20, 3),
-    createData('Image', 'Crunch', 2, 309, 600, 6, "03.01.2025", 20, 3)
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch', 2, 309, 620, 6, "03.01.2025", 20, 3),
 ];
 
 function getDate(dateString) {
@@ -87,7 +82,7 @@ const headCells = [
     {
         id: 'image',
         numeric: false,
-        disablePadding: true,
+        disablePadding: false,
         label: 'Image',
     },
     {
@@ -198,14 +193,22 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired,
 };
 
-
-
 const Items = () => {
 
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+    const [openAddNew, setOpenAddNew] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpenAddNew(true);
+    };
+
+    const handleClose = (value) => {
+        setOpenAddNew(false);
+    };
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -236,6 +239,17 @@ const Items = () => {
 
     return (
         <div>
+            <div className="buttons">
+                <div className="create-new-product">
+                    <Button variant="outlined" onClick={handleClickOpen}>
+                        Add new item
+                    </Button>
+                    <AddNewProduct
+                        open={openAddNew}
+                        onClose={handleClose}
+                    />
+                </div>
+            </div>
             <Box sx={{ width: '100%' }}>
                 <Paper sx={{ width: '100%', mb: 2 }}>
                     <TableContainer>
@@ -267,7 +281,7 @@ const Items = () => {
                                                 scope="row"
                                                 padding="none"
                                             >
-                                                {row.image}
+                                                <img style={{ height: "64px", width: "64px" }} src={row.image} alt="item" />
                                             </TableCell>
                                             <TableCell align="left">{row.name}</TableCell>
                                             <TableCell align="right">{row.left}</TableCell>
