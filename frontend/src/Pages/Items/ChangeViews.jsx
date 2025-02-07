@@ -97,13 +97,9 @@ const ChangeViews = (props) => {
     };
 
     const onSubmit = (data) => {
-        const newData = Object.entries(data).map(([key, value]) => {
-            const row = rows.find(el => el.name === key);
-            
-            if (!row) return null;
-    
-            return row.views != value ? { [key]: value } : null;
-        }).filter(Boolean);
+        const newData = Object.fromEntries(
+            Object.entries(data).filter(([_, value]) => value !== undefined && value !== null && value !== "")
+        );
     
         console.log(newData);
     };
@@ -150,7 +146,7 @@ const ChangeViews = (props) => {
                                                 id="outlined-number"
                                                 label="Number"
                                                 type="number"
-                                                defaultValue={row.views}
+                                                placeholder={row.views}
                                                 size="small"
                                                 style={{ maxWidth: "100px" }}
                                                 slotProps={{
