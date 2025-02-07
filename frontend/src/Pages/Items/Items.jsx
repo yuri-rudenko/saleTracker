@@ -13,6 +13,7 @@ import Paper from '@mui/material/Paper';
 import { visuallyHidden } from '@mui/utils';
 import { Button, Dialog, DialogTitle } from '@mui/material';
 import AddNewProduct from './AddNewProduct';
+import ChangeViews from './ChangeViews';
 
 
 function createData(image, name, left, buyprice, sellprice, sells, date, views, increase) {
@@ -201,13 +202,19 @@ const Items = () => {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     const [openAddNew, setOpenAddNew] = React.useState(false);
+    const [openViews, setOpenViews] = React.useState(false);
 
     const handleClickOpen = () => {
         setOpenAddNew(true);
     };
 
+    const handleClickOpenViews = () => {
+        setOpenViews(true);
+    };
+
     const handleClose = (value) => {
         setOpenAddNew(false);
+        setOpenViews(false);
     };
 
     const handleRequestSort = (event, property) => {
@@ -244,8 +251,15 @@ const Items = () => {
                     <Button variant="outlined" onClick={handleClickOpen}>
                         Add new item
                     </Button>
+                    <Button variant="outlined" onClick={handleClickOpenViews}>
+                        Change views
+                    </Button>
                     <AddNewProduct
                         open={openAddNew}
+                        onClose={handleClose}
+                    />
+                    <ChangeViews
+                        open={openViews}
                         onClose={handleClose}
                     />
                 </div>
@@ -266,8 +280,6 @@ const Items = () => {
                             />
                             <TableBody>
                                 {visibleRows.map((row, index) => {
-
-
 
                                     return (
                                         <TableRow

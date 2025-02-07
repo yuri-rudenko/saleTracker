@@ -14,7 +14,7 @@ const AddNewProduct = (props) => {
     const onSubmit = (data) => console.log(data);
 
     return (
-        <Dialog onClose={handleClose} open={open}>
+        <Dialog maxWidth={"sm"} onClose={handleClose} open={open}>
             <DialogTitle>Add New Product</DialogTitle>
             <form onSubmit={handleSubmit(onSubmit)} style={{ padding: 20 }}>
 
@@ -34,6 +34,16 @@ const AddNewProduct = (props) => {
                     {...register("image", { required: "Image is required", minLength: { value: 3, message: "Minimum length is 3" } })}
                     error={!!errors.image}
                     helperText={errors.image?.message}
+                    fullWidth
+                    margin="normal"
+                />
+
+                <TextField
+                    size="small"
+                    placeholder="Item link"
+                    {...register("link", { required: "Image is required", minLength: { value: 3, message: "Minimum length is 3" } })}
+                    error={!!errors.link}
+                    helperText={errors.image?.link}
                     fullWidth
                     margin="normal"
                 />
@@ -88,8 +98,17 @@ const AddNewProduct = (props) => {
                     )}
                 />
 
-                {/* Submit Button */}
-                <Button type="submit" variant="contained" color="primary" fullWidth>
+                <TextField
+                    size="small"
+                    placeholder="Views (default = 0)"
+                    {...register("views")}
+                    error={!!errors.views}
+                    helperText={errors.views?.message}
+                    fullWidth
+                    margin="normal"
+                />
+
+                <Button style={{ marginTop: "16px" }} type="submit" variant="contained" color="primary" fullWidth>
                     Submit
                 </Button>
             </form>
