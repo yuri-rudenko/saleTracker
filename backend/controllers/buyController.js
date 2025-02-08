@@ -105,7 +105,6 @@ class buyController {
                     product: foundProduct._id,
                     amount: product.amount,
                     price: product.price,
-                    totalPrice: product.amount * product.price,
                     amountInOne: product.amountInOne,
                 });
     

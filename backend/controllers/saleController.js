@@ -107,7 +107,6 @@ class saleController {
                     product: foundProduct._id,
                     amount: product.amount,
                     price: product.price,
-                    totalPrice: product.amount * product.price,
                 });
     
                 newProductsIds.push(saleProduct._id);

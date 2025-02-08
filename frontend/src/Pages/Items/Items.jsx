@@ -10,10 +10,11 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Paper from '@mui/material/Paper';
-import { visuallyHidden } from '@mui/utils';
 import { Button, Dialog, DialogTitle } from '@mui/material';
 import AddNewProduct from './AddNewProduct';
 import ChangeViews from './ChangeViews';
+import EnhancedTableHead from '../../Components/EnhancedTableHead';
+import getComparator from '../../functions/getComparator';
 
 
 function createData(image, name, left, buyprice, sellprice, sells, date, views, increase) {
@@ -48,36 +49,6 @@ const rows = [
     createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cr1unch', 2, 309, 620, 6, "03.01.2025", 20, 3),
     createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch', 2, 309, 620, 6, "03.01.2025", 20, 3),
 ];
-
-function getDate(dateString) {
-    const [day, month, year] = dateString.split('.');
-    return new Date(year, month - 1, day);
-}
-
-function descendingComparator(a, b, orderBy) {
-    if (orderBy === 'date') {
-        if (getDate(b[orderBy]) < getDate(a[orderBy])) {
-            return -1;
-        }
-        if (getDate(b[orderBy]) > getDate(a[orderBy])) {
-            return 1;
-        }
-    } else {
-        if (b[orderBy] < a[orderBy]) {
-            return -1;
-        }
-        if (b[orderBy] > a[orderBy]) {
-            return 1;
-        }
-    }
-    return 0;
-}
-
-function getComparator(order, orderBy) {
-    return order === 'desc'
-        ? (a, b) => descendingComparator(a, b, orderBy)
-        : (a, b) => -descendingComparator(a, b, orderBy);
-}
 
 const headCells = [
     {
@@ -136,64 +107,6 @@ const headCells = [
     }
 ];
 
-function EnhancedTableHead(props) {
-
-    const { order, orderBy, rowCount, onRequestSort } =
-        props;
-    const createSortHandler = (property) => (event) => {
-        onRequestSort(event, property);
-    };
-
-    return (
-        <TableHead>
-            <TableRow>
-                {headCells.map((headCell) => {
-                    if (headCell.id === "image") return (
-                        <TableCell
-                            key={headCell.id}
-                            align={headCell.numeric ? 'right' : 'left'}
-                            padding={headCell.disablePadding ? 'none' : 'normal'}
-                        >
-                            <TableSortLabel>
-                                {headCell.label}
-                            </TableSortLabel>
-                        </TableCell>
-                    )
-                    return (
-                        <TableCell
-                            key={headCell.id}
-                            align={headCell.numeric ? 'right' : 'left'}
-                            padding={!headCell.disablePadding ? 'none' : 'normal'}
-                            sortDirection={orderBy === headCell.id ? order : false}
-                        >
-                            <TableSortLabel
-                                active={orderBy === headCell.id}
-                                direction={orderBy === headCell.id ? order : 'asc'}
-                                onClick={createSortHandler(headCell.id)}
-                            >
-                                {headCell.label}
-                                {orderBy === headCell.id ? (
-                                    <Box component="span" sx={visuallyHidden}>
-                                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                    </Box>
-                                ) : null}
-                            </TableSortLabel>
-                        </TableCell>
-                    )
-                }
-                )}
-            </TableRow>
-        </TableHead>
-    );
-}
-
-EnhancedTableHead.propTypes = {
-    onRequestSort: PropTypes.func.isRequired,
-    order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-    orderBy: PropTypes.string.isRequired,
-    rowCount: PropTypes.number.isRequired,
-};
-
 const Items = () => {
 
     const [order, setOrder] = React.useState('asc');
@@ -217,12 +130,6 @@ const Items = () => {
         setOpenViews(false);
     };
 
-    const handleRequestSort = (event, property) => {
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
-    };
-
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -242,7 +149,6 @@ const Items = () => {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
         [order, orderBy, page, rowsPerPage],
     );
-
 
     return (
         <div>
@@ -275,8 +181,10 @@ const Items = () => {
                             <EnhancedTableHead
                                 order={order}
                                 orderBy={orderBy}
-                                onRequestSort={handleRequestSort}
                                 rowCount={rows.length}
+                                headCells={headCells}
+                                setOrder={setOrder}
+                                setOrderBy={setOrderBy}
                             />
                             <TableBody>
                                 {visibleRows.map((row, index) => {

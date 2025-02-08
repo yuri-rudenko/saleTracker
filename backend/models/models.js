@@ -41,7 +41,6 @@ const SaleProductSchema = new mongoose.Schema({
     product: {type : mongoose.Schema.Types.ObjectId, ref: 'Product'},
     amount: {type: Number, default: 1, min: 1},
     price: {type: Number, required: true, min: 0},
-    totalPrice: {type: Number, required: true, min: 0},
 }, { timestamps: true })
 
 const BuySchema = new mongoose.Schema({
@@ -55,7 +54,6 @@ const BuyProductSchema = new mongoose.Schema({
     product: {type : mongoose.Schema.Types.ObjectId, ref: 'Product'},
     amount: {type: Number, default: 1, min: 1},
     price: {type: Number, required: true, min: 0},
-    totalPrice: {type: Number, required: true, min: 0},
     amountInOne: {type: Number, default: 1},
 }, { timestamps: true })
 
