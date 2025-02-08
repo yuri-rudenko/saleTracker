@@ -8,8 +8,8 @@ import Menu from './Components/Menu';
 import Dashboard from './Pages/Dashboard/Dashboard';
 import Orders from './Pages/Orders/Orders';
 import Items from './Pages/Items/Items';
-import Buying from './Pages/Buying/Buying';
 import Stats from './Pages/Stats/Stats';
+import Buy from './Pages/Buy/Buy';
 
 function App() {
   return (
@@ -40,8 +40,8 @@ function App() {
                   <Items />
                 } />
 
-                <Route path='/buying' element={
-                  <Buying />
+                <Route path='/buy' element={
+                  <Buy />
                 } />
 
                 <Route path='/stats' element={

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Buying = () => {
+const Buy = () => {
     return (
         <div>
             buy
@@ -8,4 +8,4 @@ const Buying = () => {
     );
 }
 
-export default Buying;
+export default Buy;
