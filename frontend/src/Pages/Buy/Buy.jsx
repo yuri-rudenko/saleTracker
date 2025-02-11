@@ -3,6 +3,7 @@ import React from 'react';
 import EnhancedTableHead from '../../Components/EnhancedTableHead';
 import getComparator from '../../functions/getComparator';
 import BuyProductsTable from './BuyProductsTable';
+import CreateOrder from './CreateOrder';
 
 function createData(date, amount, types, price, status, products) {
     return {
@@ -107,6 +108,16 @@ const Buy = () => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = (value) => {
+        setOpen(false);
+    };
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -127,14 +138,15 @@ const Buy = () => {
         [order, orderBy, page, rowsPerPage],
     );
 
-
     return (
         <div>
             <div className="buttons">
                 <div className="create-new-product">
-                    <Button variant="outlined">
+                    <Button onClick={handleClickOpen} variant="outlined">
                         Create new order
                     </Button>
+
+                    <CreateOrder onClose={handleClose} open={open}/>
                 </div>
             </div>
             <Box sx={{ width: '100%' }}>
@@ -184,7 +196,7 @@ const Buy = () => {
                                                                 }}
                                                             >
                                                                 <TableCell align="left">{row.date}</TableCell>
-                                                                <TableCell align="right">{row.amount}</TableCell>
+                                                                <TableCell align="left">{row.amount}</TableCell>
                                                                 <TableCell align="right">{row.types}</TableCell>
                                                                 <TableCell align="right">{row.price}</TableCell>
                                                                 <TableCell align="right">{row.status}</TableCell>

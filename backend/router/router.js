@@ -15,6 +15,6 @@ router.use('/buy', buyRouter);
 router.use('/product', productRouter);
 router.use('/sale', saleRouter);
 router.use('/type', typeRouter);
-router.use('/auth', authRouter)
+router.use('/auth', authRouter);
 
 export default router;

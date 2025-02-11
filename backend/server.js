@@ -8,8 +8,8 @@ function errorHandler(err, req, res, next) {
     console.error(err.stack)
 
     res.status(err.status || 500).json({
-      success: false,
-      message: err.message || "Internal Server Error",
+        success: false,
+        message: err.message || "Internal Server Error",
     });
 }
 
@@ -23,9 +23,8 @@ app.use(express.json());
 app.use('/api', router);
 app.use(errorHandler);
 
-app.listen(port, () => 
-    {   
-        connectDB();
-        console.log(`Example app listening on port ${port}!`);
-    }
+app.listen(port, () => {
+    connectDB();
+    console.log(`Example app listening on port ${port}!`);
+}
 );
