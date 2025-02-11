@@ -17,10 +17,12 @@ import EnhancedTableHead from '../../Components/EnhancedTableHead';
 import getComparator from '../../functions/getComparator';
 
 
-function createData(image, name, left, buyprice, sellprice, sells, date, views, increase) {
+function createData(image, name, category, brand, left, buyprice, sellprice, sells, date, views, increase) {
     return {
         image,
         name,
+        category,
+        brand,
         left,
         buyprice,
         sellprice,
@@ -32,22 +34,22 @@ function createData(image, name, left, buyprice, sellprice, sells, date, views, 
 }
 
 const rows = [
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch1', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch32', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch3', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch4', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch5', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunc6h', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunc234h', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cru3nch', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'C432runch', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cr1unch', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cru32nch', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cru4nch', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cr5unch', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'C6runch', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cr1unch', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch1', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch32', 'Cable', 'Chihna', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch3', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch4', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch5', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunc6h', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunc234h', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cru3nch', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'C432runch', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cr1unch', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cru32nch', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cru4nch', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cr5unch', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'C6runch', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cr1unch', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
 ];
 
 const headCells = [
@@ -62,6 +64,18 @@ const headCells = [
         numeric: false,
         disablePadding: true,
         label: 'Name',
+    },
+    {
+        id: 'category',
+        numeric: false,
+        disablePadding: true,
+        label: 'Category',
+    },
+    {
+        id: 'brand',
+        numeric: false,
+        disablePadding: true,
+        label: 'Brand',
     },
     {
         id: 'left',
@@ -204,6 +218,8 @@ const Items = () => {
                                                 <img style={{ height: "64px", width: "64px" }} src={row.image} alt="item" />
                                             </TableCell>
                                             <TableCell align="left">{row.name}</TableCell>
+                                            <TableCell align="left">{row.category}</TableCell>
+                                            <TableCell align="left">{row.brand}</TableCell>
                                             <TableCell align="right">{row.left}</TableCell>
                                             <TableCell align="right">{row.buyprice}</TableCell>
                                             <TableCell align="right">{row.sellprice}</TableCell>

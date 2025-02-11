@@ -54,6 +54,7 @@ const AddNewProduct = (props) => {
                     rules={{ required: "Category is required" }}
                     render={({ field }) => (
                         <Autocomplete
+                            freeSolo
                             size="small"
                             {...field}
                             options={options}
