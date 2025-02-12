@@ -56,8 +56,6 @@ class productController {
                 return res.status(404).json({ message: "Category or brand not found." });
             }
 
-
-
             const product = await Product.create({
                 name,
                 category: category._id,
@@ -137,37 +135,16 @@ class productController {
                 return res.status(400).json({ message: "Cannot modify views when future data exists." });
             }
 
-            let lastEntry = product.views
-                .filter(entry => new Date(entry.date) < newDate)
-                .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
-
-            let lastViews = lastEntry ? lastEntry.views : 0;
-
-            let currentDate = lastEntry ? new Date(lastEntry.date) : new Date(newDate);
-            currentDate.setDate(currentDate.getDate() + 1);
-
-            while (currentDate < newDate) {
-                product.views.push({ date: new Date(currentDate), views: lastViews });
-                currentDate.setDate(currentDate.getDate() + 1);
-            }
-
-            const existingEntry = product.views.find(entry => new Date(entry.date).getTime() === newDate.getTime());
-            if (existingEntry) {
-                existingEntry.views = views;
-            } else {
-                product.views.push({ date: new Date(newDate), views });
-            }
+            product.views.push({ date: new Date(date), views });
 
             await product.save();
 
-            res.status(200).json({ message: "Views updated successfully", views: product.views });
+            res.status(200).json({ views: product.views });
 
         } catch (error) {
-
             next(error);
-
         }
-    };
+    }
 
 }
 

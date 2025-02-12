@@ -1,4 +1,4 @@
-import { Action, Sale, SaleProduct, Product } from "../models/models.js";
+import { Action, Sale, SaleProduct, Product, BuyProduct } from "../models/models.js";
 
 
 class saleController {
@@ -7,7 +7,7 @@ class saleController {
 
         try {
 
-            const {_id} = req.params;
+            const { _id } = req.params;
 
             const sale = await Sale.findById(_id).populate({
                 path: 'products',
@@ -16,13 +16,13 @@ class saleController {
                 }
             })
 
-            if(!sale) return res.status(404).json({ message: "Order not found." });
-            
+            if (!sale) return res.status(404).json({ message: "Order not found." });
+
             res.status(200).json(sale);
-            
+
         } catch (error) {
             next(error)
-        } 
+        }
 
     }
 
@@ -36,12 +36,12 @@ class saleController {
                     path: 'product',
                 },
             })
-            
+
             res.status(200).json(sales);
-            
+
         } catch (error) {
             next(error)
-        } 
+        }
 
     }
 
@@ -62,25 +62,25 @@ class saleController {
             const sales = await SaleProduct.find(query).populate({
                 path: 'product',
             })
-            
+
             res.status(200).json(sales);
-            
+
         } catch (error) {
             next(error)
-        } 
-    
+        }
+
     }
 
     async create(req, res, next) {
 
         try {
 
-            const {products, date, type, status} = req.body;
+            const { products, date, type, status } = req.body;
 
             const newDate = date ? new Date(date) : new Date();
             const newType = type ? type : "Unknown";
 
-            if(!products) return res.status(400).json({ message: "Order should have at least 1 product." });
+            if (!products) return res.status(400).json({ message: "Order should have at least 1 product." });
 
             let price = 0;
             let amount = 0;
@@ -99,19 +99,68 @@ class saleController {
 
             for (const product of products) {
                 const foundProduct = await Product.findById(product._id);
-    
+            
+                let remainingAmount = product.amount;
+            
+                const buyProducts = await BuyProduct.find({
+                    product: product._id,
+                    $expr: { $lt: ["$sold", "$amount"] }
+                }).sort({ createdAt: 1 });
+            
+                const bulkUpdates = [];
+                for (const buyProduct of buyProducts) {
+                    if (remainingAmount <= 0) break;
+            
+                    let availableAmount = buyProduct.amount - buyProduct.sold;
+                    let soldNow = Math.min(remainingAmount, availableAmount);
+            
+                    bulkUpdates.push({
+                        updateOne: {
+                            filter: { _id: buyProduct._id },
+                            update: { $inc: { sold: soldNow } }
+                        }
+                    });
+            
+                    remainingAmount -= soldNow;
+                }
+            
+                if (bulkUpdates.length) await BuyProduct.bulkWrite(bulkUpdates);
+            
                 price += product.amount * product.price;
                 amount += product.amount;
-    
+            
                 const saleProduct = await SaleProduct.create({
                     product: foundProduct._id,
                     amount: product.amount,
                     price: product.price,
                 });
-    
+            
                 newProductsIds.push(saleProduct._id);
+            
+                const updatedBuyProducts = await BuyProduct.find({
+                    product: product._id,
+                    $expr: { $lt: ["$sold", "$amount"] }
+                });
+            
+                let totalValue = 0;
+                let totalQuantity = 0;
+            
+                for (const buyProduct of updatedBuyProducts) {
+                    let remainingAmount = buyProduct.amount - buyProduct.sold;
+                    totalValue += remainingAmount * buyProduct.price;
+                    totalQuantity += remainingAmount;
+                }
+            
+                const averagePriceLeft = totalQuantity > 0 ? totalValue / totalQuantity : 0;
+            
+                await Product.findByIdAndUpdate(
+                    foundProduct._id,
+                    { averagePriceLeft: averagePriceLeft },
+                    { new: true }
+                );
             }
             
+
             const sale = await Sale.create({
                 products: newProductsIds,
                 date: newDate,
@@ -121,23 +170,23 @@ class saleController {
                 status
             })
 
-            if(!sale) return res.status(400).json({ message: "Problem with creating sale order" });
+            if (!sale) return res.status(400).json({ message: "Problem with creating sale order" });
 
             const latestAction = await Action.findOne().sort({ createdAt: -1 });
 
             const action = await Action.create({
                 type: "sale",
                 refId: sale._id,
-                previousAction: latestAction ? latestAction._id : null, // Link to the latest action, or null if none exists
+                previousAction: latestAction ? latestAction._id : null,
             });
 
-            if(!action) return res.status(400).json({ message: "Problem with creating action" });
+            if (!action) return res.status(400).json({ message: "Problem with creating action" });
 
             return res.status(200).json(sale);
-            
+
         } catch (error) {
             next(error)
-        } 
+        }
 
     }
 
@@ -145,9 +194,9 @@ class saleController {
 
         try {
 
-            const {_id, ...fieldsToUpdate} = req.body;
+            const { _id, ...fieldsToUpdate } = req.body;
 
-            if(!_id) return res.status(400).json({ message: "Sale ID is required." });
+            if (!_id) return res.status(400).json({ message: "Sale ID is required." });
 
             const editedSale = await Sale.findByIdAndUpdate(
                 _id,
@@ -160,7 +209,7 @@ class saleController {
             };
 
             res.status(200).json(editedSale);
-            
+
         } catch (error) {
 
             next(error);

@@ -8,6 +8,7 @@ const ProductSchema = new mongoose.Schema({
   link: { type: String, required: true },
   sold: { type: Boolean, default: false, required: true },
   averageBuyPrice: { type: Number, default: 0, min: 0 },
+  averageBuyPriceLeft: { type: Number, default: 0, min: 0 },
   avarageSellPirce: { type: Number, default: 0, min: 0 },
   currentlyAvaliable: { type: Number, default: 0, min: 0 },
   sales: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Sale' }],
@@ -56,6 +57,7 @@ const BuyProductSchema = new mongoose.Schema({
   amount: { type: Number, default: 1, min: 1 },
   price: { type: Number, required: true, min: 0 },
   amountInOne: { type: Number, default: 1 },
+  sold: { type: Number, default: 0, min: 0 },
 }, { timestamps: true })
 
 const UserSchema = new mongoose.Schema({

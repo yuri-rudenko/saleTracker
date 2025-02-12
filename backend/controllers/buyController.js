@@ -8,7 +8,7 @@ class buyController {
 
         try {
 
-            const {_id} = req.params;
+            const { _id } = req.params;
 
             const buy = await Buy.findById(_id).populate({
                 path: 'products',
@@ -17,31 +17,31 @@ class buyController {
                 }
             })
 
-            if(!buy) return res.status(404).json({ message: "Order not found." });
-            
+            if (!buy) return res.status(404).json({ message: "Order not found." });
+
             res.status(200).json(buy);
-            
+
         } catch (error) {
             next(error)
-        } 
+        }
 
     }
 
     async getAll(req, res, next) {
 
-        const {_id} = req.params;
+        const { _id } = req.params;
 
         try {
 
             const buys = await Buy.find().populate({
                 path: 'products',
             })
-            
+
             res.status(200).json(buys);
-            
+
         } catch (error) {
             next(error)
-        } 
+        }
 
     }
 
@@ -62,25 +62,25 @@ class buyController {
             const buys = await BuyProduct.find(query).populate({
                 path: 'product',
             })
-            
+
             res.status(200).json(buys);
-            
+
         } catch (error) {
             next(error)
-        } 
-    
+        }
+
     }
 
     async create(req, res, next) {
 
         try {
 
-            const {products, date, status} = req.body;
+            const { products, date, status } = req.body;
 
             const newDate = date ? new Date(date) : new Date();
             const newStatus = status || "pending";
 
-            if(!products) return res.status(400).json({ message: "Order should have at least 1 product." });
+            if (!products) return res.status(400).json({ message: "Order should have at least 1 product." });
 
             let price = 0;
 
@@ -97,20 +97,45 @@ class buyController {
             const newProductsIds = [];
 
             for (const product of products) {
+
                 const foundProduct = await Product.findById(product._id);
-    
+
                 price += product.amount * product.price;
-    
+
                 const buyProduct = await BuyProduct.create({
                     product: foundProduct._id,
                     amount: product.amount,
                     price: product.price,
                     amountInOne: product.amountInOne,
+                    sold: 0
                 });
-    
+
                 newProductsIds.push(buyProduct._id);
+
+                const buyProducts = await BuyProduct.find({
+                    product: foundProduct._id,
+                    $expr: { $lt: ["$sold", "$amount"] }
+                });
+
+                let totalValue = 0;
+                let totalQuantity = 0;
+
+                for (const buyProduct of buyProducts) {
+                    let remainingAmount = buyProduct.amount - buyProduct.sold;
+                    totalValue += remainingAmount * buyProduct.price;
+                    totalQuantity += remainingAmount;
+                }
+
+                const averagePriceLeft = totalQuantity > 0 ? totalValue / totalQuantity : 0;
+
+                await Product.findByIdAndUpdate(
+                    foundProduct._id,
+                    { averagePriceLeft: averagePriceLeft },
+                    { new: true }
+                );
+
             }
-            
+
             const buy = await Buy.create({
                 products: newProductsIds,
                 date: newDate,
@@ -118,23 +143,23 @@ class buyController {
                 price
             })
 
-            if(!buy) return res.status(400).json({ message: "Problem with creating buy order" });
+            if (!buy) return res.status(400).json({ message: "Problem with creating buy order" });
 
             const latestAction = await Action.findOne().sort({ createdAt: -1 });
 
             const action = await Action.create({
                 type: "buy",
                 refId: buy._id,
-                previousAction: latestAction ? latestAction._id : null, // Link to the latest action, or null if none exists
+                previousAction: latestAction ? latestAction._id : null,
             });
 
-            if(!action) return res.status(400).json({ message: "Problem with creating action" });
+            if (!action) return res.status(400).json({ message: "Problem with creating action" });
 
             return res.status(200).json(buy);
-            
+
         } catch (error) {
             next(error)
-        } 
+        }
 
     }
 
