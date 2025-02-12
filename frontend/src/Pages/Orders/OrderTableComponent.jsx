@@ -1,22 +1,21 @@
 import { Autocomplete, TableCell, TableRow, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
-function createData(image, name, price, amount, amountInOne) {
+function createData(image, name, price, amount) {
     return {
         image,
         name,
         price,
         amount,
-        amountInOne
     };
 }
 
 const rows = [
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch1', 250, 3, 1),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch2', 250, 3, 1),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch3', 250, 3, 1),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch4', 250, 3, 1),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch5', 2501, 33, 1),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch1', 250, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch2', 250, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch3', 250, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch4', 250, 3),
+    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch5', 2501, 33),
 ];
 
 const OrderTableComponent = (props) => {
@@ -46,8 +45,8 @@ const OrderTableComponent = (props) => {
                         component="th"
                         scope="row"
                         padding="none"
-                        colSpan={6}
-                        sx={{ padding: '    6px' }}
+                        colSpan={5}
+                        sx={{ padding: '6px' }}
                     >
                         <Autocomplete
                             options={rows}
@@ -99,16 +98,6 @@ const OrderTableComponent = (props) => {
                             {...register(`items[${number}].amount`, { min: { value: 1, message: "Too low",}, required: "Amount is required" })}
                             type='number'
                             placeholder='Amount'
-                        />
-                    </TableCell>
-                    <TableCell align="right">
-                        <TextField
-                            size='small'
-                            {...register(`items[${number}].amountInOne`,
-                                { min: { value: 1, message: "Too low" }, required: "A/I is required"  })}
-                            type='number'
-                            placeholder='A/I'
-                            defaultValue={1}
                         />
                     </TableCell>
                     <TableCell align="right" onClick={() => deleteComponent(number)}>x</TableCell>
