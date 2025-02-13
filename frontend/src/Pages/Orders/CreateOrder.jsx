@@ -24,6 +24,9 @@ const CreateOrder = (props) => {
             prevComponents.filter((component) => component.props.number !== number)
 
         );
+        
+        setValue(`items[${number}]`, undefined);
+
     };
 
 
@@ -44,7 +47,7 @@ const CreateOrder = (props) => {
             return [...prevComponents, newComponent];
         });
         console.log(increment)
-        setIncrement(prevIncrement => prevIncrement+=1);
+        setIncrement(prevIncrement => prevIncrement += 1);
     };
 
 
@@ -69,7 +72,7 @@ const CreateOrder = (props) => {
                     Clear
                 </Button>
 
-                <TableContainer style={{ minHeight: "220px", marginTop: "16px"}}>
+                <TableContainer style={{ minHeight: "220px", marginTop: "16px" }}>
                     <Table
                         sx={{ minWidth: 550 }}
                         aria-labelledby="tableTitle"

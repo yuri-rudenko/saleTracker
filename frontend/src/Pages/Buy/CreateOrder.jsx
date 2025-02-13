@@ -26,6 +26,8 @@ const CreateOrder = (props) => {
             prevComponents.filter((component) => component.props.number !== number)
 
         );
+
+        setValue(`items[${number}]`, undefined);
     };
 
 
