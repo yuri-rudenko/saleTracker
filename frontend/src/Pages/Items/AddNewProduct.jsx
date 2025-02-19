@@ -80,6 +80,7 @@ const AddNewProduct = (props) => {
                     rules={{ required: "Brand is required" }}
                     render={({ field }) => (
                         <Autocomplete
+                            freeSolo
                             size="small"
                             {...field}
                             options={options}

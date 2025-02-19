@@ -5,7 +5,7 @@ import OrderTableComponent from './OrderTableComponent';
 
 const CreateOrder = (props) => {
 
-    const { register, handleSubmit, control, setValue, formState: { errors } } = useForm();
+    const { register, handleSubmit, control, setValue, formState: { errors }, reset} = useForm();
 
     const { onClose, open } = props;
     let [increment, setIncrement] = useState(0);
@@ -24,7 +24,7 @@ const CreateOrder = (props) => {
             prevComponents.filter((component) => component.props.number !== number)
 
         );
-        
+
         setValue(`items[${number}]`, undefined);
 
     };
@@ -54,6 +54,7 @@ const CreateOrder = (props) => {
     const resetComponents = () => {
         setComponents([]);
         setIncrement(0);
+        reset();
     }
 
     const onSubmit = (data) => console.log(data);

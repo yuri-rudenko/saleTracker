@@ -121,30 +121,45 @@ class productController {
 
     async editViews(req, res, next) {
         try {
-            const { _id, views, date } = req.body;
-            if (!_id) return res.status(400).json({ message: "Product ID is required." });
+            const products = req.body; // [{ _id, views, date }]
 
-            const product = await Product.findById(_id);
-            if (!product) return res.status(404).json({ message: "Product not found." });
-
-            const newDate = new Date(date);
-            newDate.setHours(0, 0, 0, 0);
-
-            const futureEntry = product.views.some(entry => new Date(entry.date) > newDate);
-            if (futureEntry) {
-                return res.status(400).json({ message: "Cannot modify views when future data exists." });
+            if (!Array.isArray(products) || products.length === 0) {
+                return res.status(400).json({ message: "Products array is required." });
             }
 
-            product.views.push({ date: new Date(date), views });
+            const updatedProducts = [];
 
-            await product.save();
+            for (const { _id, views, date } of products) {
+                if (!_id) {
+                    return res.status(400).json({ message: "Each product must have an id." });
+                }
 
-            res.status(200).json({ views: product.views });
+                const product = await Product.findById(_id);
+                if (!product) {
+                    return res.status(404).json({ message: `Product with ID ${_id} not found.` });
+                }
+
+                const newDate = new Date(date);
+                newDate.setHours(0, 0, 0, 0);
+
+                const futureEntry = product.views.some(entry => new Date(entry.date) > newDate);
+                if (futureEntry) {
+                    return res.status(400).json({ message: `Cannot modify views for product ${_id} when future data exists.` });
+                }
+
+                product.views.push({ date: newDate, views });
+
+                await product.save();
+                updatedProducts.push({ _id: product._id, views: product.views });
+            }
+
+            res.status(200).json({ products: updatedProducts });
 
         } catch (error) {
             next(error);
         }
     }
+
 
 }
 
