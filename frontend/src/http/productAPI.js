@@ -18,9 +18,9 @@ export const createProduct = async (values) => {
 
 }
 
-export const editProduct = async (values) => {
+export const editProduct = async (_id, fieldsToUpdate) => {
 
-    return await $host.put(`/api/product/edit`, values);
+    return await $host.put(`/api/product/edit`, {_id, fieldsToUpdate});
 
 }
 

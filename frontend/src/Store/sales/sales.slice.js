@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSale, getAllSales } from '../../http/saleAPI';
 
-export const fetchItemsAsync = createAsyncThunk(
+export const fetchSalesAsync = createAsyncThunk(
     'sales/fetchAll',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await fetchItems();
+            const response = await getAllSales();
             return response.data;
         } catch (error) {
             return rejectWithValue(error.message);
@@ -12,11 +13,11 @@ export const fetchItemsAsync = createAsyncThunk(
     }
 );
 
-export const addItemAsync = createAsyncThunk(
+export const createSaleAsync = createAsyncThunk(
     'sales/add',
-    async (item, { rejectWithValue }) => {
+    async (sale, { rejectWithValue }) => {
         try {
-            const response = await addItemAPI(item);
+            const response = await createSale(sale);
             return response.data;
         } catch (error) {
             return rejectWithValue(error.message);
@@ -24,40 +25,28 @@ export const addItemAsync = createAsyncThunk(
     }
 );
 
-export const removeItemAsync = createAsyncThunk(
-    'sales/remove',
-    async (id, { rejectWithValue }) => {
-        try {
-            await removeItemAPI(id);
-            return id;
-        } catch (error) {
-            return rejectWithValue(error.message);
-        }
-    }
-);
-
-const itemsSlice = createSlice({
+const salesSlice = createSlice({
     name: 'sales',
     initialState: { list: [], loading: false, error: null },
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchItemsAsync.pending, (state) => { state.loading = true; })
-            .addCase(fetchItemsAsync.fulfilled, (state, action) => {
+            .addCase(fetchSalesAsync.pending, (state) => { state.loading = true; })
+            .addCase(fetchSalesAsync.fulfilled, (state, action) => {
                 state.loading = false;
                 state.list = action.payload;
             })
-            .addCase(fetchItemsAsync.rejected, (state, action) => {
+            .addCase(fetchSalesAsync.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             })
-            .addCase(addItemAsync.fulfilled, (state, action) => {
+            .addCase(createSaleAsync.fulfilled, (state, action) => {
                 state.list.push(action.payload);
             })
-            .addCase(removeItemAsync.fulfilled, (state, action) => {
-                state.list = state.list.filter(item => item.id !== action.payload);
-            });
+            // .addCase(createSaleAsync.fulfilled, (state, action) => {
+            //     state.list = state.list.filter(item => item.id !== action.payload);
+            // });
     },
 });
 
-export default itemsSlice.reducer;
+export default salesSlice.reducer;
