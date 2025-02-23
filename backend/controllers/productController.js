@@ -1,4 +1,4 @@
-import { Product } from "../models/models.js";
+import { Brand, Product, Type } from "../models/models.js";
 
 class productController {
 
@@ -16,7 +16,7 @@ class productController {
                 select: 'price date amount type link'
             })
                 .populate("brand")
-                .populate("category");
+                .populate("type");
 
             res.status(200).json(product);
 
@@ -36,7 +36,7 @@ class productController {
                 query.name = { $regex: name, $options: "i" };
             }
 
-            const products = await Product.find(query).populate("brand").populate("category")
+            const products = await Product.find(query).populate("brand").populate("type")
 
             res.status(200).json(products)
 
@@ -50,16 +50,28 @@ class productController {
 
         try {
 
-            const { name, category, brand, image, link, views = 0 } = req.body;
+            const { name, type, brand, image, link, views = 0 } = req.body;
 
-            if (!brand || !brand._id || !category || !category._id) {
-                return res.status(404).json({ message: "Category or brand not found." });
+            const finalBrand = await Brand.findOneAndUpdate(
+                { name: brand },
+                { name: brand },
+                { new: true, upsert: true }
+            );
+
+            const finalType = await Type.findOneAndUpdate(
+                { name: type },
+                { name: type },
+                { new: true, upsert: true }
+            );
+
+            if (!finalBrand || !finalType) {
+                return res.status(404).json({ message: "Type or brand not found." });
             }
 
             const product = await Product.create({
                 name,
-                category: category._id,
-                brand: brand._id,
+                type: finalType._id,
+                brand: finalBrand._id,
                 image,
                 link,
                 views
