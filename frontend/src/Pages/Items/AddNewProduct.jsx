@@ -1,17 +1,32 @@
 import { useForm, Controller } from "react-hook-form";
 import { Dialog, DialogTitle, TextField, Autocomplete, Button } from "@mui/material";
-
-const options = ["Brand A", "Brand B", "Brand C"];
+import { useDispatch, useSelector } from "react-redux";
+import { fetchBrandsAsync } from "../../Store/typeBrand/brand.slice";
+import { fetchTypesAsync } from "../../Store/typeBrand/type.slice";
+import { useEffect } from "react";
+import { createProductAsync } from "../../Store/product/product.slice";
 
 const AddNewProduct = (props) => {
-    const { register, handleSubmit, control, formState: { errors } } = useForm();
-    const { onClose, open } = props;
 
+    const { register, handleSubmit, control, formState: { errors } } = useForm();
+
+    const dispatch = useDispatch();
+    const brands = useSelector((state) => state.brands.list);
+    const types = useSelector((state) => state.types.list);
+
+    const loading = useSelector((state) => state.products.loading);
+
+    useEffect(() => {
+        dispatch(fetchBrandsAsync());
+        dispatch(fetchTypesAsync());
+    }, [dispatch]);
+
+    const { onClose, open } = props;
     const handleClose = () => {
         onClose();
     };
 
-    const onSubmit = (data) => console.log(data);
+    const onSubmit = (data) => dispatch(createProductAsync(data));
 
     return (
         <Dialog maxWidth={"sm"} onClose={handleClose} open={open}>
@@ -49,23 +64,24 @@ const AddNewProduct = (props) => {
                 />
 
                 <Controller
-                    name="category"
+                    name="type"
                     control={control}
-                    rules={{ required: "Category is required" }}
+                    rules={{ required: "Type is required" }}
                     render={({ field }) => (
                         <Autocomplete
                             freeSolo
                             size="small"
                             {...field}
-                            options={options}
+                            options={types.map(type => type.name)}
                             getOptionLabel={(option) => option}
                             onChange={(_, value) => field.onChange(value)}
+                            onInputChange={(_, value) => field.onChange(value)}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    label="Category"
-                                    error={!!errors.category}
-                                    helperText={errors.category?.message}
+                                    label="Type"
+                                    error={!!errors.type}
+                                    helperText={errors.type?.message}
                                     fullWidth
                                     margin="normal"
                                 />
@@ -82,10 +98,11 @@ const AddNewProduct = (props) => {
                         <Autocomplete
                             freeSolo
                             size="small"
-                            {...field}
-                            options={options}
+                            options={brands.map(brand => brand.name)}
                             getOptionLabel={(option) => option}
+                            value={field.value}
                             onChange={(_, value) => field.onChange(value)}
+                            onInputChange={(_, value) => field.onChange(value)}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
@@ -102,6 +119,7 @@ const AddNewProduct = (props) => {
 
                 <TextField
                     size="small"
+                    type="number"
                     placeholder="Views (default = 0)"
                     {...register("views")}
                     error={!!errors.views}

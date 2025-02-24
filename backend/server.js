@@ -2,6 +2,7 @@ import dotenv from "dotenv"
 import express from "express";
 import { connectDB } from "./config/db.js";
 import router from "./router/router.js";
+import cors from "cors";
 
 function errorHandler(err, req, res, next) {
 
@@ -18,6 +19,11 @@ dotenv.config()
 const app = express();
 const port = process.env.PORT || 5000;
 
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+}));
 
 app.use(express.json());
 app.use('/api', router);

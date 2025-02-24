@@ -7,6 +7,7 @@ import ViewsGraph from '../../Components/ViewsGraph';
 import RecentOrders from '../../Components/RecentOrders';
 
 const Dashboard = () => {
+
     return (
         <div>
             <div className="dashboard">

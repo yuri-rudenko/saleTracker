@@ -12,7 +12,7 @@ router.get("/", productController.getAll);
 router.get("/:_id", productController.get);
 
 // Create a new product
-router.post("/", authMiddleware, productController.create);
+router.post("/", productController.create);
 
 // Update an existing product
 router.put("/edit", authMiddleware, productController.edit);

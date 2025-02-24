@@ -6,7 +6,7 @@ const ProductSchema = new mongoose.Schema({
   brand: { type: mongoose.Schema.Types.ObjectId, ref: 'Brand' },
   image: { type: String, required: true },
   link: { type: String, required: true },
-  sold: { type: Boolean, default: false, required: true },
+  isOnSale: { type: Boolean, default: false, required: true },
   averageBuyPrice: { type: Number, default: 0, min: 0 },
   averageBuyPriceLeft: { type: Number, default: 0, min: 0 },
   avarageSellPirce: { type: Number, default: 0, min: 0 },

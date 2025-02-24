@@ -77,8 +77,10 @@ const productsSlice = createSlice({
                 state.error = action.payload;
             })
             .addCase(createProductAsync.fulfilled, (state, action) => {
+                console.log('Product added:', action.payload);
                 state.list.push(action.payload);
             })
+            
             .addCase(deleteProductAsync.fulfilled, (state, action) => {
                 state.list = state.list.filter(item => item.id !== action.payload);
             })

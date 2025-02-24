@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -15,6 +15,8 @@ import AddNewProduct from './AddNewProduct';
 import ChangeViews from './ChangeViews';
 import EnhancedTableHead from '../../Components/EnhancedTableHead';
 import getComparator from '../../functions/getComparator';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProductsAsync } from '../../Store/product/product.slice';
 
 
 function createData(image, name, category, brand, left, buyprice, sellprice, sells, date, views, increase) {
@@ -32,25 +34,6 @@ function createData(image, name, category, brand, left, buyprice, sellprice, sel
         increase
     };
 }
-
-const rows = [
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch1', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch32', 'Cable', 'Chihna', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch3', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch4', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch5', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunc6h', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunc234h', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cru3nch', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'C432runch', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cr1unch', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cru32nch', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cru4nch', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cr5unch', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'C6runch', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cr1unch', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch', 'Pedal', 'Saphue', 2, 309, 620, 6, "03.01.2025", 20, 3),
-];
 
 const headCells = [
     {
@@ -123,6 +106,18 @@ const headCells = [
 
 const Items = () => {
 
+    const dispatch = useDispatch();
+    const products = useSelector((state) =>
+        state.products.list.map(item => createData(item.image, item.name, item.type.name, item.brand.name, item.currentlyAvaliable, item.averageBuyPrice, item.avarageSellPirce, item.amountSold, item.sales.length ? item.sales.at(-1).date : 0, item.views.at(-1).views, item.increase || 0))
+    );
+
+    const loading = useSelector((state) => state.products.loading);
+
+    useEffect(() => {
+        dispatch(fetchProductsAsync());
+    }, [dispatch]);
+
+
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [page, setPage] = React.useState(0);
@@ -154,15 +149,18 @@ const Items = () => {
     };
 
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - products.length) : 0;
 
     const visibleRows = React.useMemo(
         () =>
-            [...rows]
+            [...products]
                 .sort(getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-        [order, orderBy, page, rowsPerPage],
+        [order, orderBy, page, rowsPerPage, products],
     );
+
+    if (loading) return <div>Loading...</div>;
+    if (!products.length) return <div>No products available</div>;
 
     return (
         <div>
@@ -195,7 +193,7 @@ const Items = () => {
                             <EnhancedTableHead
                                 order={order}
                                 orderBy={orderBy}
-                                rowCount={rows.length}
+                                rowCount={products.length}
                                 headCells={headCells}
                                 setOrder={setOrder}
                                 setOrderBy={setOrderBy}
@@ -207,7 +205,7 @@ const Items = () => {
                                         <TableRow
                                             hover
                                             tabIndex={-1}
-                                            key={row.id}
+                                            key={row._id}
                                             sx={{ cursor: 'pointer' }}
                                         >
                                             <TableCell
@@ -245,7 +243,7 @@ const Items = () => {
                     <TablePagination
                         rowsPerPageOptions={[5, 10, 25]}
                         component="div"
-                        count={rows.length}
+                        count={products.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}

@@ -50,7 +50,13 @@ class productController {
 
         try {
 
-            const { name, type, brand, image, link, views = 0 } = req.body;
+            const { name, type, brand, image, link, views } = req.body;
+
+            const newViews = (views === "" || views === null || views === undefined) ? 0 : views;
+
+            if (!name || !image || !link || !type || !brand) {
+                return res.status(400).json({ message: "Some of the parameters are missing" });
+            }
 
             const finalBrand = await Brand.findOneAndUpdate(
                 { name: brand },
@@ -74,10 +80,14 @@ class productController {
                 brand: finalBrand._id,
                 image,
                 link,
-                views
+                views: [{ date: new Date(), views: newViews }],
             })
 
-            res.status(200).json({ product: product });
+            const populatedProduct = await Product.findById(product._id)
+                .populate("brand")
+                .populate("type");
+
+            res.status(200).json(populatedProduct);
 
         } catch (error) {
             next(error);
@@ -95,7 +105,7 @@ class productController {
 
             const deletedProduct = await Product.findByIdAndDelete(_id);
 
-            res.status(200).json({ product: deletedProduct });
+            res.status(200).json(deletedProduct);
 
         } catch (error) {
             next(error);
@@ -133,15 +143,17 @@ class productController {
 
     async editViews(req, res, next) {
         try {
-            const products = req.body; // [{ _id, views, date }]
+            const products = req.body; // [{ _id, newViews }]
 
             if (!Array.isArray(products) || products.length === 0) {
                 return res.status(400).json({ message: "Products array is required." });
             }
 
             const updatedProducts = [];
+            const newDate = new Date(Date.now());
+            newDate.setHours(0, 0, 0, 0);
 
-            for (const { _id, views, date } of products) {
+            for (const { _id, views } of products) {
                 if (!_id) {
                     return res.status(400).json({ message: "Each product must have an id." });
                 }
@@ -150,9 +162,6 @@ class productController {
                 if (!product) {
                     return res.status(404).json({ message: `Product with ID ${_id} not found.` });
                 }
-
-                const newDate = new Date(date);
-                newDate.setHours(0, 0, 0, 0);
 
                 const futureEntry = product.views.some(entry => new Date(entry.date) > newDate);
                 if (futureEntry) {
@@ -165,7 +174,7 @@ class productController {
                 updatedProducts.push({ _id: product._id, views: product.views });
             }
 
-            res.status(200).json({ products: updatedProducts });
+            res.status(200).json(updatedProducts);
 
         } catch (error) {
             next(error);
