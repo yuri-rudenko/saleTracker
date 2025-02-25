@@ -10,8 +10,20 @@ import Orders from './Pages/Orders/Orders';
 import Items from './Pages/Items/Items';
 import Stats from './Pages/Stats/Stats';
 import Buy from './Pages/Buy/Buy';
+import { useEffect } from 'react';
+import { fetchProductsAsync } from './Store/product/product.slice';
+import { useDispatch } from 'react-redux';
+import { fetchBuysAsync } from './Store/buys/buys.slice';
 
 function App() {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchProductsAsync());
+    dispatch(fetchBuysAsync());
+  }, [dispatch]);
+
   return (
     <Router basename="/">
       <div className="App">

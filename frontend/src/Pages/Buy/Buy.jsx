@@ -1,13 +1,14 @@
 import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import EnhancedTableHead from '../../Components/EnhancedTableHead';
 import getComparator from '../../functions/getComparator';
 import BuyProductsTable from './BuyProductsTable';
 import CreateOrder from './CreateOrder';
+import { useSelector } from 'react-redux';
 
 function createData(date, amount, types, price, status, products) {
     return {
-        date,
+        date: new Date(date).toLocaleDateString('en-GB'),
         amount,
         types,
         price,
@@ -15,19 +16,6 @@ function createData(date, amount, types, price, status, products) {
         products
     };
 }
-
-const rows = [
-    createData("03.01.2025", 5, 3, 1700, "Arrived", [{ image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunchi', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }]),
-    createData("03.01.2025", 5, 3, 1700, "Arrived", [{ image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch2', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }]),
-    createData("03.01.2025", 5, 3, 1700, "Arrived", [{ image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch3', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }]),
-    createData("03.01.2025", 5, 3, 1700, "Arrived", [{ image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch4', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }]),
-    createData("03.01.2025", 5, 3, 1700, "Arrived", [{ image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch5', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }]),
-    createData("03.01.2025", 5, 3, 1700, "Arrived", [{ image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch6', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }]),
-    createData("03.01.2025", 5, 3, 1700, "Arrived", [{ image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch7', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }]),
-    createData("03.01.2025", 5, 3, 1700, "Arrived", [{ image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch8', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }]),
-    createData("03.01.2025", 5, 3, 1700, "Arrived", [{ image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch9', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, amountInOne: 1 }]),
-
-];
 
 const headCells = [
     {
@@ -39,7 +27,7 @@ const headCells = [
     {
         id: 'amount',
         numeric: true,
-        disablePadding: false,
+        disablePadding: true,
         label: 'Total amount',
     },
     {
@@ -60,45 +48,6 @@ const headCells = [
         disablePadding: true,
         label: 'Status',
     },
-];
-
-const headCellsProduct = [
-    {
-        id: 'image',
-        numeric: false,
-        disablePadding: false,
-        label: 'Image',
-    },
-    {
-        id: 'name',
-        numeric: false,
-        disablePadding: true,
-        label: 'Name',
-    },
-    {
-        id: 'amount',
-        numeric: true,
-        disablePadding: true,
-        label: 'Amount bought',
-    },
-    {
-        id: 'price',
-        numeric: true,
-        disablePadding: true,
-        label: 'Price',
-    },
-    {
-        id: 'totalPrice',
-        numeric: true,
-        disablePadding: true,
-        label: 'Total price',
-    },
-    {
-        id: 'amountInOne',
-        numeric: true,
-        disablePadding: true,
-        label: 'Amount in one',
-    }
 ];
 
 const Buy = () => {
@@ -127,15 +76,24 @@ const Buy = () => {
         setPage(0);
     };
 
+    const buys = useSelector((state) =>
+        state.buys.list.map(buy => createData(buy.date, buy.products.reduce((acc, product) => acc + product.amount, 0), buy.products.length, buy.price, buy.status, buy.products))
+    );
+
+    useEffect(() => {
+        console.log("Buy items: ");
+        console.log(buys);
+    }, [buys])
+
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - buys.length) : 0;
 
     const visibleRows = React.useMemo(
         () =>
-            [...rows]
+            [...buys]
                 .sort(getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-        [order, orderBy, page, rowsPerPage],
+        [order, orderBy, page, rowsPerPage, buys]
     );
 
     return (
@@ -160,7 +118,7 @@ const Buy = () => {
                             <EnhancedTableHead
                                 order={order}
                                 orderBy={orderBy}
-                                rowCount={rows.length}
+                                rowCount={buys.length}
                                 headCells={headCells}
                                 setOrder={setOrder}
                                 setOrderBy={setOrderBy}
@@ -195,11 +153,11 @@ const Buy = () => {
                                                                     '& td, & th': { borderBottom: 'none' }
                                                                 }}
                                                             >
-                                                                <TableCell align="left">{row.date}</TableCell>
-                                                                <TableCell align="left">{row.amount}</TableCell>
-                                                                <TableCell align="right">{row.types}</TableCell>
-                                                                <TableCell align="right">{row.price}</TableCell>
-                                                                <TableCell align="right">{row.status}</TableCell>
+                                                                <TableCell align="left" sx={{ width: '30%' }}>{row.date}</TableCell>
+                                                                <TableCell align="left" sx={{ width: '10%' }}>{row.amount}</TableCell>
+                                                                <TableCell align="right" sx={{ width: '20%' }}>{row.types}</TableCell>
+                                                                <TableCell align="right" sx={{ width: '20%' }}>{row.price}</TableCell>
+                                                                <TableCell align="right" sx={{ width: '20%' }}>{row.status}</TableCell>
                                                             </TableRow>
                                                         </TableBody>
                                                     </Table>
@@ -228,7 +186,7 @@ const Buy = () => {
                     <TablePagination
                         rowsPerPageOptions={[5, 10, 25]}
                         component="div"
-                        count={rows.length}
+                        count={buys.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}

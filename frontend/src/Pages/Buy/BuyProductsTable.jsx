@@ -1,14 +1,14 @@
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 
-function createData({ image, name, amount, price, totalPrice, amountInOne }) {
+function createData(buyProduct) {
     return {
-        image,
-        name,
-        amount,
-        price,
-        totalPrice,
-        amountInOne
+        image: buyProduct.product.image,
+        name: buyProduct.product.name,
+        amount: buyProduct.amount,
+        price: buyProduct.price,
+        totalPrice: buyProduct.price * buyProduct.amount,
+        amountInOne: buyProduct.amountInOne
     };
 }
 
@@ -55,7 +55,14 @@ const BuyProductsTable = (props) => {
 
     const { rowsData } = props;
 
-    const rows = rowsData.map(row => createData(row));
+    console.log(rowsData, 444)
+
+    const rows = rowsData ? rowsData.map(row => createData(row)): [];
+
+    useEffect(() => {
+        console.log("Single product rows")
+        console.log(rows);
+    }, [rows]);
 
     return (
         <div>
@@ -69,7 +76,7 @@ const BuyProductsTable = (props) => {
                         sx={{
                             '& .MuiTableCell-root': {
                                 padding: '4px 8px',
-                                fontSize: '0.85rem',   
+                                fontSize: '0.85rem',
                             }
                         }}
                     >
@@ -102,9 +109,9 @@ const BuyProductsTable = (props) => {
                     <TableBody
                         sx={{
                             '& .MuiTableCell-root': {
-                              fontSize: '0.8rem',
+                                fontSize: '0.8rem',
                             }
-                          }}
+                        }}
                     >
                         {rows.map((row, index) => {
 

@@ -63,8 +63,35 @@ export const editProductViewsAsync = createAsyncThunk(
 
 const productsSlice = createSlice({
     name: 'products',
-    initialState: { list: [], loading: false, error: null, updatingIds: [] },
-    reducers: {},
+    initialState: { list: [], loading: false, error: null, updatingIds: [], chosenBuyItems: [], chosenSellItems: [] },
+    reducers: {
+        addChosenBuyItem: (state, action) => {
+            const item = action.payload;
+            if (!state.chosenBuyItems.some(chosen => chosen._id === item._id)) {
+                state.chosenBuyItems.push(item);
+            }
+        },
+        removeChosenBuyItem: (state, action) => {
+            const deletingItem = action.payload;
+            state.chosenBuyItems = state.chosenBuyItems.filter(item => item._id !== deletingItem._id);
+        },
+        resetChosenBuyItems: (state) => {
+            state.chosenBuyItems = [];
+        },
+        addChosenSellItem: (state, action) => {
+            const item = action.payload;
+            if (!state.chosenSellItems.some(chosen => chosen._id === item._id)) {
+                state.chosenSellItems.push(item);
+            }
+        },
+        removeChosenSellItem: (state, action) => {
+            const deletingItem = action.payload;
+            state.chosenSellItems = state.chosenSellItems.filter(item => item._id !== deletingItem._id);
+        },
+        resetChosenSellItems: (state) => {
+            state.chosenSellItems = [];
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchProductsAsync.pending, (state) => { state.loading = true; })
@@ -80,7 +107,7 @@ const productsSlice = createSlice({
                 console.log('Product added:', action.payload);
                 state.list.push(action.payload);
             })
-            
+
             .addCase(deleteProductAsync.fulfilled, (state, action) => {
                 state.list = state.list.filter(item => item.id !== action.payload);
             })
@@ -127,5 +154,14 @@ const productsSlice = createSlice({
             });
     },
 });
+
+export const {
+    addChosenBuyItem,
+    removeChosenBuyItem,
+    resetChosenBuyItems,
+    addChosenSellItem,
+    removeChosenSellItem,
+    resetChosenSellItems
+} = productsSlice.actions;
 
 export default productsSlice.reducer;

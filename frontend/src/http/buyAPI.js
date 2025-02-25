@@ -20,6 +20,10 @@ export const getAllBuysOfProducts = async (values) => {
 
 export const createBuy = async (values) => {
 
+    if (!values?.products || values.products.length === 0) {
+        return;
+    }
+
     return await $host.post(`/buy`, values);
 
 }

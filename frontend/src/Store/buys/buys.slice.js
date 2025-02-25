@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { createBuy, getAllBuys } from '../../http/buyAPI';
+import { createBuy, getAllBuys } from '../../http/buyAPI.js';
+
 
 export const fetchBuysAsync = createAsyncThunk(
     'buys/fetchAll',

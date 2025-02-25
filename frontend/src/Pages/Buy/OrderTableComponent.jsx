@@ -1,5 +1,7 @@
 import { Autocomplete, TableCell, TableRow, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addChosenBuyItem, removeChosenBuyItem } from '../../Store/product/product.slice';
 
 function createData(image, name, price, amount, amountInOne) {
     return {
@@ -11,27 +13,47 @@ function createData(image, name, price, amount, amountInOne) {
     };
 }
 
-const rows = [
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch1', 250, 3, 1),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch2', 250, 3, 1),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch3', 250, 3, 1),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch4', 250, 3, 1),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch5', 2501, 33, 1),
-];
-
 const OrderTableComponent = (props) => {
 
     const { number, register, errors, setValue, setComponents, components, deleteComponent } = props;
 
+    const dispatch = useDispatch();
+    const chosenBuyItems = useSelector((state) => state.products.chosenBuyItems);
+    const rows = useSelector((state) => state.products.list);
+
+    const handleSelectItem = (event, value) => {
+        console.log(value);
+        setChosen(value);
+        if (value) {
+            dispatch(addChosenBuyItem(value));
+            setValue(`products[${number}].name`, value.name);
+            setValue(`products[${number}]._id`, value._id);
+        }
+    };
+
+    const handleRemoveItem = () => {
+        if (chosen) {
+            dispatch(removeChosenBuyItem(chosen));
+            setChosen(false);
+            deleteComponent(number)
+        }
+    };
+
     const [chosen, setChosen] = useState(false);
 
     useEffect(() => {
-        if (chosen) {
+        console.log('/////ROWS/////');
+        console.log(rows);
+    }, [rows]);
 
-            setValue(`items[${number}].name`, chosen.name);
+    useEffect(() => {
+        console.log('/////CHOSENROWS/////');
+        console.log(chosenBuyItems);
+    }, [chosenBuyItems]);
 
-        }
-    }, [chosen, number, setValue]);
+    const availableOptions = rows.filter(
+        option => !chosenBuyItems.some(item => item._id === option._id)
+    );
 
     return (
         <>
@@ -47,14 +69,16 @@ const OrderTableComponent = (props) => {
                         scope="row"
                         padding="none"
                         colSpan={6}
-                        sx={{ padding: '    6px' }}
+                        sx={{ padding: '6px' }}
                     >
                         <Autocomplete
-                            options={rows}
+                            options={availableOptions}
                             getOptionLabel={(option) => option.name}
-                            onChange={(event, value) => setChosen(value)}
+                            onChange={handleSelectItem}
+                            clearOnEscape
+                            isOptionEqualToValue={(option, value) => option._id === value?._id}
                             renderOption={(props, option) => (
-                                <li {...props} key={option.id}>
+                                <li {...props} key={option._id}>
                                     <img
                                         src={option.image}
                                         alt={option.name}
@@ -71,7 +95,7 @@ const OrderTableComponent = (props) => {
                 <TableRow
                     hover
                     tabIndex={-1}
-                    sx={{ cursor: 'pointer'}}
+                    sx={{ cursor: 'pointer' }}
                 >
                     <TableCell component="th" scope="row" padding="none">
                         <img style={{ height: "64px", width: "64px" }} src={chosen?.image} alt="item" />
@@ -82,21 +106,21 @@ const OrderTableComponent = (props) => {
                     <TableCell align="right">
                         <TextField
                             size="small"
-                            {...register(`items[${number}].price`, {
+                            {...register(`products[${number}].price`, {
                                 min: { value: 0.01, message: "Too low" },
                                 required: "Price is required"
                             })}
                             type="number"
                             placeholder="Price"
-                            error={!!errors.items?.[number]?.price}
-                            helperText={errors.items?.[number]?.price?.message}
+                            error={!!errors.products?.[number]?.price}
+                            helperText={errors.products?.[number]?.price?.message}
                             inputProps={{ step: "0.01" }}
                         />
                     </TableCell>
                     <TableCell align="right">
                         <TextField
                             size='small'
-                            {...register(`items[${number}].amount`, { min: { value: 1, message: "Too low",}, required: "Amount is required" })}
+                            {...register(`products[${number}].amount`, { min: { value: 1, message: "Too low", }, required: "Amount is required" })}
                             type='number'
                             placeholder='Amount'
                         />
@@ -104,14 +128,14 @@ const OrderTableComponent = (props) => {
                     <TableCell align="right">
                         <TextField
                             size='small'
-                            {...register(`items[${number}].amountInOne`,
-                                { min: { value: 1, message: "Too low" }, required: "A/I is required"  })}
+                            {...register(`products[${number}].amountInOne`,
+                                { min: { value: 1, message: "Too low" }, required: "A/I is required" })}
                             type='number'
                             placeholder='A/I'
                             defaultValue={1}
                         />
                     </TableCell>
-                    <TableCell align="right" onClick={() => deleteComponent(number)}>x</TableCell>
+                    <TableCell align="right" onClick={handleRemoveItem}>x</TableCell>
                 </TableRow>
             )}
         </>

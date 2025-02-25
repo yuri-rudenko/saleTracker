@@ -35,6 +35,9 @@ class buyController {
 
             const buys = await Buy.find().populate({
                 path: 'products',
+                populate: {
+                    path: 'product'
+                }
             })
 
             res.status(200).json(buys);
@@ -61,6 +64,9 @@ class buyController {
 
             const buys = await BuyProduct.find(query).populate({
                 path: 'product',
+                populate: {
+                    path: 'product'
+                }
             })
 
             res.status(200).json(buys);
@@ -77,17 +83,28 @@ class buyController {
 
             const { products, date, status } = req.body;
 
+
             const newDate = date ? new Date(date) : new Date();
-            const newStatus = status || "pending";
+            const newStatus = status ? "arrived" : "pending";
+
+            console.log(products, newDate, newStatus);
 
             if (!products) return res.status(400).json({ message: "Order should have at least 1 product." });
 
             let price = 0;
 
+            const seenIds = new Set();
+
             for (const product of products) {
                 if (!product._id || !product.amount || !product.price || !product.amountInOne) {
-                    return res.status(400).json({ message: "One of the products doesn't have all required parameters." });
+                    return res.status(400).json({ message: `One of the products doesn't have all required parameters: ${product._id}` });
                 }
+
+                if (seenIds.has(product._id)) {
+                    return res.status(400).json({ message: `Duplicate product detected with ID ${product._id}.` });
+                }
+                seenIds.add(product._id);
+
                 const foundProduct = await Product.findById(product._id);
                 if (!foundProduct) {
                     return res.status(404).json({ message: `Product with ID ${product._id} doesn't exist.` });
@@ -145,6 +162,14 @@ class buyController {
 
             if (!buy) return res.status(400).json({ message: "Problem with creating buy order" });
 
+
+            const foundBuy = await Buy.findById(buy._id).populate({
+                path: 'products',
+                populate: {
+                    path: 'product'
+                }
+            })
+
             const latestAction = await Action.findOne().sort({ createdAt: -1 });
 
             const action = await Action.create({
@@ -155,7 +180,7 @@ class buyController {
 
             if (!action) return res.status(400).json({ message: "Problem with creating action" });
 
-            return res.status(200).json(buy);
+            return res.status(200).json(foundBuy);
 
         } catch (error) {
             next(error)
