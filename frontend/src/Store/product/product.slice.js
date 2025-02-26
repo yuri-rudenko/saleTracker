@@ -90,6 +90,14 @@ const productsSlice = createSlice({
         },
         resetChosenSellItems: (state) => {
             state.chosenSellItems = [];
+        },
+        updateProductStock: (state, action) => {
+            action.payload.forEach(updatedProduct => {
+                const index = state.list.findIndex(p => p._id === updatedProduct._id);
+                if (index !== -1) {
+                    state.list[index] = updatedProduct;
+                }
+            });
         }
     },
     extraReducers: (builder) => {
@@ -161,7 +169,8 @@ export const {
     resetChosenBuyItems,
     addChosenSellItem,
     removeChosenSellItem,
-    resetChosenSellItems
+    resetChosenSellItems,
+    updateProductStock
 } = productsSlice.actions;
 
 export default productsSlice.reducer;

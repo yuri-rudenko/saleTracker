@@ -117,6 +117,12 @@ class buyController {
 
                 const foundProduct = await Product.findById(product._id);
 
+                await Product.findByIdAndUpdate(
+                    product._id,
+                    { $inc: { currentlyAvaliable: product.amount * product.amountInOne } },
+                    { new: true }
+                );
+
                 price += product.amount * product.price;
 
                 const buyProduct = await BuyProduct.create({
@@ -130,27 +136,37 @@ class buyController {
                 newProductsIds.push(buyProduct._id);
 
                 const buyProducts = await BuyProduct.find({
-                    product: foundProduct._id,
-                    $expr: { $lt: ["$sold", "$amount"] }
+                    product: foundProduct._id
                 });
 
                 let totalValue = 0;
                 let totalQuantity = 0;
+                let totalAmount = 0;
+                let weightedPriceSum = 0;
 
                 for (const buyProduct of buyProducts) {
                     let remainingAmount = buyProduct.amount - buyProduct.sold;
-                    totalValue += remainingAmount * buyProduct.price;
-                    totalQuantity += remainingAmount;
+
+                    if (remainingAmount > 0) {
+                        totalValue += remainingAmount * buyProduct.price;
+                        totalQuantity += remainingAmount;
+                    }
+
+                    totalAmount += buyProduct.amount;
+                    weightedPriceSum += buyProduct.amount * buyProduct.price;
                 }
 
                 const averagePriceLeft = totalQuantity > 0 ? totalValue / totalQuantity : 0;
+                const averageBuyPrice = totalAmount > 0 ? weightedPriceSum / totalAmount : 0;
 
                 await Product.findByIdAndUpdate(
                     foundProduct._id,
-                    { averagePriceLeft: averagePriceLeft },
+                    {
+                        averageBuyPriceLeft: averagePriceLeft,
+                        averageBuyPrice: averageBuyPrice
+                    },
                     { new: true }
                 );
-
             }
 
             const buy = await Buy.create({

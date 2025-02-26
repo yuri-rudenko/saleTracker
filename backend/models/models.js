@@ -11,7 +11,6 @@ const ProductSchema = new mongoose.Schema({
   averageBuyPriceLeft: { type: Number, default: 0, min: 0 },
   avarageSellPirce: { type: Number, default: 0, min: 0 },
   currentlyAvaliable: { type: Number, default: 0, min: 0 },
-  sales: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Sale' }],
   amountSold: { type: Number, default: 0 },
   active: { type: Boolean, required: true, default: true },
   views: [{
