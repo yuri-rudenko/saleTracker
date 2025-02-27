@@ -93,9 +93,11 @@ const productsSlice = createSlice({
         },
         updateProductStock: (state, action) => {
             action.payload.forEach(updatedProduct => {
-                const index = state.list.findIndex(p => p._id === updatedProduct._id);
+                const index = state.list.findIndex(p => p._id === updatedProduct.product._id);
                 if (index !== -1) {
-                    state.list[index] = updatedProduct;
+
+                    state.list[index] = updatedProduct.product;
+
                 }
             });
         }
@@ -112,7 +114,6 @@ const productsSlice = createSlice({
                 state.error = action.payload;
             })
             .addCase(createProductAsync.fulfilled, (state, action) => {
-                console.log('Product added:', action.payload);
                 state.list.push(action.payload);
             })
 

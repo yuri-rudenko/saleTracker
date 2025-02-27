@@ -80,11 +80,6 @@ const Buy = () => {
         state.buys.list.map(buy => createData(buy.date, buy.products.reduce((acc, product) => acc + product.amount, 0), buy.products.length, buy.price, buy.status, buy.products))
     );
 
-    useEffect(() => {
-        console.log("Buy items: ");
-        console.log(buys);
-    }, [buys])
-
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - buys.length) : 0;
 

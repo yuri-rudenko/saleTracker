@@ -52,7 +52,6 @@ const CreateOrder = (props) => {
             );
             return [...prevComponents, newComponent];
         });
-        console.log(increment)
         setIncrement(prevIncrement => prevIncrement += 1);
     };
 

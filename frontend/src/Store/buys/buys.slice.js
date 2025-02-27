@@ -20,8 +20,6 @@ export const createBuyAsync = createAsyncThunk(
     async (buy, { rejectWithValue, dispatch }) => {
         try {
             const response = await createBuy(buy);
-            console.log("RESPONE DATA");
-            console.log(response.data)
             if (response.data.products) {
                 dispatch(updateProductStock(response.data.products));
             }

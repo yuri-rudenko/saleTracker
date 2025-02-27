@@ -55,14 +55,8 @@ const BuyProductsTable = (props) => {
 
     const { rowsData } = props;
 
-    console.log(rowsData, 444)
-
     const rows = rowsData ? rowsData.map(row => createData(row)): [];
 
-    useEffect(() => {
-        console.log("Single product rows")
-        console.log(rows);
-    }, [rows]);
 
     return (
         <div>

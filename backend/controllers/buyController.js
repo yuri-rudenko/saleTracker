@@ -87,8 +87,6 @@ class buyController {
             const newDate = date ? new Date(date) : new Date();
             const newStatus = status ? "arrived" : "pending";
 
-            console.log(products, newDate, newStatus);
-
             if (!products) return res.status(400).json({ message: "Order should have at least 1 product." });
 
             let price = 0;
@@ -145,14 +143,16 @@ class buyController {
                 let weightedPriceSum = 0;
 
                 for (const buyProduct of buyProducts) {
-                    let remainingAmount = buyProduct.amount - buyProduct.sold;
 
-                    if (remainingAmount > 0) {
-                        totalValue += remainingAmount * buyProduct.price;
-                        totalQuantity += remainingAmount;
+                    const totalStockForEntry = buyProduct.amount * buyProduct.amountInOne;
+                    const remainingStock = totalStockForEntry - buyProduct.sold;
+
+                    if (remainingStock > 0) {
+                        totalValue += (remainingStock * buyProduct.price) / buyProduct.amountInOne;
+                        totalQuantity += remainingStock;
                     }
 
-                    totalAmount += buyProduct.amount;
+                    totalAmount += totalStockForEntry;
                     weightedPriceSum += buyProduct.amount * buyProduct.price;
                 }
 
@@ -178,13 +178,16 @@ class buyController {
 
             if (!buy) return res.status(400).json({ message: "Problem with creating buy order" });
 
-
             const foundBuy = await Buy.findById(buy._id).populate({
                 path: 'products',
                 populate: {
-                    path: 'product'
+                    path: 'product',
+                    populate: [
+                        { path: 'type' },
+                        { path: 'brand' }
+                    ]
                 }
-            })
+            });
 
             const latestAction = await Action.findOne().sort({ createdAt: -1 });
 

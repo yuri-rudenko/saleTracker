@@ -22,7 +22,6 @@ const OrderTableComponent = (props) => {
     const rows = useSelector((state) => state.products.list);
 
     const handleSelectItem = (event, value) => {
-        console.log(value);
         setChosen(value);
         if (value) {
             dispatch(addChosenBuyItem(value));
@@ -40,16 +39,6 @@ const OrderTableComponent = (props) => {
     };
 
     const [chosen, setChosen] = useState(false);
-
-    useEffect(() => {
-        console.log('/////ROWS/////');
-        console.log(rows);
-    }, [rows]);
-
-    useEffect(() => {
-        console.log('/////CHOSENROWS/////');
-        console.log(chosenBuyItems);
-    }, [chosenBuyItems]);
 
     const availableOptions = rows.filter(
         option => !chosenBuyItems.some(item => item._id === option._id)
