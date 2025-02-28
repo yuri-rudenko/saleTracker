@@ -14,6 +14,8 @@ import { useEffect } from 'react';
 import { fetchProductsAsync } from './Store/product/product.slice';
 import { useDispatch } from 'react-redux';
 import { fetchBuysAsync } from './Store/buys/buys.slice';
+import { fetchBrandsAsync } from './Store/typeBrand/brand.slice';
+import { fetchTypesAsync } from './Store/typeBrand/type.slice';
 
 function App() {
 
@@ -22,6 +24,8 @@ function App() {
   useEffect(() => {
     dispatch(fetchProductsAsync());
     dispatch(fetchBuysAsync());
+    dispatch(fetchBrandsAsync());
+    dispatch(fetchTypesAsync());
   }, [dispatch]);
 
   return (

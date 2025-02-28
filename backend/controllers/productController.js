@@ -142,7 +142,9 @@ class productController {
     }
 
     async editViews(req, res, next) {
+        
         try {
+
             const products = req.body; // [{ _id, newViews }]
 
             if (!Array.isArray(products) || products.length === 0) {
@@ -172,7 +174,7 @@ class productController {
 
                 await product.save();
                 updatedProducts.push({ _id: product._id, views: product.views });
-            }
+            }   
 
             res.status(200).json(updatedProducts);
 

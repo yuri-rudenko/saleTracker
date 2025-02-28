@@ -1,40 +1,15 @@
 import { useForm, Controller } from "react-hook-form";
 import { Dialog, DialogTitle, TextField, Autocomplete, Button, TableContainer, Table, TableBody, TableCell, TableRow, TableHead } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { editProductViewsAsync } from "../../Store/product/product.slice";
 
-const options = ["Brand A", "Brand B", "Brand C"];
-
-function createData(image, name, left, buyprice, sellprice, sells, date, views, increase) {
+function createData(_id, name, views) {
     return {
-        image,
+        _id,
         name,
-        left,
-        buyprice,
-        sellprice,
-        sells,
-        date,
         views,
-        increase
     };
 }
-
-const rows = [
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch1', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch32', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch3', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch4', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch5', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunc6h', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunc234h', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cru3nch', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'C432runch', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cr1unch', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cru32nch', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cru4nch', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cr5unch', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'C6runch', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Cr1unch', 2, 309, 620, 6, "03.01.2025", 20, 3),
-    createData('https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', 'Crunch', 2, 309, 620, 6, "03.01.2025", 20, 3),
-];
 
 function EnhancedTableHead(props) {
 
@@ -89,6 +64,13 @@ function EnhancedTableHead(props) {
 }
 
 const ChangeViews = (props) => {
+
+    const products = useSelector((state) =>
+        state.products.list.map(item => createData(item._id, item.name, item.views[item.views.length - 1].views))
+    );
+
+    const dispatch = useDispatch();
+
     const { register, handleSubmit, control, formState: { errors } } = useForm();
     const { onClose, open } = props;
 
@@ -97,11 +79,20 @@ const ChangeViews = (props) => {
     };
 
     const onSubmit = (data) => {
+
         const newData = Object.fromEntries(
             Object.entries(data).filter(([_, value]) => value !== undefined && value !== null && value !== "")
-        );
-    
-        console.log(newData);
+        )
+
+        const final = Object.entries(newData).map(([key, value]) => ({
+            _id: key,
+            views: value
+        }));
+
+        console.log(final);
+
+        dispatch(editProductViewsAsync(final));
+
     };
 
     return (
@@ -118,10 +109,10 @@ const ChangeViews = (props) => {
                         <EnhancedTableHead
                             order={"asc"}
                             orderBy={"name"}
-                            rowCount={rows.length}
+                            rowCount={products.length}
                         />
                         <TableBody>
-                            {rows.map((row, index) => {
+                            {products.map((row, index) => {
 
                                 return (
                                     <TableRow
@@ -140,9 +131,9 @@ const ChangeViews = (props) => {
                                         <TableCell align="left">{row.name}</TableCell>
                                         <TableCell align="right">
                                             <TextField
-                                                {...register(`${row.name}`, { min: { value: row.views, message: "Value is low" } })}
-                                                error={!!errors[`${row.name}`]}
-                                                helperText={errors[`${row.name}`]?.message}
+                                                {...register(`${row._id}`, { min: { value: row.views, message: "Value is low" } })}
+                                                error={!!errors[`${row._id}`]}
+                                                helperText={errors[`${row._id}`]?.message}
                                                 id="outlined-number"
                                                 label="Number"
                                                 type="number"

@@ -53,9 +53,12 @@ export const editProductViewsAsync = createAsyncThunk(
     'products/editViews',
     async (newValues, { rejectWithValue }) => {
         try {
+
             const response = await editViews(newValues);
             return response.data;
+
         } catch (error) {
+
             return rejectWithValue(error.message);
         }
     }
@@ -142,8 +145,9 @@ const productsSlice = createSlice({
             })
 
             .addCase(editProductViewsAsync.pending, (state, action) => {
-                const ids = new Set(action.meta.arg.newValues.map(product => product._id));
-                state.updatingIds = Array.from(new Set([...state.updatingIds, ...ids]));
+
+                
+
             })
             .addCase(editProductViewsAsync.fulfilled, (state, action) => {
                 const updatedProducts = action.payload;
@@ -155,11 +159,11 @@ const productsSlice = createSlice({
                         state.list[index].views = updatedProduct.views;
                     }
                 });
+                state.loading = false;
             })
             .addCase(editProductViewsAsync.rejected, (state, action) => {
-                const ids = new Set(action.meta.arg.newValues.map(product => product._id));
-                state.updatingIds = state.updatingIds.filter(id => !ids.has(id));
-                state.error = action.payload || "Failed to edit views";
+                state.loading = false;
+                state.error = action.payload;
             });
     },
 });
@@ -171,7 +175,7 @@ export const {
     addChosenSellItem,
     removeChosenSellItem,
     resetChosenSellItems,
-    updateProductStock
+    updateProductStock,
 } = productsSlice.actions;
 
 export default productsSlice.reducer;

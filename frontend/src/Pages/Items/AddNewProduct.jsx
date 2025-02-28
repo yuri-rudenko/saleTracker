@@ -16,11 +16,6 @@ const AddNewProduct = (props) => {
 
     const loading = useSelector((state) => state.products.loading);
 
-    useEffect(() => {
-        dispatch(fetchBrandsAsync());
-        dispatch(fetchTypesAsync());
-    }, [dispatch]);
-
     const { onClose, open } = props;
     const handleClose = () => {
         onClose();

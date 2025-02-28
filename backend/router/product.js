@@ -18,7 +18,7 @@ router.post("/", productController.create);
 router.put("/edit", authMiddleware, productController.edit);
 
 // Edit views
-router.put("/editViews", authMiddleware, productController.editViews);
+router.put("/editViews", productController.editViews);
 
 // Delete a product by ID
 router.delete("/:_id", authMiddleware, productController.delete);
