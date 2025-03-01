@@ -5,10 +5,11 @@ import getComparator from '../../functions/getComparator';
 import BuyProductsTable from './BuyProductsTable';
 import CreateOrder from './CreateOrder';
 import { useSelector } from 'react-redux';
+import getStandartDate from '../../functions/getStandartDate';
 
 function createData(date, amount, types, price, status, products) {
     return {
-        date: new Date(date).toLocaleDateString('en-GB'),
+        date: getStandartDate(date),
         amount,
         types,
         price,

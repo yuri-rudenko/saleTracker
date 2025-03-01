@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux';
 import { fetchBuysAsync } from './Store/buys/buys.slice';
 import { fetchBrandsAsync } from './Store/typeBrand/brand.slice';
 import { fetchTypesAsync } from './Store/typeBrand/type.slice';
+import { fetchSalesAsync } from './Store/sales/sales.slice';
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
     dispatch(fetchBuysAsync());
     dispatch(fetchBrandsAsync());
     dispatch(fetchTypesAsync());
+    dispatch(fetchSalesAsync());
   }, [dispatch]);
 
   return (

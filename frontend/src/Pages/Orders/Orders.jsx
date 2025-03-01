@@ -4,11 +4,14 @@ import EnhancedTableHead from '../../Components/EnhancedTableHead';
 import getComparator from '../../functions/getComparator';
 import OrdersProductsTable from './OrdersProductsTable';
 import CreateOrder from './CreateOrder';
+import { useSelector } from 'react-redux';
+import getMargin from '../../functions/getMargin';
+import getStandartDate from '../../functions/getStandartDate';
 
 function createData(status, date, amount, price, margin, type, products) {
     return {
         status,
-        date,
+        date: getStandartDate(date),
         amount,
         price,
         margin,
@@ -17,32 +20,12 @@ function createData(status, date, amount, price, margin, type, products) {
     };
 }
 
-const rows = [
-    createData("Sold", "03.01.2025", 3, 1700, 589, "OLX Nova", [{ image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch9', amount: 3, price: 300, totalPrice: 900, margin: 156}, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, margin: 156}, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch1', amount: 2, price: 3100, totalPrice: 9030, margin: 156}]),
-    createData("Sold", "03.01.2025", 3, 1700, 589, "OLX Nova", [{ image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch9', amount: 3, price: 300, totalPrice: 900, margin: 156}, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, margin: 156}, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch2', amount: 1, price: 300, totalPrice: 900, margin: 156}]),
-    createData("Sold", "03.01.2025", 3, 1700, 589, "OLX Nova", [{ image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch9', amount: 3, price: 300, totalPrice: 900, margin: 156}, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, margin: 156}, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch3', amount: 3, price: 300, totalPrice: 900, margin: 156}]),
-    createData("Sold", "03.01.2025", 3, 1700, 589, "OLX Nova", [{ image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch9', amount: 3, price: 300, totalPrice: 900, margin: 156}, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, margin: 156}, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch4', amount: 3, price: 300, totalPrice: 2900, margin: 156}]),
-    createData("Sold", "03.01.2025", 3, 1700, 589, "OLX Nova", [{ image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch9', amount: 3, price: 300, totalPrice: 900, margin: 156}, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, margin: 156}, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch5', amount: 3, price: 300, totalPrice: 900, margin: 156}]),
-    createData("Sold", "03.01.2025", 3, 1700, 589, "OLX Nova", [{ image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch9', amount: 3, price: 300, totalPrice: 900, margin: 156}, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, margin: 156}, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch6', amount: 3, price: 300, totalPrice: 900, margin: 156}]),
-    createData("Sold", "03.01.2025", 3, 1700, 589, "OLX Nova", [{ image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch9', amount: 3, price: 300, totalPrice: 900, margin: 156}, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, margin: 156}, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch7', amount: 3, price: 300, totalPrice: 900, margin: 156}]),
-    createData("Sold", "03.01.2025", 3, 1700, 589, "OLX Nova", [{ image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch9', amount: 3, price: 300, totalPrice: 900, margin: 156}, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, margin: 156}, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, margin: 156}]),
-    createData("Sold", "03.01.2025", 3, 1700, 589, "OLX Nova", [{ image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch9', amount: 3, price: 300, totalPrice: 900, margin: 156}, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, margin: 156}, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch8', amount: 3, price: 300, totalPrice: 500, margin: 156}]),
-    createData("Sold", "03.01.2025", 3, 1700, 589, "OLX Nova", [{ image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch9', amount: 3, price: 300, totalPrice: 900, margin: 156}, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, margin: 156}, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch9', amount: 3, price: 300, totalPrice: 900, margin: 156}]),
-    createData("Sold", "03.01.2025", 3, 1700, 589, "OLX Nova", [{ image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch9', amount: 3, price: 300, totalPrice: 900, margin: 156}, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch', amount: 3, price: 300, totalPrice: 900, margin: 156}, { image: 'https://ae-pic-a1.aliexpress-media.com/kf/S14219c43563043fea66f85f455add4d3Y.jpg_960x960q75.jpg_.avif', name: 'Crunch999', amount: 3, price: 300, totalPrice: 900, margin: 156}]),
-];
-
 
 const headCells = [
     {
-        id: 'status',
-        numeric: false,
-        disablePadding: true,
-        label: 'Status',
-    },
-    {
         id: 'date',
         numeric: false,
-        disablePadding: false,
+        disablePadding: true,
         label: 'Date',
     },
     {
@@ -69,6 +52,12 @@ const headCells = [
         disablePadding: true,
         label: 'Type',
     },
+    {
+        id: 'status',
+        numeric: true,
+        disablePadding: true,
+        label: 'Status',
+    }
 ];
 
 const Buy = () => {
@@ -97,15 +86,19 @@ const Buy = () => {
         setPage(0);
     };
 
+    const sales = useSelector((state) =>
+        state.sales.list.map(sale => createData(sale.status, sale.date, sale.products.reduce((acc, product) => acc + product.amount, 0), sale.price, getMargin(sale.products), sale.type, sale.products))
+    );
+
     const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - sales.length) : 0;
 
     const visibleRows = React.useMemo(
         () =>
-            [...rows]
+            [...sales]
                 .sort(getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-        [order, orderBy, page, rowsPerPage],
+        [order, orderBy, page, rowsPerPage, sales],
     );
 
     return (
@@ -116,7 +109,7 @@ const Buy = () => {
                         Create new order
                     </Button>
 
-                    <CreateOrder onClose={handleClose} open={open}/>
+                    <CreateOrder onClose={handleClose} open={open} />
                 </div>
             </div>
             <Box sx={{ width: '100%' }}>
@@ -130,7 +123,7 @@ const Buy = () => {
                             <EnhancedTableHead
                                 order={order}
                                 orderBy={orderBy}
-                                rowCount={rows.length}
+                                rowCount={sales.length}
                                 headCells={headCells}
                                 setOrder={setOrder}
                                 setOrderBy={setOrderBy}
@@ -165,12 +158,12 @@ const Buy = () => {
                                                                     '& td, & th': { borderBottom: 'none' }
                                                                 }}
                                                             >
-                                                                <TableCell align="left">{row.status}</TableCell>
                                                                 <TableCell align="left">{row.date}</TableCell>
                                                                 <TableCell align="right">{row.amount}</TableCell>
                                                                 <TableCell align="right">{row.price}</TableCell>
                                                                 <TableCell align="right">{row.margin}</TableCell>
                                                                 <TableCell align="right">{row.type}</TableCell>
+                                                                <TableCell align="right">{row.status}</TableCell>
                                                             </TableRow>
 
                                                         </TableBody>
@@ -178,7 +171,7 @@ const Buy = () => {
                                                 </AccordionSummary>
                                                 <AccordionDetails sx={{ padding: '0 !important' }}>
                                                     <Typography>
-                                                        <OrdersProductsTable rowsData={row.products}/>
+                                                        <OrdersProductsTable rowsData={row.products} />
                                                     </Typography>
                                                 </AccordionDetails>
                                             </Accordion>
@@ -200,7 +193,7 @@ const Buy = () => {
                     <TablePagination
                         rowsPerPageOptions={[5, 10, 25]}
                         component="div"
-                        count={rows.length}
+                        count={sales.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}

@@ -1,14 +1,15 @@
 import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableSortLabel } from '@mui/material';
 import React from 'react';
+import getMargin from '../../functions/getMargin';
 
-function createData({ image, name, amount, price, totalPrice, margin }) {
+function createData(saleProduct) {
     return {
-        image,
-        name,
-        amount,
-        price,
-        totalPrice,
-        margin
+        image: saleProduct.product.image,
+        name: saleProduct.product.name,
+        amount: saleProduct.amount,
+        price: saleProduct.price,
+        totalPrice: saleProduct.price * saleProduct.amount,
+        margin: getMargin([saleProduct])
     };
 }
 

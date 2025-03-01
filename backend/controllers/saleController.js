@@ -12,9 +12,13 @@ class saleController {
             const sale = await Sale.findById(_id).populate({
                 path: 'products',
                 populate: {
-                    path: 'product'
+                    path: 'product',
+                    populate: [
+                        { path: 'type' },
+                        { path: 'brand' }
+                    ]
                 }
-            })
+            });
 
             if (!sale) return res.status(404).json({ message: "Order not found." });
 
@@ -34,8 +38,12 @@ class saleController {
                 path: 'products',
                 populate: {
                     path: 'product',
-                },
-            })
+                    populate: [
+                        { path: 'type' },
+                        { path: 'brand' }
+                    ]
+                }
+            });
 
             res.status(200).json(sales);
 
@@ -61,6 +69,10 @@ class saleController {
 
             const sales = await SaleProduct.find(query).populate({
                 path: 'product',
+                populate: [
+                    { path: 'type' },
+                    { path: 'brand' }
+                ]
             })
 
             res.status(200).json(sales);
@@ -115,6 +127,9 @@ class saleController {
                 }).sort({ createdAt: 1 });
 
                 const bulkUpdates = [];
+                let totalCost = 0;
+                let totalSold = 0;
+
                 for (const buyProduct of buyProducts) {
 
                     if (remainingAmount <= 0) break;
@@ -129,6 +144,9 @@ class saleController {
                         }
                     });
 
+                    totalCost += soldNow * buyProduct.price;
+                    totalSold += soldNow;
+
                     remainingAmount -= soldNow;
                 }
 
@@ -137,8 +155,11 @@ class saleController {
                 price += product.amount * product.price;
                 amount += product.amount;
 
+                const averageBuyPrice = totalSold > 0 ? totalCost / totalSold : 0;
+
                 const saleProduct = await SaleProduct.create({
                     product: foundProduct._id,
+                    averageBuyPrice,
                     amount: product.amount,
                     price: product.price,
                 });
@@ -195,7 +216,18 @@ class saleController {
                 status: newStatus
             })
 
-            if (!sale) return res.status(400).json({ message: "Problem with creating sale order" });
+            const foundSale = await Sale.findById(sale._id).populate({
+                path: 'products',
+                populate: {
+                    path: 'product',
+                    populate: [
+                        { path: 'type' },
+                        { path: 'brand' }
+                    ]
+                }
+            });
+
+            if (!foundSale) return res.status(400).json({ message: "Problem with creating sale order" });
 
             // const latestAction = await Action.findOne().sort({ createdAt: -1 });
 
@@ -207,7 +239,7 @@ class saleController {
 
             // if (!action) return res.status(400).json({ message: "Problem with creating action" });
 
-            return res.status(200).json(sale);
+            return res.status(200).json(foundSale);
 
         } catch (error) {
             next(error)

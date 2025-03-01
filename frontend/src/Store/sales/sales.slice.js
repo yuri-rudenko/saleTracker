@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { createSale, getAllSales } from '../../http/saleAPI';
+import { updateProductStock } from '../product/product.slice';
 
 export const fetchSalesAsync = createAsyncThunk(
     'sales/fetchAll',
@@ -15,9 +16,12 @@ export const fetchSalesAsync = createAsyncThunk(
 
 export const createSaleAsync = createAsyncThunk(
     'sales/add',
-    async (sale, { rejectWithValue }) => {
+    async (sale, { rejectWithValue, dispatch }) => {
         try {
             const response = await createSale(sale);
+            if (response.data.products) {
+                dispatch(updateProductStock(response.data.products));
+            }
             return response.data;
         } catch (error) {
             return rejectWithValue(error.message);

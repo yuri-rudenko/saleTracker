@@ -7,11 +7,11 @@ const ProductSchema = new mongoose.Schema({
   image: { type: String, required: true },
   link: { type: String, required: true },
   isOnSale: { type: Boolean, default: true, required: true },
-  averageBuyPrice: { type: Number, default: 0, min: 0 },
-  averageBuyPriceLeft: { type: Number, default: 0, min: 0 },
-  averageSellPrice: { type: Number, default: 0, min: 0 },
-  currentlyAvaliable: { type: Number, default: 0, min: 0 },
-  amountSold: { type: Number, default: 0 },
+  averageBuyPrice: { type: Number, default: 0, min: 0, required: true },
+  averageBuyPriceLeft: { type: Number, default: 0, min: 0, required: true },
+  averageSellPrice: { type: Number, default: 0, min: 0, required: true },
+  currentlyAvaliable: { type: Number, default: 0, min: 0, required: true },
+  amountSold: { type: Number, default: 0, required: true },
   views: [{
     date: { type: Date, default: Date.now },
     views: { type: Number, default: 0 }
@@ -29,7 +29,7 @@ const TypeSchema = new mongoose.Schema({
 }, { timestamps: true })
 
 const SaleSchema = new mongoose.Schema({
-  products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'SaleProductSchema' }],
+  products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'SaleProduct' }],
   amount: { type: Number, required: true, min: 0 },
   price: { type: Number, required: true, min: 0 },
   date: { type: Date, default: Date.now },
@@ -38,9 +38,10 @@ const SaleSchema = new mongoose.Schema({
 }, { timestamps: true })
 
 const SaleProductSchema = new mongoose.Schema({
-  product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
-  amount: { type: Number, default: 1, min: 1 },
-  price: { type: Number, required: true, min: 0 },
+  product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+  averageBuyPrice: { type: Number, default: 0, min: 0, required: true },
+  amount: { type: Number, default: 1, min: 1, required: true },
+  price: { type: Number, required: true, min: 0, required: true },
 }, { timestamps: true })
 
 const BuySchema = new mongoose.Schema({
@@ -51,11 +52,11 @@ const BuySchema = new mongoose.Schema({
 }, { timestamps: true })
 
 const BuyProductSchema = new mongoose.Schema({
-  product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
-  amount: { type: Number, default: 1, min: 1 },
+  product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
+  amount: { type: Number, default: 1, min: 1, required: true },
   price: { type: Number, required: true, min: 0 },
-  amountInOne: { type: Number, default: 1 },
-  sold: { type: Number, default: 0, min: 0 },
+  amountInOne: { type: Number, default: 1, required: true },
+  sold: { type: Number, default: 0, min: 0, required: true },
 }, { timestamps: true })
 
 const UserSchema = new mongoose.Schema({
