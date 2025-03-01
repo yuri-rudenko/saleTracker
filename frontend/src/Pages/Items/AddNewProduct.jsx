@@ -74,7 +74,7 @@ const AddNewProduct = (props) => {
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    label="Type"
+                                    placeholder="Type"
                                     error={!!errors.type}
                                     helperText={errors.type?.message}
                                     fullWidth
@@ -101,7 +101,7 @@ const AddNewProduct = (props) => {
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    label="Brand"
+                                    placeholder="Brand"
                                     error={!!errors.brand}
                                     helperText={errors.brand?.message}
                                     fullWidth

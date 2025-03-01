@@ -1,3 +1,4 @@
+import cleanArray from "../functions/cleanArray.js";
 import { $authHost, $host } from "./indexAPI.js";
 
 export const getOneBuy = async ({_id}) => {
@@ -24,7 +25,7 @@ export const createBuy = async (values) => {
         return;
     }
 
-    return await $host.post(`/buy`, values);
+    return await $host.post(`/buy`, {...values, products: cleanArray(values.products)});
 
 }
 

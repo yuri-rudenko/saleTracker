@@ -77,8 +77,11 @@ class saleController {
 
             const { products, date, type, status } = req.body;
 
+            console.log(products);
+
             const newDate = date ? new Date(date) : new Date();
             const newType = type ? type : "Unknown";
+            const newStatus = status ? status : "Awaiting";
 
             if (!products) return res.status(400).json({ message: "Order should have at least 1 product." });
 
@@ -86,7 +89,7 @@ class saleController {
             let amount = 0;
 
             for (const product of products) {
-                if (!product._id || !product.amount || !product.price || !product.amountInOne) {
+                if (!product._id || !product.amount || !product.price) {
                     return res.status(400).json({ message: "One of the products doesn't have all required parameters." });
                 }
                 const foundProduct = await Product.findById(product._id);
@@ -96,6 +99,7 @@ class saleController {
             }
 
             const newProductsIds = [];
+
 
             for (const product of products) {
 
@@ -143,7 +147,7 @@ class saleController {
 
                 const updatedBuyProducts = await BuyProduct.find({
                     product: product._id,
-                    $expr: { $lt: ["$sold", "$amount"] }
+                    $expr: { $lte: ["$sold", "$amount"] }
                 });
 
                 const saleProducts = await SaleProduct.find({ product: foundProduct._id });
@@ -157,6 +161,8 @@ class saleController {
                 }
 
                 const averageSellPrice = totalSellQuantity > 0 ? totalSellValue / totalSellQuantity : 0;
+
+                console.log(totalSellValue, totalSellQuantity, averageSellPrice);
 
                 let totalValue = 0;
                 let totalQuantity = 0;
@@ -186,20 +192,20 @@ class saleController {
                 type: newType,
                 price,
                 amount,
-                status
+                status: newStatus
             })
 
             if (!sale) return res.status(400).json({ message: "Problem with creating sale order" });
 
-            const latestAction = await Action.findOne().sort({ createdAt: -1 });
+            // const latestAction = await Action.findOne().sort({ createdAt: -1 });
 
-            const action = await Action.create({
-                type: "sale",
-                refId: sale._id,
-                previousAction: latestAction ? latestAction._id : null,
-            });
+            // const action = await Action.create({
+            //     type: "sale",
+            //     refId: sale._id,
+            //     previousAction: latestAction ? latestAction._id : null,
+            // });
 
-            if (!action) return res.status(400).json({ message: "Problem with creating action" });
+            // if (!action) return res.status(400).json({ message: "Problem with creating action" });
 
             return res.status(200).json(sale);
 

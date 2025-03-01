@@ -32,7 +32,7 @@ const CreateOrder = (props) => {
 
         );
 
-        setValue(`items[${number}]`, undefined);
+        setValue(`products[${number}]`, undefined);
     };
 
 

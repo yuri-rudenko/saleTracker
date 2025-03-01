@@ -1,5 +1,7 @@
 import { Autocomplete, TableCell, TableRow, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addChosenSellItem, removeChosenSellItem } from '../../Store/product/product.slice';
 
 function createData(image, name, price, amount) {
     return {
@@ -24,13 +26,35 @@ const OrderTableComponent = (props) => {
 
     const [chosen, setChosen] = useState(false);
 
-    useEffect(() => {
-        if (chosen) {
+    const dispatch = useDispatch();
+    const chosenSellItems = useSelector((state) => state.products.chosenSellItems);
+    const rows = useSelector((state) => state.products.list);
 
-            setValue(`items[${number}].name`, chosen.name);
-
+    const handleSelectItem = (event, value) => {
+        setChosen(value);
+        if (value) {
+            dispatch(addChosenSellItem(value));
+            setValue(`products[${number}].name`, value.name);
+            setValue(`products[${number}]._id`, value._id);
         }
-    }, [chosen, number, setValue]);
+    };
+
+    useEffect(() => {
+        console.log(chosenSellItems);
+        
+    }, [chosenSellItems])
+
+    const handleRemoveItem = () => {
+        if (chosen) {
+            dispatch(removeChosenSellItem(chosen));
+            setChosen(false);
+            deleteComponent(number)
+        }
+    };
+
+    const availableOptions = rows.filter(
+        option => !chosenSellItems.some(item => item._id === option._id)
+    );
 
     return (
         <>
@@ -49,9 +73,11 @@ const OrderTableComponent = (props) => {
                         sx={{ padding: '6px' }}
                     >
                         <Autocomplete
-                            options={rows}
+                            options={availableOptions}
                             getOptionLabel={(option) => option.name}
-                            onChange={(event, value) => setChosen(value)}
+                            onChange={handleSelectItem}
+                            isOptionEqualToValue={(option, value) => option._id === value?._id}
+                            clearOnEscape
                             renderOption={(props, option) => (
                                 <li {...props} key={option.id}>
                                     <img
@@ -70,7 +96,7 @@ const OrderTableComponent = (props) => {
                 <TableRow
                     hover
                     tabIndex={-1}
-                    sx={{ cursor: 'pointer'}}
+                    sx={{ cursor: 'pointer' }}
                 >
                     <TableCell component="th" scope="row" padding="none">
                         <img style={{ height: "64px", width: "64px" }} src={chosen?.image} alt="item" />
@@ -81,7 +107,7 @@ const OrderTableComponent = (props) => {
                     <TableCell align="right">
                         <TextField
                             size="small"
-                            {...register(`items[${number}].price`, {
+                            {...register(`products[${number}].price`, {
                                 min: { value: 0.01, message: "Too low" },
                                 required: "Price is required"
                             })}
@@ -95,12 +121,12 @@ const OrderTableComponent = (props) => {
                     <TableCell align="right">
                         <TextField
                             size='small'
-                            {...register(`items[${number}].amount`, { min: { value: 1, message: "Too low",}, required: "Amount is required" })}
+                            {...register(`products[${number}].amount`, { min: { value: 1, message: "Too low", }, required: "Amount is required" })}
                             type='number'
                             placeholder='Amount'
                         />
                     </TableCell>
-                    <TableCell align="right" onClick={() => deleteComponent(number)}>x</TableCell>
+                    <TableCell align="right" onClick={handleRemoveItem}>x</TableCell>
                 </TableRow>
             )}
         </>

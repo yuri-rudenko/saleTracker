@@ -2,13 +2,19 @@ import { Autocomplete, Button, Dialog, DialogTitle, Table, TableBody, TableCell,
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import OrderTableComponent from './OrderTableComponent';
+import { useDispatch } from 'react-redux';
+import { resetChosenSellItems } from '../../Store/product/product.slice';
+import { createSaleAsync } from '../../Store/sales/sales.slice';
 
 const CreateOrder = (props) => {
 
     const { register, handleSubmit, control, setValue, formState: { errors }, reset} = useForm();
 
+
     const { onClose, open } = props;
     let [increment, setIncrement] = useState(0);
+
+    const dispatch = useDispatch();
 
     const handleClose = () => {
         onClose();
@@ -25,7 +31,7 @@ const CreateOrder = (props) => {
 
         );
 
-        setValue(`items[${number}]`, undefined);
+        setValue(`products[${number}]`, undefined);
 
     };
 
@@ -54,10 +60,14 @@ const CreateOrder = (props) => {
     const resetComponents = () => {
         setComponents([]);
         setIncrement(0);
+        dispatch(resetChosenSellItems());
         reset();
     }
 
-    const onSubmit = (data) => console.log(data);
+    const onSubmit = (data) => {
+        console.log(data);
+        dispatch(createSaleAsync(data))
+    };
 
     return (
         <Dialog maxWidth={"sm"} onClose={handleClose} open={open}>

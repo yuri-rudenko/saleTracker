@@ -107,7 +107,7 @@ const headCells = [
 const Items = () => {
 
     const products = useSelector((state) =>
-        state.products.list.map(item => createData(item.image, item.name, item.type.name, item.brand.name, item.currentlyAvaliable, item.averageBuyPrice, item.avarageSellPirce, item.amountSold, item.sales.length ? item.sales.at(-1).date : 0, item.views.at(-1).views, item.increase || 0))
+        state.products.list.map(item => createData(item.image, item.name, item.type.name, item.brand.name, item.currentlyAvaliable, item.averageBuyPrice, item.averageSellPrice, item.amountSold, item?.sales?.length ? item.sales.at(-1).date : 0, item.views.at(-1).views, item.increase || 0))
     );
 
     const loading = useSelector((state) => state.products.loading);
@@ -155,7 +155,6 @@ const Items = () => {
     );
 
     if (loading) return <div>Loading...</div>;
-    if (!products.length) return <div>No products available</div>;
 
     return (
         <div>

@@ -14,7 +14,7 @@ router.get("/products", saleController.getAllProduct);
 router.get("/:_id", saleController.get);
 
 // Create a new sale
-router.post("/", authMiddleware, saleController.create);
+router.post("/", saleController.create);
 
 // Edit sale
 router.put("/", authMiddleware, saleController.edit);

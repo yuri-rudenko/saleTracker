@@ -83,9 +83,11 @@ class buyController {
 
             const { products, date, status } = req.body;
 
+            console.log(products);
 
             const newDate = date ? new Date(date) : new Date();
             const newStatus = status ? "arrived" : "pending";
+
 
             if (!products) return res.status(400).json({ message: "Order should have at least 1 product." });
 
@@ -110,6 +112,7 @@ class buyController {
             }
 
             const newProductsIds = [];
+
 
             for (const product of products) {
 
@@ -175,6 +178,7 @@ class buyController {
                 status: newStatus,
                 price
             })
+
 
             if (!buy) return res.status(400).json({ message: "Problem with creating buy order" });
 
