@@ -89,13 +89,13 @@ class saleController {
 
             const { products, date, type, status } = req.body;
 
-            console.log(products);
-
             const newDate = date ? new Date(date) : new Date();
             const newType = type ? type : "Unknown";
-            const newStatus = status ? status : "Awaiting";
+            const newStatus = status ? "Approved" : "Awaiting";
 
-            if (!products) return res.status(400).json({ message: "Order should have at least 1 product." });
+            console.log(products, newDate, newType, newStatus)
+
+            if (!products?.length) return res.status(400).json({ message: "Order should have at least 1 product." });
 
             let price = 0;
             let amount = 0;
@@ -112,12 +112,18 @@ class saleController {
 
             const newProductsIds = [];
 
-
             for (const product of products) {
 
                 const foundProduct = await Product.findById(product._id);
 
                 if (foundProduct.currentlyAvaliable < product.amount) return res.status(400).json({ message: `Product ${product.name} has less than required amount` });
+
+            }
+
+
+            for (const product of products) {
+
+                const foundProduct = await Product.findById(product._id);
 
                 let remainingAmount = product.amount;
 
@@ -182,8 +188,6 @@ class saleController {
                 }
 
                 const averageSellPrice = totalSellQuantity > 0 ? totalSellValue / totalSellQuantity : 0;
-
-                console.log(totalSellValue, totalSellQuantity, averageSellPrice);
 
                 let totalValue = 0;
                 let totalQuantity = 0;

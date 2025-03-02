@@ -1,10 +1,12 @@
-import { Autocomplete, Button, Dialog, DialogTitle, Snackbar, Table, TableBody, TableCell, TableContainer, TableRow, TextField } from '@mui/material';
+import { Autocomplete, Button, Checkbox, Dialog, DialogTitle, FormControlLabel, Snackbar, Table, TableBody, TableCell, TableContainer, TableRow, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import OrderTableComponent from './OrderTableComponent';
 import { useDispatch } from 'react-redux';
 import { resetChosenSellItems } from '../../Store/product/product.slice';
 import { createSaleAsync } from '../../Store/sales/sales.slice';
+
+const typeOptions = ["Nova", "Ukr", "OLX Nova", "Ukr Nova", "Meeting", "Other", "Unknown"];
 
 const CreateOrder = (props) => {
 
@@ -114,6 +116,41 @@ const CreateOrder = (props) => {
                             </TableBody>
                         </Table>
                     </TableContainer>
+                    <Controller
+                        name="type"
+                        control={control}
+                        defaultValue="Unknown"
+                        rules={{ required: "Type is required" }}
+                        render={({ field: { onChange, value }, fieldState: { error } }) => (
+                            <Autocomplete
+                                options={typeOptions}
+                                getOptionLabel={(option) => option}
+                                value={value}
+                                onChange={(_, newValue) => onChange(newValue)}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Select an Item"
+                                        error={!!error}
+                                        helperText={error ? error.message : ""}
+                                    />
+                                )}
+                            />
+                        )}
+                    />
+                    <TextField
+                        size="small"
+                        type='date'
+                        placeholder="Date (default - now)"
+                        {...register("date")}
+                        error={!!errors.date}
+                        helperText={errors.image?.date}
+                        fullWidth
+                        margin="normal"
+                    />
+                    <div className="arrived">
+                        <FormControlLabel {...register("status")} control={<Checkbox defaultChecked />} label="Already finished" />
+                    </div>
                     <Button style={{ marginTop: "16px" }} type="submit" variant="contained" color="primary" fullWidth>
                         Submit
                     </Button>
