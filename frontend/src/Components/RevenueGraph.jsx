@@ -18,20 +18,16 @@ const RevenueGraph = () => {
         const months = {};
 
         const now = new Date();
-        now.setDate(now.getDate() + 1);  // Make sure to get the "next day" midnight
+        now.setDate(now.getDate() + 1);
         now.setHours(0, 0, 0, 0);
 
 
         for (let sale of sortedSales) {
             const saleDate = new Date(sale.date);
 
-            // Calculate the difference in days
             const difference = Math.floor((now - saleDate) / (1000 * 60 * 60 * 24));
 
-            // Calculate the difference in weeks
             const differenceWeek = Math.floor((now - saleDate) / (1000 * 60 * 60 * 24 * 7));
-
-            // Calculate the difference in months (in terms of total months)
             const differenceMonth =
                 (now.getFullYear() - saleDate.getFullYear()) * 12 +
                 (now.getMonth() - saleDate.getMonth());
@@ -58,7 +54,52 @@ const RevenueGraph = () => {
 
         }
 
-        return { days, weeks, months };
+        const getZeroDays = (intervals, type) => {
+
+            const setZeroes = [];
+            const newIntervals = { ...intervals }
+
+            const dates = Object.keys(intervals).sort((a, b) => a - b);
+
+            if (dates.length <= 1) return intervals;
+
+            let notCrash = 0;
+
+            const adjustDate = (date, type) => {
+                const newDate = new Date(date);
+                if (type === 'weeks') {
+                    newDate.setDate(newDate.getDate() - 7);
+                } else if (type === 'months') {
+                    newDate.setMonth(newDate.getMonth() - 1);
+                } else {
+                    newDate.setDate(newDate.getDate() - 1);
+                }
+                return newDate.toISOString().split('T')[0];
+            };
+
+            for (let current = dates[0]; current !== dates[dates.length - 1];) {
+
+                const checkDate = adjustDate(current, type);
+                console.log(current, dates[dates.length - 1]);
+
+                if (!dates.includes(checkDate)) {
+                    setZeroes.push(checkDate);
+                }
+
+                current = checkDate;
+
+                if (notCrash === 100) break;
+                notCrash++;
+            }
+
+            setZeroes.forEach(zero => newIntervals[zero] = 0);
+            return newIntervals;
+
+        }
+
+        console.log({ days, weeks, months }, getZeroDays(days, "days"))
+
+        return { days: getZeroDays(days, "days"), weeks: getZeroDays(weeks, "weeks"), months: getZeroDays(months, "months") };
     };
 
     const data = getStats(sales);
@@ -87,14 +128,18 @@ const RevenueGraph = () => {
             <LineChart
                 xAxis={[
                     {
-                        scaleType: "time",
-                        data: Object.keys(data[scale]).map(date => new Date(new Date(date).setHours(0, 0, 0, 0))),
+                        scaleType: "point",
+                        data: Object.keys(data[scale])
+                            .sort((a, b) => new Date(a) - new Date(b))
+                            .map(date => new Date(new Date(date).setHours(0, 0, 0, 0)))
                     }
                 ]}
                 series={[
                     {
                         curve: "linear",
-                        data: Object.values(data[scale]) || [],
+                        data: Object.keys(data[scale])
+                            .sort((a, b) => new Date(a) - new Date(b))
+                            .map(date => data[scale][date]) || [],
                         color: "#0561FC"
                     },
                 ]}
