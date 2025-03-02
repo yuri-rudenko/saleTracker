@@ -8,7 +8,7 @@ export const fetchBrandsAsync = createAsyncThunk(
             const response = await getAllBrands();
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.message);
+            return rejectWithValue(error.response?.data || error.message)
         }
     }
 );
@@ -20,7 +20,7 @@ export const createBrandAsync = createAsyncThunk(
             const response = await createBrand(brand);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.message);
+            return rejectWithValue(error.response?.data || error.message)
         }
     }
 );

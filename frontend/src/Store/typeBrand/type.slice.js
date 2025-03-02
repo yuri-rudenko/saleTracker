@@ -8,7 +8,7 @@ export const fetchTypesAsync = createAsyncThunk(
             const response = await getAllTypes();
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.message);
+            return rejectWithValue(error.response?.data || error.message)
         }
     }
 );
@@ -20,7 +20,7 @@ export const createTypeAsync = createAsyncThunk(
             const response = await createType(type);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.message);
+            return rejectWithValue(error.response?.data || error.message)
         }
     }
 );

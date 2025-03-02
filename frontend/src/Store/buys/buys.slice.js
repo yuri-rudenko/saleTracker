@@ -10,7 +10,7 @@ export const fetchBuysAsync = createAsyncThunk(
             const response = await getAllBuys();
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.message);
+            return rejectWithValue(error.response?.data || error.message)
         }
     }
 );
@@ -25,7 +25,7 @@ export const createBuyAsync = createAsyncThunk(
             }
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.message);
+            return rejectWithValue(error.response?.data || error.message)
         }
     }
 );

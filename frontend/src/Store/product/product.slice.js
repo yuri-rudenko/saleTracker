@@ -8,7 +8,7 @@ export const fetchProductsAsync = createAsyncThunk(
             const response = await getAllProducts();
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.message);
+            return rejectWithValue(error.response?.data || error.message)
         }
     }
 );
@@ -20,7 +20,7 @@ export const createProductAsync = createAsyncThunk(
             const response = await createProduct(product);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.message);
+            return rejectWithValue(error.response?.data || error.message)
         }
     }
 );
@@ -32,7 +32,7 @@ export const editProductAsync = createAsyncThunk(
             const response = await editProduct(_id, fieldsToUpdate);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.message);
+            return rejectWithValue(error.response?.data || error.message)
         }
     }
 );
@@ -44,7 +44,7 @@ export const deleteProductAsync = createAsyncThunk(
             const response = await deleteProduct(_id);
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.message);
+            return rejectWithValue(error.response?.data || error.message)
         }
     }
 );
@@ -59,7 +59,7 @@ export const editProductViewsAsync = createAsyncThunk(
 
         } catch (error) {
 
-            return rejectWithValue(error.message);
+            return rejectWithValue(error.response?.data || error.message)
         }
     }
 );

@@ -1,4 +1,4 @@
-import { Autocomplete, Button, Dialog, DialogTitle, Table, TableBody, TableCell, TableContainer, TableRow, TextField } from '@mui/material';
+import { Autocomplete, Button, Dialog, DialogTitle, Snackbar, Table, TableBody, TableCell, TableContainer, TableRow, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import OrderTableComponent from './OrderTableComponent';
@@ -8,7 +8,7 @@ import { createSaleAsync } from '../../Store/sales/sales.slice';
 
 const CreateOrder = (props) => {
 
-    const { register, handleSubmit, control, setValue, formState: { errors }, reset} = useForm();
+    const { register, handleSubmit, control, setValue, formState: { errors }, reset } = useForm();
 
 
     const { onClose, open } = props;
@@ -56,7 +56,6 @@ const CreateOrder = (props) => {
         setIncrement(prevIncrement => prevIncrement += 1);
     };
 
-
     const resetComponents = () => {
         setComponents([]);
         setIncrement(0);
@@ -64,41 +63,63 @@ const CreateOrder = (props) => {
         reset();
     }
 
-    const onSubmit = (data) => {
-        console.log(data);
-        dispatch(createSaleAsync(data))
+    const [snackbar, setSnackbar] = useState({ open: false, message: "" });
+
+    const handleSnackBarClose = () => {
+        setSnackbar({ open: false, message: "" });
+    };
+
+    const onSubmit = async (data) => {
+
+        try {
+            await dispatch(createSaleAsync(data)).unwrap();
+
+            setSnackbar({ open: true, message: "Succesfully created sale" });
+
+        } catch (error) {
+            setSnackbar({ open: true, message: error.message });
+        }
+
     };
 
     return (
-        <Dialog maxWidth={"sm"} onClose={handleClose} open={open}>
-            <DialogTitle sx={{ paddingBottom: 0 }}>Create new order</DialogTitle>
+        <>
+            <Snackbar
+                open={snackbar.open}
+                autoHideDuration={3000}
+                onClose={handleSnackBarClose}
+                message={snackbar.message}
+            />
+            <Dialog maxWidth={"sm"} onClose={handleClose} open={open}>
+                <DialogTitle sx={{ paddingBottom: 0 }}>Create new order</DialogTitle>
 
-            <form onSubmit={handleSubmit(onSubmit)} style={{ padding: 20 }}>
+                <form onSubmit={handleSubmit(onSubmit)} style={{ padding: 20 }}>
 
 
-                <Button onClick={addComponent} variant="contained" sx={{ maxWidth: "150px" }} color="success" fullWidth>
-                    Add new item
-                </Button>
-                <Button onClick={resetComponents} variant="contained" sx={{ maxWidth: "150px", marginLeft: "16px" }} color="error" fullWidth>
-                    Clear
-                </Button>
+                    <Button onClick={addComponent} variant="contained" sx={{ maxWidth: "150px" }} color="success" fullWidth>
+                        Add new item
+                    </Button>
+                    <Button onClick={resetComponents} variant="contained" sx={{ maxWidth: "150px", marginLeft: "16px" }} color="error" fullWidth>
+                        Clear
+                    </Button>
 
-                <TableContainer style={{ minHeight: "220px", marginTop: "16px" }}>
-                    <Table
-                        sx={{ minWidth: 550 }}
-                        aria-labelledby="tableTitle"
-                        size={'medium'}
-                    >
-                        <TableBody>
-                            {components}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <Button style={{ marginTop: "16px" }} type="submit" variant="contained" color="primary" fullWidth>
-                    Submit
-                </Button>
-            </form>
-        </Dialog>
+                    <TableContainer style={{ minHeight: "220px", marginTop: "16px" }}>
+                        <Table
+                            sx={{ minWidth: 550 }}
+                            aria-labelledby="tableTitle"
+                            size={'medium'}
+                        >
+                            <TableBody>
+                                {components}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <Button style={{ marginTop: "16px" }} type="submit" variant="contained" color="primary" fullWidth>
+                        Submit
+                    </Button>
+                </form>
+            </Dialog>
+        </>
     );
 }
 

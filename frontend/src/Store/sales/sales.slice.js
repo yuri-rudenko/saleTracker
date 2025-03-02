@@ -9,7 +9,7 @@ export const fetchSalesAsync = createAsyncThunk(
             const response = await getAllSales();
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.message);
+            return rejectWithValue(error.response?.data || error.message)
         }
     }
 );
@@ -24,7 +24,7 @@ export const createSaleAsync = createAsyncThunk(
             }
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.message);
+            return rejectWithValue(error.response?.data || error.message);
         }
     }
 );

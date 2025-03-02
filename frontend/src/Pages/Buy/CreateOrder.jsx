@@ -1,4 +1,4 @@
-import { Autocomplete, Button, Checkbox, Dialog, DialogTitle, FormControlLabel, Table, TableBody, TableCell, TableContainer, TableRow, TextField } from '@mui/material';
+import { Autocomplete, Button, Checkbox, Dialog, DialogTitle, FormControlLabel, Snackbar, Table, TableBody, TableCell, TableContainer, TableRow, TextField } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import OrderTableComponent from './OrderTableComponent';
@@ -64,53 +64,76 @@ const CreateOrder = (props) => {
     }
 
 
-    const onSubmit = (data) => {
-        dispatch(createBuyAsync(data))
+    const [snackbar, setSnackbar] = useState({ open: false, message: "" });
+
+    const handleSnackBarClose = () => {
+        setSnackbar({ open: false, message: "" });
+    };
+
+    const onSubmit = async (data) => {
+
+        try {
+            await dispatch(createBuyAsync(data)).unwrap();
+
+            setSnackbar({ open: true, message: "Succesfully created buy" });
+
+        } catch (error) {
+            setSnackbar({ open: true, message: error.message });
+        }
+
     };
 
     return (
-        <Dialog maxWidth={"sm"} onClose={handleClose} open={open}>
-            <DialogTitle sx={{ paddingBottom: 0 }}>Create new order</DialogTitle>
+        <>
+            <Snackbar
+                open={snackbar.open}
+                autoHideDuration={3000}
+                onClose={handleSnackBarClose}
+                message={snackbar.message}
+            />
+            <Dialog maxWidth={"sm"} onClose={handleClose} open={open}>
+                <DialogTitle sx={{ paddingBottom: 0 }}>Create new order</DialogTitle>
 
-            <form onSubmit={handleSubmit(onSubmit)} style={{ padding: 20 }}>
+                <form onSubmit={handleSubmit(onSubmit)} style={{ padding: 20 }}>
 
 
-                <Button onClick={addComponent} variant="contained" sx={{ maxWidth: "150px" }} color="success" fullWidth>
-                    Add new item
-                </Button>
-                <Button onClick={resetComponents} variant="contained" sx={{ maxWidth: "150px", marginLeft: "16px" }} color="error" fullWidth>
-                    Clear
-                </Button>
+                    <Button onClick={addComponent} variant="contained" sx={{ maxWidth: "150px" }} color="success" fullWidth>
+                        Add new item
+                    </Button>
+                    <Button onClick={resetComponents} variant="contained" sx={{ maxWidth: "150px", marginLeft: "16px" }} color="error" fullWidth>
+                        Clear
+                    </Button>
 
-                <TableContainer style={{ minHeight: "210px", marginTop: "16px" }}>
-                    <Table
-                        sx={{ minWidth: 550 }}
-                        aria-labelledby="tableTitle"
-                        size={'medium'}
-                    >
-                        <TableBody>
-                            {components}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TextField
-                    size="small"
-                    type='date'
-                    placeholder="Date (default - now)"
-                    {...register("date")}
-                    error={!!errors.date}
-                    helperText={errors.image?.date}
-                    fullWidth
-                    margin="normal"
-                />
-                <div className="arrived">
-                    <FormControlLabel {...register("status")} control={<Checkbox defaultChecked />} label="Already arrived" />
-                </div>
-                <Button style={{ marginTop: "16px" }} type="submit" variant="contained" color="primary" fullWidth>
-                    Submit
-                </Button>
-            </form>
-        </Dialog>
+                    <TableContainer style={{ minHeight: "210px", marginTop: "16px" }}>
+                        <Table
+                            sx={{ minWidth: 550 }}
+                            aria-labelledby="tableTitle"
+                            size={'medium'}
+                        >
+                            <TableBody>
+                                {components}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <TextField
+                        size="small"
+                        type='date'
+                        placeholder="Date (default - now)"
+                        {...register("date")}
+                        error={!!errors.date}
+                        helperText={errors.image?.date}
+                        fullWidth
+                        margin="normal"
+                    />
+                    <div className="arrived">
+                        <FormControlLabel {...register("status")} control={<Checkbox defaultChecked />} label="Already arrived" />
+                    </div>
+                    <Button style={{ marginTop: "16px" }} type="submit" variant="contained" color="primary" fullWidth>
+                        Submit
+                    </Button>
+                </form>
+            </Dialog>
+        </>
     );
 }
 
