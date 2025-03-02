@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { createSale, getAllSales } from '../../http/saleAPI';
 import { updateProductStock } from '../product/product.slice';
+import getSaleDashboardValues from '../../functions/getSaleDashboardValues';
 
 export const fetchSalesAsync = createAsyncThunk(
     'sales/fetchAll',
@@ -31,7 +32,7 @@ export const createSaleAsync = createAsyncThunk(
 
 const salesSlice = createSlice({
     name: 'sales',
-    initialState: { list: [], loading: false, error: null },
+    initialState: { list: [], loading: false, error: null, totalRevenue: 0, daysPerOrder: 0 },
     reducers: {},
     extraReducers: (builder) => {
         builder
@@ -39,6 +40,9 @@ const salesSlice = createSlice({
             .addCase(fetchSalesAsync.fulfilled, (state, action) => {
                 state.loading = false;
                 state.list = action.payload;
+                const {revenue, daysPerOrder} = getSaleDashboardValues(action.payload);
+                state.totalRevenue = revenue;
+                state.daysPerOrder = daysPerOrder;
             })
             .addCase(fetchSalesAsync.rejected, (state, action) => {
                 state.loading = false;

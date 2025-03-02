@@ -1,16 +1,16 @@
 import React from 'react';
 import { ReactComponent as More } from '../images/More.svg';
 
-const StatsBlock = () => {
+const StatsBlock = (props) => {
     return (
         <div className='block'>
             <div className="top">
 
-                <div className="total">Total Revenue</div>
+                <div className="total">{props.name}</div>
                 <More/>
 
             </div>
-            <div className="amount">300₴</div>
+            <div className="amount">{props.value}</div>
 
         </div>
     );

@@ -32,7 +32,7 @@ export const createBuyAsync = createAsyncThunk(
 
 const buysSlice = createSlice({
     name: 'buys',
-    initialState: { list: [], loading: false, error: null },
+    initialState: { list: [], loading: false, error: null, totalSpend: 0 },
     reducers: {},
     extraReducers: (builder) => {
         builder
