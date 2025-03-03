@@ -1,7 +1,8 @@
 import { useForm, Controller } from "react-hook-form";
-import { Dialog, DialogTitle, TextField, Autocomplete, Button, TableContainer, Table, TableBody, TableCell, TableRow, TableHead } from "@mui/material";
+import { Dialog, DialogTitle, TextField, Autocomplete, Button, TableContainer, Table, TableBody, TableCell, TableRow, TableHead, Snackbar } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { editProductViewsAsync } from "../../Store/product/product.slice";
+import { useState } from "react";
 
 function createData(_id, name, views) {
     return {
@@ -78,87 +79,112 @@ const ChangeViews = (props) => {
         onClose();
     };
 
-    const onSubmit = (data) => {
 
-        const newData = Object.fromEntries(
-            Object.entries(data).filter(([_, value]) => value !== undefined && value !== null && value !== "")
-        )
+    const [snackbar, setSnackbar] = useState({ open: false, message: "" });
 
-        const final = Object.entries(newData).map(([key, value]) => ({
-            _id: key,
-            views: value
-        }));
+    const handleSnackBarClose = () => {
+        setSnackbar({ open: false, message: "" });
+    };
 
-        console.log(final);
+    const onSubmit = async (data) => {
 
-        dispatch(editProductViewsAsync(final));
+        try {
+
+
+            const newData = Object.fromEntries(
+                Object.entries(data).filter(([_, value]) => value !== undefined && value !== null && value !== "")
+            )
+
+            const final = Object.entries(newData).map(([key, value]) => ({
+                _id: key,
+                views: value
+            }));
+
+            console.log(final);
+
+            await dispatch(editProductViewsAsync(final)).unwrap();
+
+            setSnackbar({ open: true, message: "Succesfully updated views" });
+
+        } catch (error) {
+            setSnackbar({ open: true, message: error.message });
+        }
 
     };
 
     return (
-        <Dialog maxWidth={"sm"} onClose={handleClose} open={open}>
-            <DialogTitle>Change Views</DialogTitle>
-            <form onSubmit={handleSubmit(onSubmit)} style={{ padding: 20 }}>
+        <>
+            <Snackbar
+                open={snackbar.open}
+                autoHideDuration={3000}
+                onClose={handleSnackBarClose}
+                message={snackbar.message}
+            />
+            <Dialog maxWidth={"sm"} onClose={handleClose} open={open}>
+                <DialogTitle>Change Views</DialogTitle>
+                <form onSubmit={handleSubmit(onSubmit)} style={{ padding: 20 }}>
 
-                <TableContainer>
-                    <Table
-                        sx={{ minWidth: '400px' }}
-                        aria-labelledby="tableTitle"
-                        size={'small'}
-                    >
-                        <EnhancedTableHead
-                            order={"asc"}
-                            orderBy={"name"}
-                            rowCount={products.length}
-                        />
-                        <TableBody>
-                            {products.map((row, index) => {
+                    <TableContainer>
+                        <Table
+                            sx={{ minWidth: '400px' }}
+                            aria-labelledby="tableTitle"
+                            size={'small'}
+                        >
+                            <EnhancedTableHead
+                                order={"asc"}
+                                orderBy={"name"}
+                                rowCount={products.length}
+                            />
+                            <TableBody>
+                                {products.map((row, index) => {
 
-                                return (
-                                    <TableRow
-                                        hover
-                                        tabIndex={-1}
-                                        key={row.id}
-                                        sx={{ cursor: 'pointer' }}
-                                    >
-                                        <TableCell
-                                            component="th"
-                                            scope="row"
-                                            padding="none"
+                                    return (
+                                        <TableRow
+                                            hover
+                                            tabIndex={-1}
+                                            key={row.id}
+                                            sx={{ cursor: 'pointer' }}
                                         >
-                                            <img style={{ height: "50px", width: "50px" }} src={row.image} alt="item" />
-                                        </TableCell>
-                                        <TableCell align="left">{row.name}</TableCell>
-                                        <TableCell align="right">
-                                            <TextField
-                                                {...register(`${row._id}`, { min: { value: row.views, message: "Value is low" } })}
-                                                error={!!errors[`${row._id}`]}
-                                                helperText={errors[`${row._id}`]?.message}
-                                                id="outlined-number"
-                                                label="Number"
-                                                type="number"
-                                                placeholder={row.views}
-                                                size="small"
-                                                style={{ maxWidth: "100px" }}
-                                                slotProps={{
-                                                    inputLabel: {
-                                                        shrink: true,
-                                                    },
-                                                }}
-                                            />
-                                        </TableCell>
-                                    </TableRow>
-                                );
-                            })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                                            <TableCell
+                                                component="th"
+                                                scope="row"
+                                                padding="none"
+                                            >
+                                                <img style={{ height: "50px", width: "50px" }} src={row.image} alt="item" />
+                                            </TableCell>
+                                            <TableCell align="left">{row.name}</TableCell>
+                                            <TableCell align="right">
+                                                <TextField
+                                                    // { min: { value: row.views, message: "Value is low" } }
+                                                    {...register(`${row._id}`,)}
+                                                    error={!!errors[`${row._id}`]}
+                                                    helperText={errors[`${row._id}`]?.message}
+                                                    id="outlined-number"
+                                                    label="Number"
+                                                    type="number"
+                                                    placeholder={row.views}
+                                                    size="small"
+                                                    style={{ maxWidth: "100px" }}
+                                                    slotProps={{
+                                                        inputLabel: {
+                                                            shrink: true,
+                                                        },
+                                                    }}
+                                                />
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
 
-                <Button style={{ marginTop: "16px" }} type="submit" variant="contained" color="primary" fullWidth>
-                    Submit
-                </Button>
-            </form>
-        </Dialog>
+                    <Button style={{ marginTop: "16px" }} type="submit" variant="contained" color="primary" fullWidth>
+                        Submit
+                    </Button>
+                </form>
+            </Dialog>
+        </>
     );
 };
 

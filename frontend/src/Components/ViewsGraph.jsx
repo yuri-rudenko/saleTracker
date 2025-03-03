@@ -1,5 +1,6 @@
 import { BarChart } from '@mui/x-charts';
-import React from 'react';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const uData = [4000, 3000, 2000, 2780, 1890, 2390, 3490];
 const xLabels = [
@@ -14,6 +15,20 @@ const xLabels = [
 
 
 const ViewsGraph = () => {
+
+    const getViewsData = function(products) {
+        const views = products.map(product => product.views);
+        const dates = views.map(product => product.map(view => view.date));
+        console.log(dates);
+    }
+
+    const products = useSelector(state => state.products.list);
+
+    const [scale, setScale] = useState("days");
+
+    getViewsData(products);
+
+
     return (
         <div className='views-container'>
             <div className="views-text">

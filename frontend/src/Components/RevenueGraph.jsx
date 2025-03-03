@@ -1,16 +1,15 @@
 import { LineChart } from '@mui/x-charts';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import getStandartDate from '../functions/getStandartDate';
-import getStats from '../functions/getStats';
+import getSaleGraphStats from '../functions/getSaleGraphStats';
 
 const RevenueGraph = () => {
 
     const sales = useSelector(state => state.sales.list);
 
-    const [scale, setScale] = useState("days")
+    const [scale, setScale] = useState("days");
 
-    const data = getStats(sales);
+    const data = getSaleGraphStats(sales);
 
     return (
         <div className='revenue-container'>

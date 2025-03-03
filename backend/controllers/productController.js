@@ -142,7 +142,7 @@ class productController {
     }
 
     async editViews(req, res, next) {
-        
+
         try {
 
             const products = req.body; // [{ _id, newViews }]
@@ -170,11 +170,21 @@ class productController {
                     return res.status(400).json({ message: `Cannot modify views for product ${_id} when future data exists.` });
                 }
 
-                product.views.push({ date: newDate, views });
+                const existingEntry = product.views.find(entry => {
+                    const entryDate = new Date(entry.date);
+                    entryDate.setHours(0, 0, 0, 0);
+                    return entryDate.getTime() === newDate.getTime();
+                });
+
+                if (existingEntry) {
+                    existingEntry.views = views;
+                } else {
+                    product.views.push({ date: newDate, views });
+                }
 
                 await product.save();
                 updatedProducts.push({ _id: product._id, views: product.views });
-            }   
+            }
 
             res.status(200).json(updatedProducts);
 
