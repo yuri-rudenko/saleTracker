@@ -6,7 +6,6 @@ export default function (products) {
     if (!products || !products[0]) return;
 
     const views = products.map(product => [...product.views]);
-    console.log(views[0]);
 
     let newDates = [];
 
@@ -26,8 +25,6 @@ export default function (products) {
 
 
     for (let array of views) {
-
-        console.log(array);
 
         const currentDateDay = new Date(startDay);
         const currentDateWeek = new Date(startWeek);
@@ -93,10 +90,7 @@ export default function (products) {
 
             const nextView = array[index + i - ajuster];
 
-            console.log(!!nextView, index + i - ajuster, index, i, ajuster);
-
             if (nextView && isSameDate(new Date(nextView.date), firstViewsDatePlus)) {
-                console.log("SUCCESS")
                 if (!dayViews[i]) {
                     dayViews[i] = nextView.views;
                 } else {
@@ -150,10 +144,6 @@ export default function (products) {
 
         }
     }
-
-    console.log(dayViews);
-    console.log(weekViews);
-    console.log(monthViews);
 
     return {days: dayViews, weeks: weekViews, months: monthViews}
 
