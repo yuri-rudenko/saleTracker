@@ -5,7 +5,7 @@ import getComparator from '../../functions/getComparator';
 import BuyProductsTable from './BuyProductsTable';
 import CreateOrder from './CreateOrder';
 import { useSelector } from 'react-redux';
-import getStandartDate from '../../functions/getStandartDate';
+import getStandartDate from '../../functions/dates/getStandartDate';
 
 function createData(date, amount, types, price, status, products) {
     return {

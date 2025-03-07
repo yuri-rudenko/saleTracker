@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { createSale, getAllSales } from '../../http/saleAPI';
 import { updateProductStock } from '../product/product.slice';
-import getSaleDashboardValues from '../../functions/getSaleDashboardValues';
+import getSaleDashboardValues from '../../functions/graphs/getSaleDashboardValues';
 
 export const fetchSalesAsync = createAsyncThunk(
     'sales/fetchAll',

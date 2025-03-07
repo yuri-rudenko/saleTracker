@@ -1,4 +1,4 @@
-import formatDate from "./formatDate";
+import formatDate from "../dates/formatDate";
 
 export default function (sales) {
 

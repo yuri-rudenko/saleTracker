@@ -6,7 +6,7 @@ import OrdersProductsTable from './OrdersProductsTable';
 import CreateOrder from './CreateOrder';
 import { useSelector } from 'react-redux';
 import getMargin from '../../functions/getMargin';
-import getStandartDate from '../../functions/getStandartDate';
+import getStandartDate from '../../functions/dates/getStandartDate';
 
 function createData(status, date, amount, price, margin, type, products) {
     return {

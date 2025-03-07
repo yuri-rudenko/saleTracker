@@ -1,7 +1,7 @@
 import { LineChart } from '@mui/x-charts';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import getSaleGraphStats from '../functions/getSaleGraphStats';
+import getSaleGraphStats from '../functions/graphs/getSaleGraphStats';
 
 const RevenueGraph = () => {
 
