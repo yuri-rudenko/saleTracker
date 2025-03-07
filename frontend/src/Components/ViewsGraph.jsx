@@ -27,7 +27,7 @@ const ViewsGraph = () => {
 
         let newDates = [];
 
-        let dayViews = [];
+        let dayViews = Array(7).fill(0);
         let weekViews = [];
         let monthViews = [];
 
@@ -83,18 +83,18 @@ const ViewsGraph = () => {
             const index = firsViews === null ? -1 : array.findIndex(view => isSameDate(new Date(view.date), firsViews.date));
             let oldViews = firsViews === null ? 0 : firsViews.views;
 
-            const firsViewsDatePlusOne = new Date(currentDate);
+            const firsViewsDatePlus = new Date(currentDate);
 
             let ajuster = 0;
 
             for (let i = 1; i <= 6; i++) {
 
-                firsViewsDatePlusOne.setDate(firsViewsDatePlusOne.getDate() + 1);
+                firsViewsDatePlus.setDate(firsViewsDatePlus.getDate() + 1);
 
                 const nextView = array[index + i - ajuster];
 
                 console.log(!!nextView, index + i - ajuster, index, i, ajuster);
-                if (nextView && isSameDate(new Date(nextView.date), firsViewsDatePlusOne)) {
+                if (nextView && isSameDate(new Date(nextView.date), firsViewsDatePlus)) {
                     console.log("SUCCESS")
                     if (!dayViews[i]) {
                         dayViews[i] = nextView.views;
@@ -104,7 +104,7 @@ const ViewsGraph = () => {
 
                     oldViews = nextView.views;
 
-                    ajuster = 0;
+                    ajuster = 1;
 
                 } else {
 
