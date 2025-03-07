@@ -1,10 +1,6 @@
-export default function (sales) {
+import formatDate from "./formatDate";
 
-    const formatDate = (date) => {
-        return date.getFullYear() + '-' +
-            String(date.getMonth() + 1).padStart(2, '0') + '-' +
-            String(date.getDate()).padStart(2, '0');
-    };
+export default function (sales) {
 
     const sortedSales = [...sales].sort((a, b) => new Date(b.date) - new Date(a.date));
 
@@ -46,7 +42,7 @@ export default function (sales) {
     }
 
     const getZeroDays = (intervals, type) => {
-        
+
         const newIntervals = { ...intervals };
         const dates = Object.keys(intervals)
             .sort((a, b) => new Date(b) - new Date(a));
@@ -54,7 +50,7 @@ export default function (sales) {
         if (dates.length === 0) return intervals;
 
         let filledCount = 0;
-        let current = dates[0];
+        let current = new Date(now);
 
         const adjustDate = (date, type) => {
             const newDate = new Date(date);
