@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { createSale, getAllSales } from '../../http/saleAPI';
+import { approveSale, createSale, getAllSales } from '../../http/saleAPI';
 import { updateProductStock } from '../product/product.slice';
 import getSaleDashboardValues from '../../functions/graphs/getSaleDashboardValues';
 
@@ -30,6 +30,18 @@ export const createSaleAsync = createAsyncThunk(
     }
 );
 
+export const approveSaleAsync = createAsyncThunk(
+    'sales/approveSale',
+    async (_id, { rejectWithValue }) => {
+        try {
+            const response = await approveSale(_id);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+);
+
 const salesSlice = createSlice({
     name: 'sales',
     initialState: { list: [], loading: false, error: null, totalRevenue: 0, daysPerOrder: 0 },
@@ -40,7 +52,7 @@ const salesSlice = createSlice({
             .addCase(fetchSalesAsync.fulfilled, (state, action) => {
                 state.loading = false;
                 state.list = action.payload;
-                const {revenue, daysPerOrder} = getSaleDashboardValues(action.payload);
+                const { revenue, daysPerOrder } = getSaleDashboardValues(action.payload);
                 state.totalRevenue = revenue;
                 state.daysPerOrder = daysPerOrder;
             })
@@ -51,9 +63,23 @@ const salesSlice = createSlice({
             .addCase(createSaleAsync.fulfilled, (state, action) => {
                 state.list.push(action.payload);
             })
-            // .addCase(createSaleAsync.fulfilled, (state, action) => {
-            //     state.list = state.list.filter(item => item.id !== action.payload);
-            // });
+            .addCase(approveSaleAsync.fulfilled, (state, action) => {
+
+                const newSale = action.payload;
+
+                const index = state.list.findIndex(p => p._id === newSale._id);
+                if (index !== -1) {
+
+                    state.list[index] = newSale;
+
+                }
+            })
+            .addCase(approveSaleAsync.rejected, (state, action) => {
+                state.error = action.payload;
+            })
+        // .addCase(createSaleAsync.fulfilled, (state, action) => {
+        //     state.list = state.list.filter(item => item.id !== action.payload);
+        // });
     },
 });
 

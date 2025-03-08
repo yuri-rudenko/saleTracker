@@ -29,7 +29,13 @@ export const createSale = async (values) => {
 
 export const editSale = async (values) => {
 
-    return await $host.put(`/sale/edit`, values);
+    return await $host.put(`/sale`, values);
+
+}
+
+export const approveSale = async (saleId) => {
+
+    return await $host.put(`/sale/approveSale/${saleId}`);
 
 }
 

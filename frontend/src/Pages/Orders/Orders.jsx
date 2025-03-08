@@ -4,12 +4,14 @@ import EnhancedTableHead from '../../Components/EnhancedTableHead';
 import getComparator from '../../functions/getComparator';
 import OrdersProductsTable from './OrdersProductsTable';
 import CreateOrder from './CreateOrder';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import getMargin from '../../functions/getMargin';
 import getStandartDate from '../../functions/dates/getStandartDate';
+import { approveSaleAsync } from '../../Store/sales/sales.slice';
 
-function createData(status, date, amount, price, margin, type, products) {
+function createData(_id, status, date, amount, price, margin, type, products) {
     return {
+        _id,
         status,
         date: getStandartDate(date),
         amount,
@@ -66,6 +68,7 @@ const Buy = () => {
     const [orderBy, setOrderBy] = React.useState('calories');
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const dispatch = useDispatch();
 
     const [open, setOpen] = React.useState(false);
 
@@ -86,8 +89,13 @@ const Buy = () => {
         setPage(0);
     };
 
+    const approveSale = (id, status) => {
+        if(status === "Approved") return;
+        dispatch(approveSaleAsync(id));
+    }
+
     const sales = useSelector((state) =>
-        state.sales.list.map(sale => createData(sale.status, sale.date, sale.products.reduce((acc, product) => acc + product.amount, 0), sale.price, getMargin(sale.products), sale.type, sale.products))
+        state.sales.list.map(sale => createData(sale._id, sale.status, sale.date, sale.products.reduce((acc, product) => acc + product.amount, 0), sale.price, getMargin(sale.products), sale.type, sale.products))
     );
 
     const emptyRows =
@@ -163,7 +171,7 @@ const Buy = () => {
                                                                 <TableCell align="right">{row.price}</TableCell>
                                                                 <TableCell align="right">{row.margin}</TableCell>
                                                                 <TableCell align="right">{row.type}</TableCell>
-                                                                <TableCell align="right">{row.status}</TableCell>
+                                                                <TableCell align="right" onClick={event => event.stopPropagation()} onDoubleClick={() => approveSale(row._id, row.status)}>{row.status}</TableCell>
                                                             </TableRow>
 
                                                         </TableBody>

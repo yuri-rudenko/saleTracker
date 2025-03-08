@@ -1,5 +1,4 @@
 import findClosestPastDate from "../dates/findClosestPastDate";
-import isSameDate from "../dates/isSameDate";
 
 export default function (products) {
 
@@ -7,15 +6,14 @@ export default function (products) {
 
     const views = products.map(product => [...product.views]);
 
-    let newDates = [];
-
     let dayViews = Array(7).fill(0);
     let weekViews = Array(7).fill(0);
     let monthViews = Array(7).fill(0);
 
     const now = new Date();
+    now.setHours(0, 0, 0, 0);
     const startDay = new Date(now);
-    startDay.setDate(now.getDate() - 7);
+    startDay.setDate(now.getDate() - 6);
 
     const startWeek = new Date(now);
     startWeek.setDate(now.getDate() - 42);
@@ -73,14 +71,9 @@ export default function (products) {
             }
         }
 
-        const index = firsViewsDay === null ? -1 : array.findIndex(view => isSameDate(new Date(view.date), firsViewsDay.date));
-        let oldViews = firsViewsDay === null ? 0 : firsViewsDay.views;
-
         const firstViewsDatePlus = new Date(currentDateDay);
         const firstViewsWeekPlus = new Date(currentDateWeek);
         const firstViewsMonthPlus = new Date(currentDateMonth);
-
-        let ajuster = 0;
 
         for (let i = 1; i <= 6; i++) {
 
@@ -88,27 +81,19 @@ export default function (products) {
             firstViewsWeekPlus.setDate(firstViewsWeekPlus.getDate() + 7);
             firstViewsMonthPlus.setDate(firstViewsMonthPlus.getDate() + 30);
 
-            const nextView = array[index + i - ajuster];
+            let foundDate = findClosestPastDate(array, firstViewsDatePlus);
 
-            if (nextView && isSameDate(new Date(nextView.date), firstViewsDatePlus)) {
+            if (foundDate === null) {
                 if (!dayViews[i]) {
-                    dayViews[i] = nextView.views;
-                } else {
-                    dayViews[i] += nextView.views;
+                    dayViews[i] = 0;
                 }
-
-                oldViews = nextView.views;
-
-                ajuster = 1;
-
             } else {
 
                 if (!dayViews[i]) {
-                    dayViews[i] = oldViews;
+                    dayViews[i] = foundDate.views;
                 } else {
-                    dayViews[i] += oldViews;
+                    dayViews[i] += foundDate.views;
                 }
-                ajuster++;
             }
 
             let foundWeek = findClosestPastDate(array, firstViewsWeekPlus);

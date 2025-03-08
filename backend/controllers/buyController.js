@@ -83,8 +83,6 @@ class buyController {
 
             const { products, date, status } = req.body;
 
-            console.log(products);
-
             const newDate = date ? new Date(date) : new Date();
             const newStatus = status ? "arrived" : "pending";
 

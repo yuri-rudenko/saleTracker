@@ -19,4 +19,7 @@ router.post("/", saleController.create);
 // Edit sale
 router.put("/", authMiddleware, saleController.edit);
 
+// Approve sale
+router.put('/approveSale/:_id', saleController.approveSale);
+
 export default router;
