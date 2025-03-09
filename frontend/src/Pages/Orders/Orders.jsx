@@ -64,8 +64,8 @@ const headCells = [
 
 const Buy = () => {
 
-    const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('calories');
+    const [order, setOrder] = React.useState('desc');
+    const [orderBy, setOrderBy] = React.useState('date');
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const dispatch = useDispatch();
@@ -95,7 +95,7 @@ const Buy = () => {
     }
 
     const sales = useSelector((state) =>
-        state.sales.list.map(sale => createData(sale._id, sale.status, sale.date, sale.products.reduce((acc, product) => acc + product.amount, 0), sale.price, getMargin(sale.products), sale.type, sale.products))
+        state.sales.list.map(sale => createData(sale._id, sale.status, sale.date, sale.products.reduce((acc, product) => acc + product.amount, 0), Number(sale.price).toFixed(1), Number(getMargin(sale.products)).toFixed(1), sale.type, sale.products))
     );
 
     const emptyRows =
@@ -166,12 +166,12 @@ const Buy = () => {
                                                                     '& td, & th': { borderBottom: 'none' }
                                                                 }}
                                                             >
-                                                                <TableCell align="left">{row.date}</TableCell>
-                                                                <TableCell align="right">{row.amount}</TableCell>
-                                                                <TableCell align="right">{row.price}</TableCell>
-                                                                <TableCell align="right">{row.margin}</TableCell>
-                                                                <TableCell align="right">{row.type}</TableCell>
-                                                                <TableCell align="right" onClick={event => event.stopPropagation()} onDoubleClick={() => approveSale(row._id, row.status)}>{row.status}</TableCell>
+                                                                <TableCell sx={{ width: '16%' }} align="left">{row.date}</TableCell>
+                                                                <TableCell sx={{ width: '17%' }} align="right">{row.amount}</TableCell>
+                                                                <TableCell sx={{ width: '16%' }} align="right">{row.price}</TableCell>
+                                                                <TableCell sx={{ width: '17%' }} align="right">{row.margin}</TableCell>
+                                                                <TableCell sx={{ width: '16%' }} align="right">{row.type}</TableCell>
+                                                                <TableCell sx={{ width: '17%' }} align="right" onClick={event => event.stopPropagation()} onDoubleClick={() => approveSale(row._id, row.status)}>{row.status}</TableCell>
                                                             </TableRow>
 
                                                         </TableBody>

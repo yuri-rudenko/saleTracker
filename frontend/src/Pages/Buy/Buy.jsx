@@ -78,7 +78,7 @@ const Buy = () => {
     };
 
     const buys = useSelector((state) =>
-        state.buys.list.map(buy => createData(buy.date, buy.products.reduce((acc, product) => acc + product.amount, 0), buy.products.length, buy.price, buy.status, buy.products))
+        state.buys.list.map(buy => createData(buy.date, buy.products.reduce((acc, product) => acc + product.amount, 0), buy.products.length, Number(buy.price).toFixed(1), buy.status, buy.products))
     );
 
     const emptyRows =

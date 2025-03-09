@@ -23,11 +23,11 @@ const Dashboard = () => {
 
                 <div className="dashboard-text">Dashboard</div>
                 <div className="stats-blocks">
-                    <StatsBlock name={"Total Revenue"} value={totalRevenue + "₴"}/>
-                    <StatsBlock name={"Total Sum Spend"} value={totalSpend + "₴"}/>
-                    <StatsBlock name={"Current Stock Price"} value={totalSpendLeft + "₴"}/>
+                    <StatsBlock name={"Total Revenue"} value={totalRevenue.toFixed(1) + "₴"}/>
+                    <StatsBlock name={"Total Sum Spend"} value={totalSpend.toFixed(1) + "₴"}/>
+                    <StatsBlock name={"Current Stock Price"} value={totalSpendLeft.toFixed(1) + "₴"}/>
                     <StatsBlock name={"Amount of Orders"} value = {sales.length || 0}/>
-                    <StatsBlock name={"Average Order Time (30d)"} value={daysPerOrder + "d"} />
+                    <StatsBlock name={"Average Order Time (30d)"} value={daysPerOrder.toFixed(2) + "d"} />
                 </div>
                 <div className="graphs">
                     <RevenueGraph />

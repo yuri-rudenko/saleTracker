@@ -57,7 +57,6 @@ const BuyProductsTable = (props) => {
 
     const rows = rowsData ? rowsData.map(row => createData(row)): [];
 
-
     return (
         <div>
             <TableContainer>
@@ -125,8 +124,8 @@ const BuyProductsTable = (props) => {
                                     </TableCell>
                                     <TableCell align="left">{row.name}</TableCell>
                                     <TableCell align="left">{row.amount}</TableCell>
-                                    <TableCell align="left">{row.price}</TableCell>
-                                    <TableCell align="left">{row.totalPrice}</TableCell>
+                                    <TableCell align="left">{Number(row.price).toFixed(1)}</TableCell>
+                                    <TableCell align="left">{Number(row.totalPrice).toFixed(1)}</TableCell>
                                     <TableCell align="right">{row.amountInOne}</TableCell>
                                 </TableRow>
                             );
