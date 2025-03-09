@@ -17,9 +17,11 @@ export const fetchBuysAsync = createAsyncThunk(
 
 export const createBuyAsync = createAsyncThunk(
     'buys/add',
-    async (buy, { rejectWithValue, dispatch }) => {
+    async (buy, { rejectWithValue, dispatch, getState }) => {
         try {
-            const response = await createBuy(buy);
+            const state = getState();
+            const course = state.global.course;
+            const response = await createBuy(buy, course);
             if (response.data.products) {
                 dispatch(updateProductStock(response.data.products));
             }

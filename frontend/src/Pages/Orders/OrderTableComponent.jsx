@@ -31,11 +31,6 @@ const OrderTableComponent = (props) => {
         }
     };
 
-    useEffect(() => {
-        console.log(chosenSellItems);
-        
-    }, [chosenSellItems])
-
     const handleRemoveItem = () => {
         if (chosen) {
             dispatch(removeChosenSellItem(chosen));

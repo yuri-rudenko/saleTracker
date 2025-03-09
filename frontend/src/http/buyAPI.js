@@ -1,7 +1,7 @@
 import cleanArray from "../functions/cleanArray.js";
 import { $authHost, $host } from "./indexAPI.js";
 
-export const getOneBuy = async ({_id}) => {
+export const getOneBuy = async ({ _id }) => {
 
     return await $host.get(`/Buy/${_id}`);
 
@@ -19,15 +19,25 @@ export const getAllBuysOfProducts = async (values) => {
 
 }
 
-export const createBuy = async (values) => {
-
+export const createBuy = async (values, course) => {
     if (!values?.products || values.products.length === 0) {
         return;
     }
 
-    return await $host.post(`/buy`, {...values, products: cleanArray(values.products)});
+    if (!course) {
+        throw new Error("Course not found.");
+    }
 
-}
+    const newValues = {
+        ...values,
+        products: values.products.map(product => ({
+            ...product,
+            price: Number(product.price) * course
+        }))
+    };
+
+    return await $host.post(`/buy`, { ...newValues, products: cleanArray(newValues.products) });
+};
 
 export const editBuy = async (values) => {
 
@@ -35,7 +45,7 @@ export const editBuy = async (values) => {
 
 }
 
-export const deleteBuy = async ({_id}) => {
+export const deleteBuy = async ({ _id }) => {
 
     return await $host.delete(`/buy/${_id}`);
 

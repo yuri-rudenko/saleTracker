@@ -100,8 +100,6 @@ const ChangeViews = (props) => {
                 views: value
             }));
 
-            console.log(final);
-
             await dispatch(editProductViewsAsync(final)).unwrap();
 
             setSnackbar({ open: true, message: "Succesfully updated views" });

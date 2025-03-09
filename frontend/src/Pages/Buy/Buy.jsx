@@ -100,7 +100,7 @@ const Buy = () => {
                         Create new order
                     </Button>
 
-                    <CreateOrder onClose={handleClose} open={open}/>
+                    <CreateOrder onClose={handleClose} open={open} />
                 </div>
             </div>
             <Box sx={{ width: '100%' }}>
@@ -160,7 +160,7 @@ const Buy = () => {
                                                 </AccordionSummary>
                                                 <AccordionDetails sx={{ padding: '0 !important' }}>
                                                     <Typography>
-                                                        <BuyProductsTable rowsData={row.products}/>
+                                                        <BuyProductsTable rowsData={row.products} />
                                                     </Typography>
                                                 </AccordionDetails>
                                             </Accordion>

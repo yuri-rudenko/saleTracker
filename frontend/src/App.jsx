@@ -17,6 +17,7 @@ import { fetchBuysAsync } from './Store/buys/buys.slice';
 import { fetchBrandsAsync } from './Store/typeBrand/brand.slice';
 import { fetchTypesAsync } from './Store/typeBrand/type.slice';
 import { fetchSalesAsync } from './Store/sales/sales.slice';
+import { getCourseAsync } from './Store/global/global.slice';
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
     dispatch(fetchBrandsAsync());
     dispatch(fetchTypesAsync());
     dispatch(fetchSalesAsync());
+    dispatch(getCourseAsync());
   }, [dispatch]);
 
   return (

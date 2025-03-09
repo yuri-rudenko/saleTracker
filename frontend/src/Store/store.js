@@ -4,6 +4,7 @@ import typeRedcuer from './typeBrand/type.slice';
 import brandReducer from './typeBrand/brand.slice';
 import productReducer from './product/product.slice';
 import buysReducer from './buys/buys.slice';
+import globalReducer from './global/global.slice';
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     brands: brandReducer,
     products: productReducer,
     buys: buysReducer,
+    global: globalReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),

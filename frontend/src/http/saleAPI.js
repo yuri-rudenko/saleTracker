@@ -21,8 +21,6 @@ export const getAllSalesOfProducts = async (values) => {
 
 export const createSale = async (values) => {
 
-    console.log(values);
-
     return await $host.post(`/sale`, {...values, products: cleanArray(values?.products || [])});
 
 }
