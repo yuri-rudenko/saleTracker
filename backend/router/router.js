@@ -1,4 +1,3 @@
-import actionRouter from "./action.js";
 import brandRouter from "./brand.js";
 import buyRouter from "./buy.js";
 import productRouter from "./product.js";
@@ -9,7 +8,6 @@ import { Router } from "express";
 
 const router = new Router();
 
-router.use('/action', actionRouter);
 router.use('/brand', brandRouter);
 router.use('/buy', buyRouter);
 router.use('/product', productRouter);

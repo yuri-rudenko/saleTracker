@@ -10,9 +10,6 @@ class productController {
 
             const product = await Product.findById(_id).populate({
                 path: 'sales',
-                populate: {
-                    path: 'action'
-                },
                 select: 'price date amount type link'
             })
                 .populate("brand")

@@ -1,4 +1,4 @@
-import { Action, Sale, SaleProduct, Product, BuyProduct } from "../models/models.js";
+import { Sale, SaleProduct, Product, BuyProduct } from "../models/models.js";
 
 
 class saleController {

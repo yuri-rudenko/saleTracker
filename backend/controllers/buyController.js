@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Action, Buy, BuyProduct, Product } from "../models/models.js";
+import { Buy, BuyProduct, Product } from "../models/models.js";
 
 
 class buyController {
@@ -190,16 +190,6 @@ class buyController {
                     ]
                 }
             });
-
-            const latestAction = await Action.findOne().sort({ createdAt: -1 });
-
-            const action = await Action.create({
-                type: "buy",
-                refId: buy._id,
-                previousAction: latestAction ? latestAction._id : null,
-            });
-
-            if (!action) return res.status(400).json({ message: "Problem with creating action" });
 
             return res.status(200).json(foundBuy);
 

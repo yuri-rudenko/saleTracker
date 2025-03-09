@@ -64,31 +64,6 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true, min: [6, 'Password is too short'], max: [16, 'Password is too long'] },
 })
 
-const ActionSchema = new mongoose.Schema(
-  {
-    type: {
-      type: String,
-      required: true,
-      enum: ["buy", "sell"],
-    },
-    refId: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      refPath: "type",
-    },
-    previousAction: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Action",
-      default: null,
-    },
-    undone: {
-      type: Boolean,
-      default: false,
-    }
-  },
-  { timestamps: true }
-);
-
 const Product = mongoose.model('Product', ProductSchema);
 const Brand = mongoose.model('Brand', BrandSchema);
 const Type = mongoose.model('Type', TypeSchema);
@@ -96,7 +71,6 @@ const Sale = mongoose.model('Sale', SaleSchema);
 const SaleProduct = mongoose.model('SaleProduct', SaleProductSchema);
 const Buy = mongoose.model('Buy', BuySchema);
 const BuyProduct = mongoose.model('BuyProduct', BuyProductSchema);
-const Action = mongoose.model('Action', ActionSchema);
 const User = mongoose.model('User', UserSchema)
 
-export { Product, Brand, Type, Sale, SaleProduct, Buy, BuyProduct, Action, User }
+export { Product, Brand, Type, Sale, SaleProduct, Buy, BuyProduct, User }

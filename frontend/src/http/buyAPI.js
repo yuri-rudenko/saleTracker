@@ -24,8 +24,6 @@ export const createBuy = async (values, course) => {
         return;
     }
 
-    console.log(values);
-
     if (!course) {
         throw new Error("Course not found.");
     }
