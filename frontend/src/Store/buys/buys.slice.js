@@ -50,9 +50,6 @@ const buysSlice = createSlice({
             .addCase(createBuyAsync.fulfilled, (state, action) => {
                 state.list.push(action.payload);
             })
-            // .addCase(createBuyAsync.fulfilled, (state, action) => {
-            //     state.list = state.list.filter(item => item.id !== action.payload);
-            // });
     },
 });
 

@@ -96,13 +96,21 @@ const CreateOrder = (props) => {
 
                 <form onSubmit={handleSubmit(onSubmit)} style={{ padding: 20 }}>
 
+                    <div className="create-order-top" style={{ display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+                        <div className="top-button" style={{display:"flex", minWidth: "60%"}}>
 
-                    <Button onClick={addComponent} variant="contained" sx={{ maxWidth: "150px" }} color="success" fullWidth>
-                        Add new item
-                    </Button>
-                    <Button onClick={resetComponents} variant="contained" sx={{ maxWidth: "150px", marginLeft: "16px" }} color="error" fullWidth>
-                        Clear
-                    </Button>
+                            <Button onClick={addComponent} variant="contained" sx={{ maxWidth: "150px" }} color="success" fullWidth>
+                                Add new item
+                            </Button>
+                            <Button onClick={resetComponents} variant="contained" sx={{ maxWidth: "150px", marginLeft: "16px" }} color="error" fullWidth>
+                                Clear
+                            </Button>
+
+                        </div>
+                        <div className="arrived">
+                            <FormControlLabel {...register("usd")} control={<Checkbox defaultChecked />} label="USD" />
+                        </div>
+                    </div>
 
                     <TableContainer style={{ minHeight: "210px", marginTop: "16px" }}>
                         <Table

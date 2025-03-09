@@ -24,6 +24,8 @@ export const createBuy = async (values, course) => {
         return;
     }
 
+    console.log(values);
+
     if (!course) {
         throw new Error("Course not found.");
     }
@@ -32,7 +34,7 @@ export const createBuy = async (values, course) => {
         ...values,
         products: values.products.map(product => ({
             ...product,
-            price: Number(product.price) * course
+            price: values.usd ? Number(product.price) * course : Number(product.price)
         }))
     };
 

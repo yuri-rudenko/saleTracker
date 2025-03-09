@@ -11,8 +11,8 @@ import { useSelector } from 'react-redux';
 import formatDate from '../functions/dates/formatDate';
 import getMargin from '../functions/getMargin';
 
-function createData(name, qty, date, amount, revenue, status) {
-  return { name, qty, date, amount, revenue, status };
+function createData(_id, name, qty, date, amount, revenue, status) {
+  return { _id, name, qty, date, amount, revenue, status };
 }
 
 
@@ -33,7 +33,7 @@ const RecentOrders = () => {
   }
 
   const rows = finalRows.map(row =>
-    createData(row.products.sort((a, b) => b.price * b.amount - a.price * a.amount)[0].product.name, row.amount, formatDate(new Date(row.date)), row.price, getMargin(row.products), row.status)
+    createData(row._id, row.products.sort((a, b) => b.price * b.amount - a.price * a.amount)[0].product.name, row.amount, formatDate(new Date(row.date)), row.price, getMargin(row.products), row.status)
   )
   return (
     <div>
@@ -52,7 +52,7 @@ const RecentOrders = () => {
           <TableBody>
             {rows.map((row) => (
               <TableRow
-                key={row.name}
+                key={row._id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 <TableCell style={{ fontWeight: 600 }} align="left">{row.name}</TableCell>
