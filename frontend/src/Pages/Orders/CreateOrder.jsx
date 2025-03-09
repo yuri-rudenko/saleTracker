@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { resetChosenSellItems } from '../../Store/product/product.slice';
 import { createSaleAsync } from '../../Store/sales/sales.slice';
 
-const typeOptions = ["Nova", "Ukr", "OLX Nova", "Ukr Nova", "Meeting", "Other", "Unknown"];
+const typeOptions = ["Nova", "Ukr", "OLX Nova", "OLX Ukr", "Meeting", "Other", "Unknown"];
 
 const CreateOrder = (props) => {
 

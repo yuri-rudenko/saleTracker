@@ -32,8 +32,9 @@ const RecentOrders = () => {
     finalRows.push(...extraOrders);
   }
 
+  
   const rows = finalRows.map(row =>
-    createData(row._id, row.products.sort((a, b) => b.price * b.amount - a.price * a.amount)[0].product.name, row.amount, formatDate(new Date(row.date)), row.price, getMargin(row.products), row.status)
+    createData(row._id, [...row.products].sort((a, b) => b.price * b.amount - a.price * a.amount)[0].product.name, row.amount, formatDate(new Date(row.date)), row.price, getMargin(row.products), row.status)
   )
   return (
     <div>

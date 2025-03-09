@@ -33,7 +33,7 @@ const SaleSchema = new mongoose.Schema({
   amount: { type: Number, required: true, min: 0 },
   price: { type: Number, required: true, min: 0 },
   date: { type: Date, default: Date.now },
-  type: { type: String, required: true, enum: ["OLX Nova", "Ukr Nova", "Nova", "Ukr", "Meeting", "Other", "Unknown"], default: "Unknown" },
+  type: { type: String, required: true, enum: ["OLX Nova", "OLX Ukr", "Nova", "Ukr", "Meeting", "Other", "Unknown"], default: "Unknown" },
   status: { type: String, required: true, enum: ["Awaiting", "Sent", "Approved", "Declined"], default: "Awaiting" },
 }, { timestamps: true })
 
