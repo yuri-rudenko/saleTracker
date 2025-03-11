@@ -1,14 +1,11 @@
 import { Router } from "express";
 import authController from "../controllers/authController.js";
-import { check } from "express-validator";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = new Router()
 
-router.post("/register", [
-    check('username', "Name can't be empty").notEmpty(),
-    check('password', "Password can't be empty").notEmpty(),
-], authController.register);
+router.post("/register", authController.register);
 router.post("/login", authController.login);
-router.get("/", authController.getAll);
+router.get("/auth", authMiddleware, authController.check);
 
 export default router;

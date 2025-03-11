@@ -112,7 +112,6 @@ const Items = () => {
 
     const loading = useSelector((state) => state.products.loading);
 
-
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [page, setPage] = React.useState(0);
