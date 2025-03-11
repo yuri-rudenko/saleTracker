@@ -108,7 +108,7 @@ const OrderTableComponent = (props) => {
                     <TableCell align="right">
                         <TextField
                             size='small'
-                            {...register(`products[${number}].amount`, { min: { value: 1, message: "Too low", }, required: "Amount is required" })}
+                            {...register(`products[${number}].amount`, { min: { value: 1, message: "Too low", }, required: "Amount is required", valueAsNumber: true })}
                             type='number'
                             placeholder='Amount'
                         />

@@ -152,7 +152,7 @@ class saleController {
                 }
     
                 price += product.amount * product.price;
-                amount += product.amount;
+                amount += Number(product.amount);
     
                 const averageBuyPrice = totalSold > 0 ? totalCost / totalSold : 0;
     
