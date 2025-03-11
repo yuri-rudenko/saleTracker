@@ -1,5 +1,5 @@
-import { Button, Dialog, DialogTitle, TextField } from '@mui/material';
-import React from 'react';
+import { Button, Dialog, DialogTitle, Snackbar, TextField } from '@mui/material';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { registerAsync } from '../../Store/user/user.slice';
@@ -15,20 +15,34 @@ const Register = (props) => {
         onClose();
     };
 
+    const [snackbar, setSnackbar] = useState({ open: false, message: "" });
+
+    const handleSnackBarClose = () => {
+        setSnackbar({ open: false, message: "" });
+    };
+
     const onSubmit = async (data) => {
 
         try {
 
-            await dispatch(registerAsync(data));
+            await dispatch(registerAsync(data)).unwrap();
+            setSnackbar({ open: true, message: "Registered successfully!" });
+            handleClose()
 
         } catch (error) {
-            // setSnackbar({ open: true, message: error.message });
+            setSnackbar({ open: true, message: error });
         }
 
     };
 
     return (
         <>
+            <Snackbar
+                open={snackbar.open}
+                autoHideDuration={3000}
+                onClose={handleSnackBarClose}
+                message={snackbar.message}
+            />
             <Dialog maxWidth={"sm"} open={open} onClose={handleClose}>
                 <DialogTitle>Register</DialogTitle>
                 <form style={{ padding: 20 }} onSubmit={handleSubmit(onSubmit)}>
