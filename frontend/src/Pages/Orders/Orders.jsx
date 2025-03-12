@@ -1,5 +1,5 @@
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography } from '@mui/material';
-import React from 'react';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, FormControl, InputLabel, MenuItem, Paper, Select, Snackbar, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography } from '@mui/material';
+import React, { useState } from 'react';
 import EnhancedTableHead from '../../Components/EnhancedTableHead';
 import getComparator from '../../functions/getComparator';
 import OrdersProductsTable from './OrdersProductsTable';
@@ -7,7 +7,7 @@ import CreateOrder from './CreateOrder';
 import { useDispatch, useSelector } from 'react-redux';
 import getMargin from '../../functions/getMargin';
 import getStandartDate from '../../functions/dates/getStandartDate';
-import { approveSaleAsync } from '../../Store/sales/sales.slice';
+import { approveSaleAsync, deleteSaleAsync, editSaleAsync } from '../../Store/sales/sales.slice';
 
 function createData(_id, status, date, amount, price, margin, type, products) {
     return {
@@ -64,13 +64,49 @@ const headCells = [
 
 const Buy = () => {
 
-    const [order, setOrder] = React.useState('desc');
-    const [orderBy, setOrderBy] = React.useState('date');
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const dispatch = useDispatch();
 
-    const [open, setOpen] = React.useState(false);
+    const [order, setOrder] = useState('desc');
+    const [orderBy, setOrderBy] = useState('date');
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [editingStatus, setEditingStatus] = useState({});
+    const [selectValues, setSelectValues] = useState({});
+
+    const handleChange = async (rowId, event) => {
+        try {
+            switch (event.target.value) {
+                case "Sent":
+                    await dispatch(editSaleAsync({ _id: rowId, fieldsToUpdate: { status: "Sent" } })).unwrap();
+                    break;
+                case "Declined":
+                    await dispatch(editSaleAsync({ _id: rowId, fieldsToUpdate: { status: "Declined" } })).unwrap();
+                    break;
+                case "Delete":
+                    await dispatch(deleteSaleAsync(rowId)).unwrap();
+                    break;
+                case "Approved":
+                    await dispatch(approveSaleAsync(rowId)).unwrap();
+                    break;
+            }
+        } catch(error) {
+            setSnackbar({ open: true, message: error.message });
+        }
+
+        setSelectValues(prev => ({
+            ...prev,
+            [rowId]: event.target.value
+        }));
+    };
+
+    const toggleEditingStatus = (rowId) => {
+        setEditingStatus(prev => ({
+            ...prev,
+            [rowId]: !prev[rowId]
+        }));
+    };
+
+    const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -90,7 +126,7 @@ const Buy = () => {
     };
 
     const approveSale = (id, status) => {
-        if(status === "Approved") return;
+        if (status === "Approved") return;
         dispatch(approveSaleAsync(id));
     }
 
@@ -109,8 +145,20 @@ const Buy = () => {
         [order, orderBy, page, rowsPerPage, sales],
     );
 
+    const [snackbar, setSnackbar] = useState({ open: false, message: "" });
+
+    const handleSnackBarClose = () => {
+        setSnackbar({ open: false, message: "" });
+    };
+
     return (
         <div>
+            <Snackbar
+                open={snackbar.open}
+                autoHideDuration={3000}
+                onClose={handleSnackBarClose}
+                message={snackbar.message}
+            />
             <div className="buttons">
                 <div className="create-new-product">
                     <Button onClick={handleClickOpen} variant="outlined">
@@ -138,7 +186,7 @@ const Buy = () => {
                             />
                             <TableBody>
                                 {visibleRows.map((row, index) => (
-                                    <TableRow>
+                                    <TableRow key={row._id}>
                                         <TableCell colSpan={6} style={{ padding: 0 }}>
                                             <Accordion
                                                 sx={{ boxShadow: 'none', '&:before': { display: 'none' } }}
@@ -171,7 +219,34 @@ const Buy = () => {
                                                                 <TableCell sx={{ width: '16%' }} align="right">{row.price}</TableCell>
                                                                 <TableCell sx={{ width: '17%' }} align="right">{row.margin}</TableCell>
                                                                 <TableCell sx={{ width: '16%' }} align="right">{row.type}</TableCell>
-                                                                <TableCell sx={{ width: '17%' }} align="right" onClick={event => event.stopPropagation()} onDoubleClick={() => approveSale(row._id, row.status)}>{row.status}</TableCell>
+                                                                {editingStatus[row._id] ?
+                                                                    <TableCell sx={{ width: '17%' }} align="right" onClick={event => event.stopPropagation()}>
+                                                                        <FormControl size="small" sx={{ width: "70%" }}>
+                                                                            <InputLabel id={`select-label-${row._id}`}>{row.status}</InputLabel>
+                                                                            <Select
+                                                                                labelId={`select-label-${row._id}`}
+                                                                                value={selectValues[row._id] || ""}
+                                                                                onChange={(event) => handleChange(row._id, event)}
+                                                                                onClose={() => toggleEditingStatus(row._id)}
+                                                                            >
+                                                                                <MenuItem value="Awaiting">Awaiting</MenuItem>
+                                                                                <MenuItem value="Sent">Sent</MenuItem>
+                                                                                <MenuItem value="Approved">Approved</MenuItem>
+                                                                                <MenuItem value="Declined">Declined</MenuItem>
+                                                                                <MenuItem value="Delete">Delete</MenuItem>
+                                                                            </Select>
+                                                                        </FormControl>
+                                                                    </TableCell>
+                                                                    :
+                                                                    <TableCell
+                                                                        sx={{ width: '17%' }}
+                                                                        align="right"
+                                                                        onClick={event => event.stopPropagation()}
+                                                                        onDoubleClick={() => toggleEditingStatus(row._id)}
+                                                                    >
+                                                                        {row.status}
+                                                                    </TableCell>
+                                                                }
                                                             </TableRow>
 
                                                         </TableBody>

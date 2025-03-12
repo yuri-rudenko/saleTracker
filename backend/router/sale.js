@@ -17,9 +17,13 @@ router.get("/:_id", saleController.get);
 router.post("/", saleController.create);
 
 // Edit sale
-router.put("/", authMiddleware, saleController.edit);
+router.put("/", saleController.edit);
 
 // Approve sale
 router.put('/approveSale/:_id', saleController.approveSale);
+
+// Delete sale 
+router.delete("/:_id", saleController.delete);
+
 
 export default router;
