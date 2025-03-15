@@ -19,6 +19,7 @@ import { fetchTypesAsync } from './Store/typeBrand/type.slice';
 import { fetchSalesAsync } from './Store/sales/sales.slice';
 import { getCourseAsync } from './Store/global/global.slice';
 import { checkAsync } from './Store/user/user.slice';
+import Product from './Pages/Product/Product';
 
 function App() {
 
@@ -68,6 +69,10 @@ function App() {
 
                 <Route path='/stats' element={
                   <Stats />
+                } />
+
+                <Route path='/product/:productId' element={
+                  <Product />
                 } />
 
               </Routes>

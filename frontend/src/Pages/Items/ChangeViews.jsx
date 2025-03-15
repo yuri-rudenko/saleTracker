@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { editProductViewsAsync } from "../../Store/product/product.slice";
 import { useState } from "react";
 
-function createData(_id, name, views) {
+function createData(_id, name, views, image) {
     return {
         _id,
         name,
         views,
+        image
     };
 }
 
@@ -67,7 +68,7 @@ function EnhancedTableHead(props) {
 const ChangeViews = (props) => {
 
     const products = useSelector((state) =>
-        state.products.list.map(item => createData(item._id, item.name, item.views[item.views.length - 1].views))
+        state.products.list.map(item => createData(item._id, item.name, item.views[item.views.length - 1].views, item.image))
     );
 
     const dispatch = useDispatch();
@@ -153,8 +154,7 @@ const ChangeViews = (props) => {
                                             <TableCell align="left">{row.name}</TableCell>
                                             <TableCell align="right">
                                                 <TextField
-                                                    // { min: { value: row.views, message: "Value is low" } }
-                                                    {...register(`${row._id}`,)}
+                                                    {...register(`${row._id}`, { min: { value: row.views, message: "Value is low" } })}
                                                     error={!!errors[`${row._id}`]}
                                                     helperText={errors[`${row._id}`]?.message}
                                                     id="outlined-number"

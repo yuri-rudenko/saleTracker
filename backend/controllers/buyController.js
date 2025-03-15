@@ -29,8 +29,6 @@ class buyController {
 
     async getAll(req, res, next) {
 
-        const { _id } = req.params;
-
         try {
 
             const buys = await Buy.find().populate({

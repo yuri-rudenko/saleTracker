@@ -144,7 +144,7 @@ class saleController {
                             }
                         });
 
-                        totalCost += soldNow * buyProduct.price;
+                        totalCost += soldNow * buyProduct.price / buyProduct.amountInOne;
                         totalSold += soldNow;
                         remainingAmount -= soldNow;
                     }
@@ -334,7 +334,7 @@ class saleController {
                         }
                     });
 
-                    totalCost += soldNow * buyProduct.price;
+                    totalCost += soldNow * buyProduct.price / buyProduct.amountInOne;
                     totalSold += soldNow;
                     remainingAmount -= soldNow;
                 }
@@ -356,6 +356,18 @@ class saleController {
                     $expr: { $lte: ["$sold", "$amount"] }
                 });
 
+                const saleProducts = await SaleProduct.find({ product: foundProduct._id });
+
+                let totalSellValue = 0;
+                let totalSellQuantity = 0;
+
+                for (const saleProduct of saleProducts) {
+                    totalSellValue += saleProduct.amount * saleProduct.price;
+                    totalSellQuantity += saleProduct.amount;
+                }
+
+                const averageSellPrice = totalSellQuantity > 0 ? totalSellValue / totalSellQuantity : 0;
+
                 let totalValue = 0;
                 let totalQuantity = 0;
 
@@ -371,6 +383,7 @@ class saleController {
                     foundProduct._id,
                     {
                         averageBuyPriceLeft,
+                        averageSellPrice,
                         $inc: { amountSold: saleProduct.amount, currentlyAvaliable: -saleProduct.amount },
                     },
                     { new: true }

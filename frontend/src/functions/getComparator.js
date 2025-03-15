@@ -12,10 +12,10 @@ function descendingComparator(a, b, orderBy) {
             return 1;
         }
     } else {
-        if (b[orderBy] < a[orderBy]) {
+        if (Number(b[orderBy]) < Number(a[orderBy])) {
             return -1;
         }
-        if (b[orderBy] > a[orderBy]) {
+        if (Number(b[orderBy]) > Number(a[orderBy])) {
             return 1;
         }
     }

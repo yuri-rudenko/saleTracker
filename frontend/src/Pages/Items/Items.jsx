@@ -17,9 +17,10 @@ import EnhancedTableHead from '../../Components/EnhancedTableHead';
 import getComparator from '../../functions/getComparator';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProductsAsync } from '../../Store/product/product.slice';
+import { useNavigate } from 'react-router';
 
 
-function createData(image, name, category, brand, left, buyprice, sellprice, sells, date, views, increase) {
+function createData(image, name, category, brand, left, buyprice, sellprice, sells, date, views, increase, _id) {
     return {
         image,
         name,
@@ -31,7 +32,8 @@ function createData(image, name, category, brand, left, buyprice, sellprice, sel
         sells,
         date,
         views,
-        increase
+        increase,
+        _id
     };
 }
 
@@ -106,8 +108,10 @@ const headCells = [
 
 const Items = () => {
 
+    const navigate = useNavigate();
+
     const products = useSelector((state) =>
-        state.products.list.map(item => createData(item.image, item.name, item.type.name, item.brand.name, item.currentlyAvaliable, Number(item.averageBuyPrice).toFixed(1), Number(item.averageSellPrice).toFixed(1), item.amountSold, item?.sales?.length ? item.sales.at(-1).date : 0, item.views.at(-1).views, item.increase || 0))
+        state.products.list.map(item => createData(item.image, item.name, item.type.name, item.brand.name, item.currentlyAvaliable, Number(item.averageBuyPrice).toFixed(1), Number(item.averageSellPrice).toFixed(1), item.amountSold, item?.sales?.length ? item.sales.at(-1).date : 0, item.views.at(-1).views, item.increase || 0, item._id))
     );
 
     const loading = useSelector((state) => state.products.loading);
@@ -200,6 +204,7 @@ const Items = () => {
                                             tabIndex={-1}
                                             key={row._id}
                                             sx={{ cursor: 'pointer' }}
+                                            onClick={() => navigate(`/product/${row._id}`)}
                                         >
                                             <TableCell
                                                 component="th"
