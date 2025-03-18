@@ -1,4 +1,5 @@
 import formatDate from "../dates/formatDate";
+import getMargin from "../getMargin";
 
 export default function (sales) {
 
@@ -19,7 +20,7 @@ export default function (sales) {
         const differenceWeek = Math.floor((now - saleDate) / (1000 * 60 * 60 * 24 * 7));
         const differenceMonth = (now.getFullYear() - saleDate.getFullYear()) * 12 + (now.getMonth() - saleDate.getMonth());
 
-        const profit = sale.products.reduce((acc, product) => acc + (product.price - product.averageBuyPrice) * product.amount, 0);
+        const profit = Number(getMargin(sale.products));
 
         if (difference < 10) {
             const date = new Date(now);
