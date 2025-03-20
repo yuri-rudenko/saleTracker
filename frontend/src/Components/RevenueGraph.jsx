@@ -3,13 +3,17 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import getSaleGraphStats from '../functions/graphs/getSaleGraphStats';
 
-const RevenueGraph = () => {
+const RevenueGraph = ({givenSales}) => {
 
-    const sales = useSelector(state => state.sales.list);
-
+    const foundSales = useSelector(state => state.sales.list) || [];
+    const sales = givenSales || foundSales;
     const [scale, setScale] = useState("days");
 
     const data = getSaleGraphStats(sales);
+
+    if (!sales.length) {
+        return <div>No sales data yet</div>;
+    }
 
     return (
         <div className='revenue-container'>

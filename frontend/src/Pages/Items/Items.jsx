@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchProductsAsync } from '../../Store/product/product.slice';
 import { useNavigate } from 'react-router';
 import getStandartDate from '../../functions/dates/getStandartDate';
+import getLatestSaleDate from '../../functions/getLatestSaleDate';
 
 
 function createData(image, name, category, brand, left, buyprice, sellprice, sells, date, views, increase, _id) {
@@ -118,22 +119,6 @@ const Items = () => {
         const sales = state.sales.list;
 
         if (stateProducts.length === 0 || sales.length === 0) return [];
-
-        const getLatestSaleDate = function (productId, sales) {
-
-            const salesWithProduct = sales?.filter(sale =>
-                sale.products.find(saleProduct => saleProduct.product._id === productId)
-            );
-
-            if (!salesWithProduct || salesWithProduct.length === 0) return getStandartDate(new Date("01.01.1970"));
-
-            const latestSale = salesWithProduct.reduce((latest, sale) =>
-                new Date(sale.date) > new Date(latest.date) ? sale : latest
-            );
-
-            return getStandartDate(new Date(latestSale.date));
-        }
-
         
         return stateProducts.map(item => createData(item.image, item.name, item.type.name, item.brand.name, item.currentlyAvaliable, Number(item.averageBuyPrice).toFixed(1), Number(item.averageSellPrice).toFixed(1), item.amountSold, getLatestSaleDate(item._id, sales), item.views.at(-1).views, item.increase || 0, item._id));
     }
@@ -145,7 +130,7 @@ const Items = () => {
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('calories');
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
     const [openAddNew, setOpenAddNew] = React.useState(false);
     const [openViews, setOpenViews] = React.useState(false);

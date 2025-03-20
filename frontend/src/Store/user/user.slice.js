@@ -59,7 +59,7 @@ const userSlice = createSlice({
             .addCase(checkAsync.pending, (state) => { state.loading = true; })
             .addCase(checkAsync.fulfilled, (state, action) => {
                 state.loading = false;
-                if (!action.payload.username) return;
+                if (!action.payload?.username) return;
                 state.user = action.payload;
                 state.isAuth = true;
             })
