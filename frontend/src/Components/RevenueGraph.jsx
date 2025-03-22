@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import getSaleGraphStats from '../functions/graphs/getSaleGraphStats';
 
-const RevenueGraph = ({givenSales}) => {
+const RevenueGraph = ({ givenSales }) => {
 
     const foundSales = useSelector(state => state.sales.list) || [];
     const sales = givenSales || foundSales;
@@ -29,10 +29,40 @@ const RevenueGraph = ({givenSales}) => {
                         <p style={{ cursor: "pointer", color: scale === "months" ? "#0561FC" : "" }} className="scale" onClick={() => setScale("months")}>Month</p>
                     </div>
                 </div>
-                <div className="total-revenue">2873₴</div>
+                <div className="total-revenue">{
+                    data[scale][Object.keys(data[scale])
+                        .sort((a, b) => new Date(b) - new Date(a))[0]]
+                }₴</div>
                 <div className="increase">
-                    <div className="percent-good">+3.3%</div>
-                    <div className="period">from last period</div>
+                    {(() => {
+                        const sortedDates = Object.keys(data[scale])
+                            .sort((a, b) => new Date(b) - new Date(a));
+
+                        if (sortedDates.length < 2) return (
+                            <>
+                                <div className="percent-good">0%</div>
+                                <div className="period">from last period</div>
+                            </>
+                        );
+
+                        const newRevenue = data[scale][sortedDates[0]];
+                        const oldRevenue = data[scale][sortedDates[1]];
+
+                        let change;
+                        if (newRevenue === 0 && oldRevenue === 0) change = 0;
+                        else if (newRevenue === 0) change = -100;
+                        else if (oldRevenue === 0) change = 100;
+                        else change = ((newRevenue - oldRevenue) / oldRevenue) * 100;
+
+                        const className = change < 0 ? "percent-bad" : "percent-good";
+
+                        return (
+                            <>
+                                <div className={className}>{change.toFixed(1)}%</div>
+                                <div className="period">from last period</div>
+                            </>
+                        );
+                    })()}
                 </div>
 
             </div>

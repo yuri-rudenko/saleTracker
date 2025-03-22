@@ -161,6 +161,7 @@ const ChangeViews = (props) => {
                                                     label="Number"
                                                     type="number"
                                                     placeholder={row.views}
+                                                    {...(row.views !== 0 ? { defaultValue: row.views } : {})}
                                                     size="small"
                                                     style={{ maxWidth: "100px" }}
                                                     slotProps={{
