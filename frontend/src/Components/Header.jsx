@@ -47,9 +47,7 @@ function Header() {
   };
 
   useEffect(() => {
-    if (user.isAuth) {
-      setAnchorEl(null);
-    }
+    setAnchorEl(null);
   }, [user.isAuth]);
 
   const handleClosePopup = () => {

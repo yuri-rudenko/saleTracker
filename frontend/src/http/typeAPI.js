@@ -1,31 +1,31 @@
-import { $authHost, $host } from "./indexAPI.js";
+import { $authHost } from "./indexAPI.js";
 
 export const getOneType = async ({_id}) => {
 
-    return await $host.get(`/type/${_id}`);
+    return await $authHost.get(`/type/${_id}`);
 
 }
 
 export const getAllTypes = async () => {
 
-    return await $host.get(`/type`);
+    return await $authHost.get(`/type`);
 
 }
 
 export const createType = async (values) => {
 
-    return await $host.post(`/type`, values);
+    return await $authHost.post(`/type`, values);
 
 }
 
 export const editType = async (values) => {
 
-    return await $host.put(`/type`, values);
+    return await $authHost.put(`/type`, values);
 
 }
 
 export const deleteType = async ({_id}) => {
 
-    return await $host.delete(`/type/${_id}`);
+    return await $authHost.delete(`/type/${_id}`);
 
 }

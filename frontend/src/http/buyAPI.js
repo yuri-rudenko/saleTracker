@@ -1,21 +1,21 @@
 import cleanArray from "../functions/cleanArray.js";
-import { $authHost, $host } from "./indexAPI.js";
+import { $authHost } from "./indexAPI.js";
 
 export const getOneBuy = async ({ _id }) => {
 
-    return await $host.get(`/Buy/${_id}`);
+    return await $authHost.get(`/Buy/${_id}`);
 
 }
 
 export const getAllBuys = async () => {
 
-    return await $host.get(`/buy`);
+    return await $authHost.get(`/buy`);
 
 }
 
 export const getAllBuysOfProducts = async (values) => {
 
-    return await $host.get(`/buy/products`, values);
+    return await $authHost.get(`/buy/products`, values);
 
 }
 
@@ -36,17 +36,17 @@ export const createBuy = async (values, course) => {
         }))
     };
 
-    return await $host.post(`/buy`, { ...newValues, products: cleanArray(newValues.products) });
+    return await $authHost.post(`/buy`, { ...newValues, products: cleanArray(newValues.products) });
 };
 
 export const editBuy = async (values) => {
 
-    return await $host.put(`/buy/edit`, values);
+    return await $authHost.put(`/buy/edit`, values);
 
 }
 
 export const deleteBuy = async ({ _id }) => {
 
-    return await $host.delete(`/buy/${_id}`);
+    return await $authHost.delete(`/buy/${_id}`);
 
 }

@@ -1,44 +1,44 @@
 import cleanArray from "../functions/cleanArray.js";
-import { $authHost, $host } from "./indexAPI.js";
+import { $authHost } from "./indexAPI.js";
 
 export const getOneSale = async ({ _id }) => {
 
-    return await $host.get(`/sale/${_id}`);
+    return await $authHost.get(`/sale/${_id}`);
 
 }
 
 export const getAllSales = async () => {
 
-    return await $host.get(`/sale`);
+    return await $authHost.get(`/sale`);
 
 }
 
 export const getAllSalesOfProducts = async (values) => {
 
-    return await $host.get(`/sale/products`, values);
+    return await $authHost.get(`/sale/products`, values);
 
 }
 
 export const createSale = async (values) => {
 
-    return await $host.post(`/sale`, { ...values, products: cleanArray(values?.products || []) });
+    return await $authHost.post(`/sale`, { ...values, products: cleanArray(values?.products || []) });
 
 }
 
 export const editSale = async (values) => {
 
-    return await $host.put(`/sale`, values);
+    return await $authHost.put(`/sale`, values);
 
 }
 
 export const approveSale = async (saleId) => {
 
-    return await $host.put(`/sale/approveSale/${saleId}`);
+    return await $authHost.put(`/sale/approveSale/${saleId}`);
 
 }
 
 export const deleteSale = async (_id) => {
 
-    return await $host.delete(`/sale/${_id}`);
+    return await $authHost.delete(`/sale/${_id}`);
 
 };

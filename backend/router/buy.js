@@ -11,9 +11,9 @@ router.get("/", buyController.getAll);
 router.get("/products", buyController.getAllProduct);
 
 // Get a single buy 
-router.get("/:_id", buyController.get);
+router.get("/:_id", authMiddleware, buyController.get);
 
 // Create a new buy
-router.post("/", buyController.create);
+router.post("/", authMiddleware, buyController.create);
 
 export default router;

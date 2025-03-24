@@ -12,13 +12,13 @@ router.get("/", productController.getAll);
 router.get("/:_id", productController.get);
 
 // Create a new product
-router.post("/", productController.create);
+router.post("/", authMiddleware, productController.create);
 
 // Update an existing product
 router.put("/edit", authMiddleware, productController.edit);
 
 // Edit views
-router.put("/editViews", productController.editViews);
+router.put("/editViews",authMiddleware, productController.editViews);
 
 // Delete a product by ID
 router.delete("/:_id", authMiddleware, productController.delete);

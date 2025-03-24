@@ -1,9 +1,9 @@
-import { $authHost, $host } from "./indexAPI";
+import { $authHost } from "./indexAPI";
 import { jwtDecode } from "jwt-decode";
 
 export const registration = async (values) => {
     try {
-        const { data } = await $host.post('/auth/register', values);
+        const { data } = await $authHost.post('/auth/register', values);
         localStorage.setItem('token', data.token);
         return data;
     } catch (error) {
@@ -14,7 +14,7 @@ export const registration = async (values) => {
 
 export const login = async (values) => {
     try {
-        const { data } = await $host.post('/auth/login', values);
+        const { data } = await $authHost.post('/auth/login', values);
         localStorage.setItem('token', data.token);
         return data;
     } catch (error) {

@@ -14,16 +14,16 @@ router.get("/products", saleController.getAllProduct);
 router.get("/:_id", saleController.get);
 
 // Create a new sale
-router.post("/", saleController.create);
+router.post("/", authMiddleware, saleController.create);
 
 // Edit sale
-router.put("/", saleController.edit);
+router.put("/", authMiddleware, saleController.edit);
 
 // Approve sale
-router.put('/approveSale/:_id', saleController.approveSale);
+router.put('/approveSale/:_id', authMiddleware, saleController.approveSale);
 
 // Delete sale 
-router.delete("/:_id", saleController.delete);
+router.delete("/:_id", authMiddleware, saleController.delete);
 
 
 export default router;
