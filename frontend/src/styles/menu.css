@@ -24,6 +24,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    cursor: pointer;
 }
 
 .menu-container .menu-list .menu-item .left {
@@ -34,7 +35,22 @@
     color: #93A3AB;
 }
 
-@media (max-width: 1100px) { 
+.menu-item svg {
+    color: #C3Ced2;
+}
+
+.menu-item:hover * {
+    color: #0561FC;
+    transition: 0.2s color;
+}
+
+.active-item * {
+    color: #0561FC;
+    transition: 0.2s color;
+}
+
+
+@media (max-width: 1100px) {
     .menu-item-text {
         display: none;
     }
