@@ -21,32 +21,29 @@ import { getCourseAsync, setLoading } from './Store/global/global.slice';
 import { checkAsync } from './Store/user/user.slice';
 import Product from './Pages/Product/Product';
 
+export const loadData = async (dispatch) => {
+  dispatch(setLoading(true));
+  await dispatch(fetchProductsAsync());
+  await dispatch(fetchBuysAsync());
+  await dispatch(fetchBrandsAsync());
+  await dispatch(fetchTypesAsync());
+  await dispatch(fetchSalesAsync());
+  await dispatch(getCourseAsync());
+  await dispatch(checkAsync());
+  dispatch(setLoading(false));
+};
+
 function App() {
 
+  const loading = useSelector(state => state.global.loading);
+  const isAuth = useSelector(state => state.user.isAuth);
   const dispatch = useDispatch();
 
-  const loading = useSelector(state => state.global.loading);
-
   useEffect(() => {
-    const loadData = async () => {
-      dispatch(setLoading(true));
-      await dispatch(fetchProductsAsync());
-      await dispatch(fetchBuysAsync());
-      await dispatch(fetchBrandsAsync());
-      await dispatch(fetchTypesAsync());
-      await dispatch(fetchSalesAsync());
-      await dispatch(getCourseAsync());
-      await dispatch(checkAsync());
-      dispatch(setLoading(false));
-    };
 
-    loadData();
-    
-  }, [dispatch]);
-  
-  useEffect(() => {
-    console.log('Loading changed:', loading);
-  }, [loading]);
+    loadData(dispatch);
+
+  }, [dispatch, isAuth]);
 
   
   if (loading) return <div className="loader"></div>
