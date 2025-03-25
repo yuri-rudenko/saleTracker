@@ -3,6 +3,8 @@ import express from "express";
 import { connectDB } from "./config/db.js";
 import router from "./router/router.js";
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from 'url';
 
 function errorHandler(err, req, res, next) {
 
@@ -24,6 +26,11 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
 }));
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+app.use('/images', express.static(path.join(__dirname, 'randomization/images')));
 
 app.use(express.json());
 app.use('/api', router);

@@ -1,10 +1,16 @@
 import { Brand, Product, Type } from "../models/models.js";
+import generateRandomProduct from "../randomization/functions/generateRandomProduct.js";
 
 class productController {
 
     async get(req, res, next) {
 
         try {
+
+            if (!req.isAuthorized) {
+
+                res.status(200).json(generateRandomProduct());
+            }
 
             const { _id } = req.params;
 
@@ -25,6 +31,15 @@ class productController {
     async getAll(req, res, next) {
 
         try {
+
+            if (!req.isAuthorized) {
+
+                const generateRandomProducts = (count = 10) => Array.from({ length: count }).map(() => generateRandomProduct());
+
+                const generatedProducts = generateRandomProducts(25);
+
+                res.status(200).json(generatedProducts);
+            }
 
             const { name } = req.query;
 

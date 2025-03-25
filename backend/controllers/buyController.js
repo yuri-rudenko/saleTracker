@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import { Buy, BuyProduct, Product } from "../models/models.js";
+import generateRandomBuy from "../randomization/functions/generateRandomBuy.js";
+import generateRandomProduct from "../randomization/functions/generateRandomProduct.js";
 
 
 class buyController {
@@ -7,6 +9,11 @@ class buyController {
     async get(req, res, next) {
 
         try {
+
+            if (!req.isAuthorized) {
+
+                res.status(200).json(generateRandomProduct());
+            }
 
             const { _id } = req.params;
 
@@ -31,6 +38,17 @@ class buyController {
 
         try {
 
+            if (!req.isAuthorized) {
+
+                const generateRandomBuys = (count = 10) => Array.from({ length: count }).map(() => generateRandomBuy());
+
+                const generatedBuys = generateRandomBuys(44);
+
+                res.status(200).json(generatedBuys);
+
+                return;
+            }
+
             const buys = await Buy.find().populate({
                 path: 'products',
                 populate: {
@@ -48,14 +66,27 @@ class buyController {
 
     async getAllProduct(req, res, next) {
 
+        if (!req.isAuthorized) {
+
+            const generateRandomBuys = (count = 10) => Array.from({ length: count }).map(() => generateRandomBuy());
+
+            const generatedBuys = generateRandomBuys(3);
+
+            res.status(200).json(generatedBuys);
+        }
+
         const { _id } = req.query;
 
         const query = {};
         if (_id) {
             try {
+
                 query._id = new mongoose.Types.ObjectId(_id);
+
             } catch (error) {
+
                 return res.status(400).json({ message: "Invalid _id format." });
+
             }
         }
         try {

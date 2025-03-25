@@ -1,15 +1,16 @@
 import { Router } from "express";
 import productController from "../controllers/productController.js";
 import authMiddleware from "../middleware/authMiddleware.js";
+import authGetMiddleware from "../middleware/authGetMiddleware.js";
 
 
 const router = new Router()
 
 // Get all products 
-router.get("/", productController.getAll);
+router.get("/", authGetMiddleware, productController.getAll);
 
 // Get a single product 
-router.get("/:_id", productController.get);
+router.get("/:_id", authGetMiddleware, productController.get);
 
 // Create a new product
 router.post("/", authMiddleware, productController.create);

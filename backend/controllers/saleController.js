@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { Sale, SaleProduct, Product, BuyProduct } from "../models/models.js";
+import generateRandomSale from "../randomization/functions/generateRandomSale.js";
 
 
 class saleController {
@@ -7,6 +8,13 @@ class saleController {
     async get(req, res, next) {
 
         try {
+
+            if (!req.isAuthorized) {
+
+                res.status(200).json(generateRandomSale());
+
+                return;
+            }
 
             const { _id } = req.params;
 
@@ -33,6 +41,17 @@ class saleController {
 
     async getAll(req, res, next) {
 
+        if (!req.isAuthorized) {
+
+            const generateRandomSales = (count = 10) => Array.from({ length: count }).map(() => generateRandomSale());
+
+            const generatedSales = generateRandomSales(200);
+
+            res.status(200).json(generatedSales);
+
+            return;
+        }
+
         try {
 
             const sales = await Sale.find().populate({
@@ -55,6 +74,17 @@ class saleController {
     }
 
     async getAllProduct(req, res, next) {
+
+        if (!req.isAuthorized) {
+
+            const generateRandomSales = (count = 10) => Array.from({ length: count }).map(() => generateRandomSale());
+
+            const generatedSales = generateRandomSales(3);
+
+            res.status(200).json(generatedSales);
+
+            return;
+        }
 
         const { _id } = req.query;
 

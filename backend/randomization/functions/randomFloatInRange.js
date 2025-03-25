@@ -1,0 +1,1 @@
+export default (min, max, decimals = 2) => parseFloat((Math.random() * (max - min) + min).toFixed(decimals));

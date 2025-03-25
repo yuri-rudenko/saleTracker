@@ -1,5 +1,5 @@
 import { LineChart } from '@mui/x-charts';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import getSaleGraphStats from '../functions/graphs/getSaleGraphStats';
 

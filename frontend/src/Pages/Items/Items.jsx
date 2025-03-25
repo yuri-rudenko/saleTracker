@@ -119,16 +119,15 @@ const Items = () => {
         const sales = state.sales.list;
 
         if (stateProducts.length === 0 || sales.length === 0) return [];
-        
-        return stateProducts.map(item => createData(item.image, item.name, item.type.name, item.brand.name, item.currentlyAvaliable, Number(item.averageBuyPrice).toFixed(1), Number(item.averageSellPrice).toFixed(1), item.amountSold, getLatestSaleDate(item._id, sales), item.views.at(-1).views, item.increase || 0, item._id));
-    }
 
-    );
+        return stateProducts.map(item => createData(item.image, item.name, item.type.name, item.brand.name, item.currentlyAvaliable, Number(item.averageBuyPrice).toFixed(1), Number(item.averageSellPrice).toFixed(1), item.amountSold, getLatestSaleDate(item._id, sales), item.views.at(-1).views, item.increase || 0, item._id));
+    
+    });
 
     const loading = useSelector((state) => state.products.loading);
 
-    const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('calories');
+    const [order, setOrder] = React.useState('desc');
+    const [orderBy, setOrderBy] = React.useState('left');
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
