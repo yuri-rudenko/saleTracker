@@ -26,15 +26,22 @@ export const getCourseAsync = createAsyncThunk(
 const globalSlice = createSlice({
     name: 'global',
     initialState: { course: null, loading: false },
-    reducers: {},
+    reducers: {
+        setLoading: (state, action) => {
+            state.loading = action.payload;
+        },
+    },
     extraReducers: (builder) => {
         builder
-            .addCase(getCourseAsync.pending, (state) => { state.loading = true; })
             .addCase(getCourseAsync.fulfilled, (state, action) => {
                 state.loading = false;
                 state.course = action.payload.find(el => el.cc === "USD").rate;
             })
     },
 });
+
+export const {
+    setLoading,
+} = globalSlice.actions;
 
 export default globalSlice.reducer;

@@ -12,12 +12,12 @@ import Stats from './Pages/Stats/Stats';
 import Buy from './Pages/Buy/Buy';
 import { useEffect } from 'react';
 import { fetchProductsAsync } from './Store/product/product.slice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchBuysAsync } from './Store/buys/buys.slice';
 import { fetchBrandsAsync } from './Store/typeBrand/brand.slice';
 import { fetchTypesAsync } from './Store/typeBrand/type.slice';
 import { fetchSalesAsync } from './Store/sales/sales.slice';
-import { getCourseAsync } from './Store/global/global.slice';
+import { getCourseAsync, setLoading } from './Store/global/global.slice';
 import { checkAsync } from './Store/user/user.slice';
 import Product from './Pages/Product/Product';
 
@@ -25,15 +25,31 @@ function App() {
 
   const dispatch = useDispatch();
 
+  const loading = useSelector(state => state.global.loading);
+
   useEffect(() => {
-    dispatch(fetchProductsAsync());
-    dispatch(fetchBuysAsync());
-    dispatch(fetchBrandsAsync());
-    dispatch(fetchTypesAsync());
-    dispatch(fetchSalesAsync());
-    dispatch(getCourseAsync());
-    dispatch(checkAsync());
+    const loadData = async () => {
+      dispatch(setLoading(true));
+      await dispatch(fetchProductsAsync());
+      await dispatch(fetchBuysAsync());
+      await dispatch(fetchBrandsAsync());
+      await dispatch(fetchTypesAsync());
+      await dispatch(fetchSalesAsync());
+      await dispatch(getCourseAsync());
+      await dispatch(checkAsync());
+      dispatch(setLoading(false));
+    };
+
+    loadData();
+    
   }, [dispatch]);
+  
+  useEffect(() => {
+    console.log('Loading changed:', loading);
+  }, [loading]);
+
+  
+  if (loading) return <div className="loader"></div>
 
   return (
     <Router basename="/">
