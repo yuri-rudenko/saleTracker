@@ -50,6 +50,8 @@ class authController {
 
         try {
 
+            return res.status(400).json({ message: "Registration is turned off" });
+
             const { username, password } = req.body;
 
             if(username.length < 3) return res.status(400).json({ message: "Username must be longer than 3" });
