@@ -31,7 +31,10 @@ const RevenueGraph = ({ givenSales }) => {
                 </div>
                 <div className="total-revenue">{
                     data[scale][Object.keys(data[scale])
+                        .sort((a, b) => new Date(b) - new Date(a))[0]] ?
+                    data[scale][Object.keys(data[scale])
                         .sort((a, b) => new Date(b) - new Date(a))[0]].toFixed(2)
+                        : 0
                 }₴</div>
                 <div className="increase">
                     {(() => {
