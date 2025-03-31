@@ -15,7 +15,7 @@ export default function () {
     return {
         _id: id,
         name: names[Math.floor(Math.random() * names.length)],
-        image: `http://localhost:5000/images/${randomImage}.webp`,
+        image: `${process.env.SERVER_URL}/images/${randomImage}.webp`,
         link: `https://example.com/product/${id}`,
         type: {name: types[Math.floor(Math.random() * types.length)]},
         brand: {name: brands[Math.floor(Math.random() * brands.length)]},
