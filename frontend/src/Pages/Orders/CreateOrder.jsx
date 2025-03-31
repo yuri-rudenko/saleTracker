@@ -122,6 +122,7 @@ const CreateOrder = (props) => {
                         rules={{ required: "Type is required" }}
                         render={({ field: { onChange, value }, fieldState: { error } }) => (
                             <Autocomplete
+                                style={{ marginTop: "10px" }}
                                 options={typeOptions}
                                 getOptionLabel={(option) => option}
                                 value={value}

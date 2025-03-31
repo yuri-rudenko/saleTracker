@@ -1,0 +1,23 @@
+export default [
+    "Fender",
+    "Gibson",
+    "Ibanez",
+    "PRS",
+    "Jackson",
+    "Schecter",
+    "ESP",
+    "Orange",
+    "Boss",
+    "Electro-Harmonix",
+    "Dunlop",
+    "MXR",
+    "TC Electronic",
+    "Line 6",
+    "Vox",
+    "Marshall",
+    "Ernie Ball",
+    "D'Addario",
+    "Walrus Audio",
+    "Strymon",
+    "Saphue"
+]

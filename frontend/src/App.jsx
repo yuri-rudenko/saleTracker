@@ -49,7 +49,7 @@ function App() {
   if (loading) return <div className="loader"></div>
 
   return (
-    <Router basename="/">
+    <Router basename="/saleTracker">
       <div className="App">
 
         <div className="wrapper">
