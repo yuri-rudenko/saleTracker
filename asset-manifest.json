@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/saleTracker/static/css/main.5eb69f81.css",
-    "main.js": "/saleTracker/static/js/main.c17c252f.js",
+    "main.js": "/saleTracker/static/js/main.cd382727.js",
     "static/media/Inter.ttf": "/saleTracker/static/media/Inter.e05c5f3d1fa6a3893d84.ttf",
     "static/media/Logo.svg": "/saleTracker/static/media/Logo.4c5489f4005269196f2a8568b6b2e30e.svg",
     "static/media/Dashboard.svg": "/saleTracker/static/media/Dashboard.865a468b6913d0289512b8609bb3cf10.svg",
@@ -16,10 +16,10 @@
     "static/media/GreyArrow.svg": "/saleTracker/static/media/GreyArrow.1ca555ad85885bb68168abf219531bc4.svg",
     "static/media/Arrow.svg": "/saleTracker/static/media/Arrow.c2be8e75a50f55b531dac01768978137.svg",
     "main.5eb69f81.css.map": "/saleTracker/static/css/main.5eb69f81.css.map",
-    "main.c17c252f.js.map": "/saleTracker/static/js/main.c17c252f.js.map"
+    "main.cd382727.js.map": "/saleTracker/static/js/main.cd382727.js.map"
   },
   "entrypoints": [
     "static/css/main.5eb69f81.css",
-    "static/js/main.c17c252f.js"
+    "static/js/main.cd382727.js"
   ]
 }
