@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/static/css/main.57052975.css",
+    "main.js": "/static/js/main.800e6457.js",
+    "static/media/Inter.ttf": "/static/media/Inter.e05c5f3d1fa6a3893d84.ttf",
+    "static/media/Logo.svg": "/static/media/Logo.4c5489f4005269196f2a8568b6b2e30e.svg",
+    "static/media/Dashboard.svg": "/static/media/Dashboard.865a468b6913d0289512b8609bb3cf10.svg",
+    "static/media/Cart.svg": "/static/media/Cart.e3d7f7c3f4fe900be1276a8714d76754.svg",
+    "static/media/More.svg": "/static/media/More.970d6b5187567a3719b1b62e1a805e4c.svg",
+    "static/media/List.svg": "/static/media/List.fd44413347b25285a5c0cfe835b11afc.svg",
+    "static/media/Bell.svg": "/static/media/Bell.41c26d690797a6ad8c52ef6179feb70a.svg",
+    "static/media/Sheet.svg": "/static/media/Sheet.4f3d51b528ae1e5a3daec4e47664777a.svg",
+    "static/media/Search.svg": "/static/media/Search.4a1c14211ea41d37e4e7e9ffc1ee684c.svg",
+    "static/media/Box.svg": "/static/media/Box.0036027ce5df77c1cdbc8b1a40f3bd84.svg",
+    "index.html": "/index.html",
+    "static/media/GreyArrow.svg": "/static/media/GreyArrow.1ca555ad85885bb68168abf219531bc4.svg",
+    "static/media/Arrow.svg": "/static/media/Arrow.c2be8e75a50f55b531dac01768978137.svg",
+    "main.57052975.css.map": "/static/css/main.57052975.css.map",
+    "main.800e6457.js.map": "/static/js/main.800e6457.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.57052975.css",
+    "static/js/main.800e6457.js"
+  ]
+}

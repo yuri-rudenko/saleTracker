@@ -1,0 +1,4 @@
+node_modules
+.env
+backend/randomization/images/
+backend/randomization/randomText/
