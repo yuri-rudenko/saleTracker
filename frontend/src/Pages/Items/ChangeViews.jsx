@@ -135,7 +135,9 @@ const ChangeViews = (props) => {
                                 rowCount={products.length}
                             />
                             <TableBody>
-                                {products.map((row, index) => {
+                                {products
+                                .sort((a,b) => b.views - a.views)
+                                .map((row, index) => {
 
                                     return (
                                         <TableRow
@@ -154,7 +156,7 @@ const ChangeViews = (props) => {
                                             <TableCell align="left">{row.name}</TableCell>
                                             <TableCell align="right">
                                                 <TextField
-                                                    {...register(`${row._id}`, { min: { value: row.views, message: "Value is low" } })}
+                                                    {...register(`${row._id}`)}
                                                     error={!!errors[`${row._id}`]}
                                                     helperText={errors[`${row._id}`]?.message}
                                                     id="outlined-number"
