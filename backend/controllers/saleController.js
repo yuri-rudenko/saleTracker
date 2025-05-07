@@ -152,34 +152,42 @@ class saleController {
                 let totalSold = 0;
 
                 if (newStatus === "Approved") {
-                    let remainingAmount = product.amount;
 
-                    const buyProducts = await BuyProduct.find({
+                    let needed = product.amount;
+                
+                    const buyLots = await BuyProduct.find({
                         product: product._id,
-                        $expr: { $lt: ["$sold", "$amount"] }
+                        $expr: {
+                            $lt: [
+                                "$sold",
+                                { $multiply: ["$amount", "$amountInOne"] }
+                            ]
+                        }
                     }).sort({ createdAt: 1 });
-
+                
                     const bulkUpdates = [];
-
-                    for (const buyProduct of buyProducts) {
-                        if (remainingAmount <= 0) break;
-
-                        let availableAmount = buyProduct.amount - buyProduct.sold;
-                        let soldNow = Math.min(remainingAmount, availableAmount);
-
+                
+                    for (const lot of buyLots) {
+                        if (needed <= 0) break;
+                
+                        const available = lot.amount * lot.amountInOne - lot.sold;
+                        const soldNow   = Math.min(needed, available);
+                
                         bulkUpdates.push({
                             updateOne: {
-                                filter: { _id: buyProduct._id },
+                                filter: { _id: lot._id },
                                 update: { $inc: { sold: soldNow } }
                             }
                         });
-
-                        totalCost += soldNow * buyProduct.price / buyProduct.amountInOne;
-                        totalSold += soldNow;
-                        remainingAmount -= soldNow;
+                
+                        totalCost  += soldNow * lot.price / lot.amountInOne;
+                        totalSold  += soldNow;
+                        needed     -= soldNow;
                     }
-
-                    if (bulkUpdates.length) await BuyProduct.bulkWrite(bulkUpdates);
+                
+                    if (bulkUpdates.length) {
+                        await BuyProduct.bulkWrite(bulkUpdates);
+                    }
                 }
 
                 price += product.amount * product.price;
@@ -197,9 +205,16 @@ class saleController {
                 newProductsIds.push(saleProduct._id);
 
                 if (newStatus === "Approved") {
+
                     const updatedBuyProducts = await BuyProduct.find({
+
                         product: product._id,
-                        $expr: { $lte: ["$sold", "$amount"] }
+                        $expr: {
+                            $lt: [
+                                "$sold",
+                                { $multiply: ["$amount", "$amountInOne"] }
+                            ]
+                        }
                     });
 
                     const saleProducts = await SaleProduct.find({ product: foundProduct._id });
@@ -218,12 +233,15 @@ class saleController {
                     let totalQuantity = 0;
 
                     for (const buyProduct of updatedBuyProducts) {
-                        let remainingAmount = buyProduct.amount - buyProduct.sold;
-                        totalValue += remainingAmount * buyProduct.price;
-                        totalQuantity += remainingAmount;
+                        let remainingUnits = buyProduct.amount * buyProduct.amountInOne - buyProduct.sold;
+                        totalValue += remainingUnits * buyProduct.price / buyProduct.amountInOne;
+                        totalQuantity += remainingUnits;
                     }
 
+                    console.log(totalQuantity)
+
                     const averageBuyPriceLeft = totalQuantity > 0 ? totalValue / totalQuantity : 0;
+                    console.log(averageBuyPriceLeft)
 
                     await Product.findByIdAndUpdate(
                         foundProduct._id,
@@ -258,6 +276,8 @@ class saleController {
             });
 
             if (!foundSale) return res.status(400).json({ message: "Problem with creating sale order" });
+
+            console.log(foundSale)
 
             return res.status(200).json(foundSale);
 
@@ -304,6 +324,7 @@ class saleController {
     }
 
     async approveSale(req, res, next) {
+
         try {
             const saleId = req.params._id;
             const sale = await Sale.findById(saleId)
@@ -340,33 +361,39 @@ class saleController {
             for (const saleProduct of sale.products) {
                 const foundProduct = await Product.findById(saleProduct.product);
 
-                let remainingAmount = saleProduct.amount;
-                let totalCost = 0;
-                let totalSold = 0;
-
-                const buyProducts = await BuyProduct.find({
-                    product: foundProduct._id,
-                    $expr: { $lt: ["$sold", "$amount"] }
+                const buyLots = await BuyProduct.find({
+                    product: saleProduct.product,
+                    $expr: {
+                        $lt: [
+                            "$sold",
+                            { $multiply: ["$amount", "$amountInOne"] }
+                        ]
+                    }
                 }).sort({ createdAt: 1 });
 
                 const bulkUpdates = [];
 
-                for (const buyProduct of buyProducts) {
-                    if (remainingAmount <= 0) break;
+                let needed = saleProduct.amount;
+                let totalCost = 0;
+                let totalSold = 0;
 
-                    let availableAmount = buyProduct.amount - buyProduct.sold;
-                    let soldNow = Math.min(remainingAmount, availableAmount);
+                for (const lot of buyLots) {
+                    if (needed <= 0) break;
+
+                    const available = lot.amount * lot.amountInOne - lot.sold;
+                    const soldNow = Math.min(needed, available);
 
                     bulkUpdates.push({
                         updateOne: {
-                            filter: { _id: buyProduct._id },
+                            filter: { _id: lot._id },
                             update: { $inc: { sold: soldNow } }
                         }
                     });
 
-                    totalCost += soldNow * buyProduct.price / buyProduct.amountInOne;
+                    totalCost += soldNow * lot.price / lot.amountInOne;
                     totalSold += soldNow;
-                    remainingAmount -= soldNow;
+
+                    needed -= soldNow;
                 }
 
                 if (bulkUpdates.length) {
@@ -383,7 +410,12 @@ class saleController {
 
                 const updatedBuyProducts = await BuyProduct.find({
                     product: foundProduct._id,
-                    $expr: { $lte: ["$sold", "$amount"] }
+                    $expr: {
+                        $lt: [
+                            "$sold",
+                            { $multiply: ["$amount", "$amountInOne"] }
+                        ]
+                    }
                 });
 
                 const saleProducts = await SaleProduct.find({ product: foundProduct._id });
@@ -402,9 +434,9 @@ class saleController {
                 let totalQuantity = 0;
 
                 for (const buyProduct of updatedBuyProducts) {
-                    let remainingAmount = buyProduct.amount - buyProduct.sold;
-                    totalValue += remainingAmount * buyProduct.price;
-                    totalQuantity += remainingAmount;
+                    let remainingUnits = buyProduct.amount * buyProduct.amountInOne - buyProduct.sold;
+                    totalValue += remainingUnits * buyProduct.price / buyProduct.amountInOne;
+                    totalQuantity += remainingUnits;
                 }
 
                 const averageBuyPriceLeft = totalQuantity > 0 ? totalValue / totalQuantity : 0;
